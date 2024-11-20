@@ -18,9 +18,6 @@ def cleaning(data):
 
 
 def similarity(data, query):
-    #data = ["Mars is the fourth planet in our solar system.",
-    #        "It is second-smallest planet in the Solar System after Mercury.", 
-    #        "Saturn is yellow planet."]
     #data = cleaning(data)
     tokens = tokenize(data)
     #print(tokens, '\n')
@@ -34,11 +31,9 @@ def similarity(data, query):
     #for doc in tf_idf[corpus]:
     #    print([[dictionary[id], np.around(freq, decimals=2)] for id, freq in doc])
 
-
     # building the index
     sims = gensim.similarities.Similarity('workdir/',tf_idf[corpus], num_features=len(dictionary))
 
-    #query = ["Saturn is the sixth planet from the Sun."]
     query_doc = tokenize(query)
     query_doc_bow = dictionary.doc2bow(query_doc[0])
 
@@ -46,10 +41,10 @@ def similarity(data, query):
     # print(document_number, document_similarity)
     #print('Comparing Result:', sims[query_doc_tf_idf]) 
     sum_of_sims =(np.sum(sims[query_doc_tf_idf], dtype=np.float32))
-    percentage_of_similarity = round(float((sum_of_sims / len(data)) * 100))
+    similarity = round(float(sum_of_sims / len(data)), 2)
     #print(f'Average similarity float: {float(sum_of_sims / len(data))}')
     #print(f'Average similarity percentage: {float(sum_of_sims / len(data)) * 100}')
     #print(f'Average similarity rounded percentage: {percentage_of_similarity}')
 
-    return percentage_of_similarity
+    return similarity
 
