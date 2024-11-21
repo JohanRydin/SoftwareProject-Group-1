@@ -29,3 +29,5 @@ df["description_tokens"] = filtered_descriptions
 print("Token average lenth: ", df['description_tokens'].apply((lambda x: sum(len(s) for s in x))).mean())
 #print(filtered_descriptions[0])
 
+df.to_csv("./game_data/filtered_descriptions.csv", index=False)
+

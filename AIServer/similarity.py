@@ -17,10 +17,15 @@ def cleaning(data):
     return data
 
 
-def similarity(data, query):
+def similarity(data, query, isTokens = False):
     #data = cleaning(data)
-    tokens = tokenize(data)
-    #print(tokens, '\n')
+    if (isTokens):
+        tokens = data
+        query_doc = query
+    else:
+        tokens = tokenize(data)
+        query_doc = tokenize(query)
+    print(tokens)
 
     dictionary = gensim.corpora.Dictionary(tokens)
     #print(dictionary.token2id, '\n')
@@ -34,12 +39,14 @@ def similarity(data, query):
     # building the index
     sims = gensim.similarities.Similarity('workdir/',tf_idf[corpus], num_features=len(dictionary))
 
-    query_doc = tokenize(query)
+
+    #query_doc = tokenize(query)
     query_doc_bow = dictionary.doc2bow(query_doc[0])
 
     query_doc_tf_idf = tf_idf[query_doc_bow]
     # print(document_number, document_similarity)
     #print('Comparing Result:', sims[query_doc_tf_idf]) 
+    print(sims[query_doc_tf_idf])
     sum_of_sims =(np.sum(sims[query_doc_tf_idf], dtype=np.float32))
     similarity = round(float(sum_of_sims / len(data)), 2)
     #print(f'Average similarity float: {float(sum_of_sims / len(data))}')
