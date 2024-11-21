@@ -1,31 +1,22 @@
 from nltk.tokenize import word_tokenize
-import re
 import gensim
 import numpy as np
 
-def tokenize(data):
-    tokens = [[w.lower() for w in word_tokenize(doc)] for doc in data]
+#Extracts the tokens in the docs
+# docs - a list of strings/documents
+# returns the string tokenized, thereby returning a list of words 
+def tokenize(docs):
+    tokens = [[w.lower() for w in word_tokenize(doc)] for doc in docs]
     return tokens
 
-def cleaning(data):
-    data = re.sub('http\S+\s*', '', data)  # remove URLs
-    data = re.sub('RT|cc', '', data)  # remove RT and cc
-    data = re.sub('#\S+', '', data)  # remove hashtags
-    data = re.sub('@\S+', '', data)  # remove mentions
-    data = re.sub(r'[!"\$%&\'()*+,-./:;<=>?\[\\\]^_`{|}~]', '', data)  # remove punctuations
-    data = re.sub(r'[^\x00-\x7f]', r'', data)
-    return data
-
-
-def similarity(data, query, isTokens = False):
-    #data = cleaning(data)
-    if (isTokens):
-        tokens = data
-        query_doc = query
-    else:
-        tokens = tokenize(data)
-        query_doc = tokenize(query)
-    print(tokens)
+# Calculate the average similarity of the query to each document in docs
+# docs - a list of strings/documents
+# query - a list of strings (should have length 1)
+# returns a value from 0 to 1 specifying the level of similarity between the query and the docs
+def similarity(docs, query):
+    #docs = cleaning(docs)
+    tokens = tokenize(docs)
+    query_doc = tokenize(query)
 
     dictionary = gensim.corpora.Dictionary(tokens)
     #print(dictionary.token2id, '\n')
@@ -46,12 +37,51 @@ def similarity(data, query, isTokens = False):
     query_doc_tf_idf = tf_idf[query_doc_bow]
     # print(document_number, document_similarity)
     #print('Comparing Result:', sims[query_doc_tf_idf]) 
+    return sims[query_doc_tf_idf]
     print(sims[query_doc_tf_idf])
     sum_of_sims =(np.sum(sims[query_doc_tf_idf], dtype=np.float32))
-    similarity = round(float(sum_of_sims / len(data)), 2)
-    #print(f'Average similarity float: {float(sum_of_sims / len(data))}')
-    #print(f'Average similarity percentage: {float(sum_of_sims / len(data)) * 100}')
+    similarity = round(float(sum_of_sims / len(docs)), 2)
+    #print(f'Average similarity float: {float(sum_of_sims / len(docs))}')
+    #print(f'Average similarity percentage: {float(sum_of_sims / len(docs)) * 100}')
     #print(f'Average similarity rounded percentage: {percentage_of_similarity}')
 
     return similarity
 
+# Creates similarity matrix for the given dataset of documents
+# docs - contains a list of descriptions
+# returns the matrix that can be indexed by matrix[queryindex] to get all the similarities for that particular index
+#WARNING: Runtime of approx 6-7 mins with 300 elems
+def sim_matrix(docs):
+    sim_matrix = list()
+    for n in range(0, len(docs)):
+        sim = similarity(docs, [docs[n]])
+        sim[n] = 0
+        sim_matrix.append(sim)
+        #print(n)
+    return sim_matrix
+
+# Finds the top X indices
+# number - the number of indices to take
+# similarities - a vector of numeric similarity values
+# returns a list of top indices
+def find_best_indices(number, similarities):
+    return sorted(range(len(similarities)), key = lambda sub: similarities[sub], reverse=True)[:number]
+
+
+# Combine several matrixes into one, weighing them with different weights
+# PRE - each matrix must have the same dimensions, and len(matrixes) must be equal to len(weights)
+# matrixes - the matrixes to combine
+# weights - the weights for each matrix
+# returns one matrix
+def combine_matrixes(matrixes, weights):
+    size = len(matrixes[0])
+    matrix = list()
+    for n in range(0,size):
+        matrix.append([0] * size)
+    
+    for i in range(0, len(matrixes)):
+        for n in range(0,size):
+            for m in range(0,size):
+                matrix[n][m] += matrixes[i][n][m] * weights[i]
+    return matrix
+    
