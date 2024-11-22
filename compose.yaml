@@ -1,8 +1,34 @@
- services:
+
+
+services:
+  db:
+    build:
+      context: ./db
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: storage
+    volumes:
+      - mysql-data:/var/lib/mysql  # Persistent storage for MySQL data
+      - ./db/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql  # Load schema
+    ports:
+      - "3306:3306"  # Expose MySQL port to host machine
+    restart: always
+
   springapi:  # The service name
     container_name: springapi  # Name the container explicitly
     build:
-      context: /SpringAPI  # Path to the directory containing the Dockerfile
+      context: ./SpringAPI  # Path to your Spring Boot project
       dockerfile: Dockerfile  # Explicitly name the Dockerfile
     ports:
-      - "8080:8080"  # Map host port 8080 to container port 8080
+      - "8080:8080"  # Expose Spring Boot application on port 8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/storage  # Connect Spring Boot to MySQL container
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - db  # Ensure db starts before springapi
+    restart: always
+
+volumes:
+  mysql-data:  # Define persistent volume for MySQL data

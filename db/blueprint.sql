@@ -2,7 +2,7 @@ CREATE DATABASE storage IF NOT EXISTS storage;
 USE storage; 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+
 
 
 
