@@ -1,0 +1,657 @@
+game_name,genre,rank_type,rank,game_id
+Counter-Strike 2,Action,Sales,1,1
+"Warhammer 40,000: Space Marine 2",Action,Sales,2,2
+Cyberpunk 2077,Action,Sales,3,3
+Black Myth: Wukong,Action,Sales,4,0
+ELDEN RING,Action,Sales,5,4
+PUBG: BATTLEGROUNDS,Action,Sales,6,5
+Apex Legends™,Action,Sales,8,6
+Dota 2,Action,Sales,9,7
+Party Animals,Action,Sales,10,8
+Total War: WARHAMMER III,Action,Sales,11,9
+Cyberpunk 2077: Phantom Liberty,Action,Sales,12,10
+Once Human,Action,Sales,13,11
+NARAKA: BLADEPOINT,Action,Sales,14,12
+Warframe,Action,Sales,15,13
+Grounded,Action,Sales,16,14
+Grand Theft Auto V,Action,Sales,17,16
+Tom Clancy's Rainbow Six® Siege,Action,Sales,18,15
+Call of Duty®: Black Ops III,Action,Sales,19,17
+Like a Dragon: Infinite Wealth,Action,Sales,20,18
+Dead by Daylight,Action,Sales,21,19
+Call of Duty®,Action,Sales,22,20
+The First Descendant,Action,Sales,23,22
+Street Fighter™ 6,Action,Sales,24,21
+Call of Duty®: Modern Warfare® III - BlackCell (Season 6),Action,Sales,25,23
+The Crew™ 2,Action,Sales,26,24
+Battlefield™ V,Action,Sales,27,25
+Sea of Thieves: 2024 Edition,Action,Sales,28,26
+Halo: The Master Chief Collection,Action,Sales,29,27
+Call of Duty®: Modern Warfare® III,Action,Sales,30,28
+The Witcher 3: Wild Hunt,Action,Sales,31,29
+LOCKDOWN Protocol,Action,Sales,32,30
+Call of Duty®: Warzone™,Action,Sales,33,31
+Rust,Action,Sales,34,32
+Dead Rising Deluxe Remaster,Action,Sales,35,34
+Noita,Action,Sales,36,33
+"Warhammer 40,000: Space Marine 2",Action,Revenue,1,2
+Black Myth: Wukong,Action,Revenue,2,0
+Counter-Strike 2,Action,Revenue,3,1
+ELDEN RING,Action,Revenue,4,4
+PUBG: BATTLEGROUNDS,Action,Revenue,5,5
+Cyberpunk 2077,Action,Revenue,6,3
+Warframe,Action,Revenue,7,13
+Dota 2,Action,Revenue,8,7
+Apex Legends™,Action,Revenue,9,6
+Grand Theft Auto V,Action,Revenue,10,16
+Once Human,Action,Revenue,11,11
+NARAKA: BLADEPOINT,Action,Revenue,12,12
+Tom Clancy's Rainbow Six® Siege,Action,Revenue,13,15
+The First Descendant,Action,Revenue,14,22
+Call of Duty®: Black Ops III,Action,Revenue,15,17
+Cyberpunk 2077: Phantom Liberty,Action,Revenue,16,10
+Dead by Daylight,Action,Revenue,17,19
+ELDEN RING Shadow of the Erdtree,Action,Revenue,18,35
+Total War: WARHAMMER III,Action,Revenue,19,9
+Call of Duty®,Action,Revenue,20,20
+Street Fighter™ 6,Action,Revenue,21,21
+Sea of Thieves: 2024 Edition,Action,Revenue,22,26
+LOCKDOWN Protocol,Action,Revenue,23,30
+The Crew™ 2,Action,Revenue,24,24
+Dead Rising Deluxe Remaster,Action,Revenue,25,34
+Rust,Action,Revenue,26,32
+Party Animals,Action,Revenue,27,8
+Call of Duty®: Modern Warfare® III - BlackCell (Season 6),Action,Revenue,28,23
+Diablo® IV,Action,Revenue,29,36
+FINAL FANTASY XIV Online,Action,Revenue,30,37
+Destiny 2,Action,Revenue,31,39
+Like a Dragon: Infinite Wealth,Action,Revenue,32,18
+Wallpaper Engine,Action,Revenue,33,38
+Team Fortress 2,Action,Revenue,34,40
+The Elder Scrolls® Online,Action,Revenue,35,41
+Red Dead Redemption 2,Action,Revenue,36,42
+Black Desert,Action,Revenue,37,43
+Call of Duty®: Black Ops II,Action,Revenue,39,44
+Risk of Rain 2,Action,Revenue,40,45
+Counter-Strike 2,Action,Review,1,1
+Grand Theft Auto V,Action,Review,2,16
+Dota 2,Action,Review,3,7
+Terraria,Action,Review,4,46
+Black Myth: Wukong,Action,Review,5,0
+Wallpaper Engine,Action,Review,6,38
+Tom Clancy's Rainbow Six® Siege,Action,Review,7,15
+Left 4 Dead 2,Action,Review,8,47
+The Witcher 3: Wild Hunt,Action,Review,9,29
+Team Fortress 2,Action,Review,10,40
+Rust,Action,Review,11,32
+ELDEN RING,Action,Review,12,4
+Red Dead Redemption 2,Action,Review,13,42
+Warframe,Action,Review,14,13
+The Forest,Action,Review,15,48
+Among Us,Action,Review,16,49
+Portal 2,Action,Review,17,50
+Cyberpunk 2077,Action,Review,18,3
+Sekiro™: Shadows Die Twice - GOTY Edition,Action,Review,19,51
+PAYDAY 2,Action,Review,20,52
+Dying Light,Action,Review,21,54
+Hades,Action,Review,22,53
+Hollow Knight,Action,Review,24,55
+Unturned,Action,Review,25,56
+Destiny 2,Action,Review,26,39
+Deep Rock Galactic,Action,Review,27,57
+Valheim,Action,Review,28,58
+Borderlands 2,Action,Review,29,60
+Titanfall® 2,Action,Review,30,59
+ARK: Survival Evolved,Action,Review,31,61
+Vampire Survivors,Action,Review,32,62
+Dead by Daylight,Action,Review,33,19
+Devil May Cry 5,Action,Review,34,63
+Monster Hunter: World,Action,Review,35,64
+Sea of Thieves: 2024 Edition,Action,Review,36,26
+Half-Life 2,Action,Review,37,65
+Tomb Raider,Action,Review,38,66
+Resident Evil 4,Action,Review,39,67
+"Warhammer 40,000: Space Marine 2",Adventure,Sales,1,2
+Black Myth: Wukong,Adventure,Sales,2,0
+Satisfactory,Adventure,Sales,3,68
+Once Human,Adventure,Sales,4,11
+Baldur's Gate 3,Adventure,Sales,5,70
+Persona 3 Reload,Adventure,Sales,6,69
+Grounded,Adventure,Sales,7,14
+Shin Megami Tensei V: Vengeance,Adventure,Sales,8,71
+Grand Theft Auto V,Adventure,Sales,9,16
+Like a Dragon: Infinite Wealth,Adventure,Sales,10,18
+The First Descendant,Adventure,Sales,11,22
+Street Fighter™ 6,Adventure,Sales,12,21
+Sea of Thieves: 2024 Edition,Adventure,Sales,13,26
+The Witcher 3: Wild Hunt,Adventure,Sales,14,29
+Rust,Adventure,Sales,15,32
+Dead Rising Deluxe Remaster,Adventure,Sales,16,34
+Microsoft Flight Simulator 40th Anniversary Edition,Adventure,Sales,17,72
+Dragon's Dogma 2,Adventure,Sales,18,73
+Lies of P,Adventure,Sales,19,74
+UFO 50,Adventure,Sales,20,75
+FINAL FANTASY VII REMAKE INTERGRADE,Adventure,Sales,21,76
+Black Desert,Adventure,Sales,22,43
+FINAL FANTASY XIV Online,Adventure,Sales,23,37
+Gunfire Reborn,Adventure,Sales,24,77
+Core Keeper,Adventure,Sales,25,78
+STAR WARS Jedi: Survivor™,Adventure,Sales,26,79
+DEATH STRANDING DIRECTOR'S CUT,Adventure,Sales,27,80
+Resident Evil 4,Adventure,Sales,28,67
+Palworld,Adventure,Sales,29,81
+Little Nightmares II,Adventure,Sales,30,82
+Little Nightmares,Adventure,Sales,31,83
+Sonic Frontiers,Adventure,Sales,32,84
+"Warhammer 40,000: Space Marine 2 - Season Pass",Adventure,Sales,33,85
+Alien: Isolation,Adventure,Sales,34,86
+Lost Judgment,Adventure,Sales,35,87
+ELDEN RING Shadow of the Erdtree,Adventure,Sales,36,35
+Lethal Company,Adventure,Sales,37,88
+The Elder Scrolls® Online,Adventure,Sales,38,41
+Thank Goodness You're Here!,Adventure,Sales,39,89
+STAR WARS™ Battlefront™ II,Adventure,Sales,40,90
+"Warhammer 40,000: Space Marine 2",Adventure,Revenue,1,2
+Black Myth: Wukong,Adventure,Revenue,2,0
+Baldur's Gate 3,Adventure,Revenue,3,70
+Satisfactory,Adventure,Revenue,4,68
+Once Human,Adventure,Revenue,5,11
+Grand Theft Auto V,Adventure,Revenue,6,16
+Persona 3 Reload,Adventure,Revenue,7,69
+Sea of Thieves: 2024 Edition,Adventure,Revenue,8,26
+The First Descendant,Adventure,Revenue,9,22
+Rust,Adventure,Revenue,10,32
+Street Fighter™ 6,Adventure,Revenue,11,21
+Dead Rising Deluxe Remaster,Adventure,Revenue,12,34
+Shin Megami Tensei V: Vengeance,Adventure,Revenue,13,71
+FINAL FANTASY XIV Online,Adventure,Revenue,14,37
+Like a Dragon: Infinite Wealth,Adventure,Revenue,15,18
+Core Keeper,Adventure,Revenue,16,78
+The Elder Scrolls® Online,Adventure,Revenue,17,41
+Red Dead Redemption 2,Adventure,Revenue,18,42
+Microsoft Flight Simulator 40th Anniversary Edition,Adventure,Revenue,19,72
+Black Desert,Adventure,Revenue,20,43
+The Witcher 3: Wild Hunt,Adventure,Revenue,21,29
+Chained Together,Adventure,Revenue,22,91
+Dragon's Dogma 2,Adventure,Revenue,23,73
+Grounded,Adventure,Revenue,24,14
+Forza Horizon 5,Adventure,Revenue,25,92
+Gunfire Reborn,Adventure,Revenue,26,77
+Palworld,Adventure,Revenue,27,81
+"Warhammer 40,000: Space Marine 2 - Season Pass",Adventure,Revenue,28,85
+ARK: Survival Ascended,Adventure,Revenue,29,93
+ELDEN RING Shadow of the Erdtree,Adventure,Revenue,30,35
+Lethal Company,Adventure,Revenue,31,88
+Sons Of The Forest,Adventure,Revenue,32,94
+FINAL FANTASY VII REMAKE INTERGRADE,Adventure,Revenue,33,76
+Lies of P,Adventure,Revenue,34,74
+Resident Evil 4,Adventure,Revenue,35,67
+UFO 50,Adventure,Revenue,36,75
+DREDGE,Adventure,Revenue,37,95
+Crime Scene Cleaner,Adventure,Revenue,38,96
+Thank Goodness You're Here!,Adventure,Revenue,39,89
+STAR WARS Jedi: Survivor™,Adventure,Revenue,40,79
+Terraria,Adventure,Review,1,46
+Grand Theft Auto V,Adventure,Review,2,16
+The Witcher 3: Wild Hunt,Adventure,Review,3,29
+Baldur's Gate 3,Adventure,Review,4,70
+Black Myth: Wukong,Adventure,Review,5,0
+Rust,Adventure,Review,6,32
+The Forest,Adventure,Review,7,48
+Red Dead Redemption 2,Adventure,Review,8,42
+Lethal Company,Adventure,Review,9,88
+Hollow Knight,Adventure,Review,10,55
+Unturned,Adventure,Review,11,56
+Subnautica,Adventure,Review,12,97
+Cyberpunk 2077,Role-Playing,Sales,1,3
+Black Myth: Wukong,Role-Playing,Sales,2,0
+ELDEN RING,Role-Playing,Sales,3,4
+Dota 2,Role-Playing,Sales,4,7
+Crusader Kings III,Role-Playing,Sales,5,98
+Cyberpunk 2077: Phantom Liberty,Role-Playing,Sales,6,10
+Once Human,Role-Playing,Sales,7,11
+Persona 5 Royal,Role-Playing,Sales,8,99
+Baldur's Gate 3,Role-Playing,Sales,9,70
+Persona 3 Reload,Role-Playing,Sales,10,69
+Warframe,Role-Playing,Sales,11,13
+Shin Megami Tensei V: Vengeance,Role-Playing,Sales,12,71
+Like a Dragon: Infinite Wealth,Role-Playing,Sales,13,18
+The First Descendant,Role-Playing,Sales,14,22
+Street Fighter™ 6,Role-Playing,Sales,15,21
+The Witcher 3: Wild Hunt,Role-Playing,Sales,16,29
+Noita,Role-Playing,Sales,17,33
+Dragon's Dogma 2,Role-Playing,Sales,18,73
+Lies of P,Role-Playing,Sales,20,74
+UFO 50,Role-Playing,Sales,21,75
+FINAL FANTASY VII REMAKE INTERGRADE,Role-Playing,Sales,22,76
+Diablo® IV,Role-Playing,Sales,23,36
+Black Desert,Role-Playing,Sales,24,43
+Persona 3 Reload,Role-Playing,Revenue,1,69
+Black Myth: Wukong,Role-Playing,Revenue,2,0
+Once Human,Role-Playing,Revenue,3,11
+ELDEN RING,Role-Playing,Revenue,4,4
+Cyberpunk 2077,Role-Playing,Revenue,5,3
+Baldur's Gate 3,Role-Playing,Revenue,6,70
+FINAL FANTASY XIV Online,Role-Playing,Revenue,7,37
+Persona 5 Royal,Role-Playing,Revenue,8,99
+Dota 2,Role-Playing,Revenue,9,7
+Warframe,Role-Playing,Revenue,10,13
+Cyberpunk 2077: Phantom Liberty,Role-Playing,Revenue,11,10
+The First Descendant,Role-Playing,Revenue,12,22
+The Elder Scrolls® Online,Role-Playing,Revenue,13,41
+Crusader Kings III,Role-Playing,Revenue,14,98
+Black Desert,Role-Playing,Revenue,15,43
+FINAL FANTASY VII REMAKE INTERGRADE,Role-Playing,Revenue,16,76
+Diablo® IV,Role-Playing,Revenue,17,36
+Destiny 2,Role-Playing,Revenue,18,39
+Like a Dragon: Infinite Wealth,Role-Playing,Revenue,19,18
+Shin Megami Tensei V: Vengeance,Role-Playing,Revenue,20,71
+Dale & Dawson Stationery Supplies,Role-Playing,Revenue,21,100
+Street Fighter™ 6,Role-Playing,Revenue,22,21
+Path of Exile,Role-Playing,Revenue,23,101
+The Witcher 3: Wild Hunt,Role-Playing,Revenue,24,29
+ELDEN RING Shadow of the Erdtree,Role-Playing,Revenue,25,35
+Dragon's Dogma 2,Role-Playing,Revenue,26,73
+Stardew Valley,Role-Playing,Revenue,27,102
+STAR WARS™: The Old Republic™,Role-Playing,Revenue,28,103
+Gunfire Reborn,Role-Playing,Revenue,29,77
+Lies of P,Role-Playing,Revenue,30,74
+Fallout 76,Role-Playing,Revenue,31,104
+Palworld,Role-Playing,Revenue,32,81
+Monster Hunter: World,Role-Playing,Revenue,33,64
+Project Zomboid,Role-Playing,Revenue,34,105
+"Warhammer 40,000: Space Marine 2 - Season Pass",Role-Playing,Revenue,35,85
+Dark and Darker,Role-Playing,Revenue,36,106
+UFO 50,Role-Playing,Revenue,37,75
+Visions of Mana,Role-Playing,Revenue,38,107
+Limbus Company,Role-Playing,Revenue,39,108
+Noita,Role-Playing,Revenue,40,33
+Dota 2,Role-Playing,Review,1,7
+The Witcher 3: Wild Hunt,Role-Playing,Review,2,29
+Black Myth: Wukong,Role-Playing,Review,3,0
+Baldur's Gate 3,Role-Playing,Review,4,70
+Stardew Valley,Role-Playing,Review,5,102
+ELDEN RING,Role-Playing,Review,6,4
+Divinity: Original Sin 2 - Definitive Edition,Role-Playing,Review,7,109
+Warframe,Role-Playing,Review,8,13
+Cyberpunk 2077,Role-Playing,Review,9,3
+Destiny 2,Role-Playing,Review,10,39
+Monster Hunter: World,Role-Playing,Review,11,64
+Hades,Role-Playing,Review,12,53
+Vampire Survivors,Role-Playing,Review,13,62
+Path of Exile,Role-Playing,Review,14,101
+Borderlands 2,Role-Playing,Review,15,60
+Fallout: New Vegas,Role-Playing,Review,16,110
+STAR WARS™: The Old Republic™,Role-Playing,Review,17,103
+Undertale,Role-Playing,Review,18,111
+Persona 4 Golden,Role-Playing,Review,19,112
+DARK SOULS™ III,Role-Playing,Review,20,113
+Persona 5 Royal,Role-Playing,Review,21,99
+FINAL FANTASY XIV Online,Role-Playing,Review,22,37
+Palworld,Role-Playing,Review,23,81
+Project Zomboid,Role-Playing,Review,24,105
+The Elder Scrolls® Online,Role-Playing,Review,25,41
+Hogwarts Legacy,Role-Playing,Review,26,114
+OMORI,Role-Playing,Review,27,115
+Slay the Spire,Role-Playing,Review,28,116
+Symphony of War: The Nephilim Saga,Role-Playing,Review,29,117
+God of War,Role-Playing,Review,30,118
+Fallout 4,Role-Playing,Review,31,119
+TROUBLESHOOTER: Abandoned Children,Role-Playing,Review,32,120
+Persona 3 Reload,Role-Playing,Review,33,69
+DAVE THE DIVER,Role-Playing,Review,34,121
+The Elder Scrolls V: Skyrim Special Edition,Role-Playing,Review,35,122
+FINAL FANTASY VII REMAKE INTERGRADE,Role-Playing,Review,36,76
+Yakuza 0,Role-Playing,Review,37,123
+Mount & Blade: Warband,Role-Playing,Review,38,124
+Mount & Blade II: Bannerlord,Role-Playing,Review,39,125
+Kenshi,Role-Playing,Review,40,126
+EA SPORTS FC™ 25,Simulation,Sales,1,127
+Frostpunk 2,Simulation,Sales,2,128
+TCG Card Shop Simulator,Simulation,Sales,3,130
+Satisfactory,Simulation,Sales,4,68
+NBA 2K25,Simulation,Sales,5,129
+Crusader Kings III,Simulation,Sales,6,98
+Once Human,Simulation,Sales,7,11
+The Sims™ 4,Simulation,Sales,8,131
+War Thunder,Simulation,Sales,9,132
+Euro Truck Simulator 2,Simulation,Sales,10,133
+American Truck Simulator,Simulation,Sales,11,135
+Anno 1800,Simulation,Sales,12,134
+Microsoft Flight Simulator 40th Anniversary Edition,Simulation,Sales,13,72
+Yu-Gi-Oh! Master Duel,Simulation,Sales,14,136
+BeamNG.drive,Simulation,Sales,15,137
+eFootball™,Simulation,Sales,16,138
+Stardew Valley,Simulation,Sales,17,102
+Two Point Campus,Simulation,Sales,18,139
+Assetto Corsa,Simulation,Sales,19,140
+Project Zomboid,Simulation,Sales,20,105
+Chained Together,Simulation,Sales,21,91
+Forza Horizon 5,Simulation,Sales,22,92
+EA SPORTS™ Madden NFL 25,Simulation,Sales,23,141
+DREDGE,Simulation,Sales,24,95
+RimWorld,Simulation,Sales,25,142
+theHunter: Call of the Wild™,Simulation,Sales,26,143
+Shawarma Legend,Simulation,Sales,27,144
+Stellaris,Simulation,Sales,28,145
+World of Warships,Simulation,Sales,29,146
+Assetto Corsa Competizione,Simulation,Sales,30,147
+World of Tanks,Simulation,Sales,31,148
+Dyson Sphere Program,Simulation,Sales,32,149
+Crime Scene Cleaner,Simulation,Sales,33,96
+Jurassic World Evolution 2,Simulation,Sales,34,150
+DCS World Steam Edition,Simulation,Sales,35,151
+American Truck Simulator - Arkansas,Simulation,Sales,36,152
+Train Sim World® 5,Simulation,Sales,37,153
+Crusader Kings III: Tours & Tournaments,Simulation,Sales,38,154
+Cities: Skylines II,Simulation,Sales,39,155
+EA SPORTS FC™ 25,Simulation,Revenue,1,127
+Frostpunk 2,Simulation,Revenue,2,128
+TCG Card Shop Simulator,Simulation,Revenue,3,130
+NBA 2K25,Simulation,Revenue,4,129
+War Thunder,Simulation,Revenue,5,132
+Satisfactory,Simulation,Revenue,6,68
+The Sims™ 4,Simulation,Revenue,7,131
+Crusader Kings III,Simulation,Revenue,8,98
+Euro Truck Simulator 2,Simulation,Revenue,9,133
+Once Human,Simulation,Revenue,10,11
+American Truck Simulator,Simulation,Revenue,11,135
+Microsoft Flight Simulator 40th Anniversary Edition,Simulation,Revenue,12,72
+BeamNG.drive,Simulation,Revenue,13,137
+Yu-Gi-Oh! Master Duel,Simulation,Revenue,14,136
+Stardew Valley,Simulation,Revenue,15,102
+Anno 1800,Simulation,Revenue,16,134
+Chained Together,Simulation,Revenue,17,91
+Forza Horizon 5,Simulation,Revenue,18,92
+EA SPORTS™ Madden NFL 25,Simulation,Revenue,19,141
+Stellaris,Simulation,Revenue,20,145
+eFootball™,Simulation,Revenue,21,138
+Crime Scene Cleaner,Simulation,Revenue,22,96
+Assetto Corsa,Simulation,Revenue,23,140
+Project Zomboid,Simulation,Revenue,24,105
+RimWorld,Simulation,Revenue,25,142
+DREDGE,Simulation,Revenue,26,95
+Fields of Mistria,Simulation,Revenue,27,156
+World of Warships,Simulation,Revenue,28,146
+Supermarket Simulator,Simulation,Revenue,29,157
+Cities: Skylines II,Simulation,Revenue,30,155
+theHunter: Call of the Wild™,Simulation,Revenue,31,143
+CarX Street,Simulation,Revenue,32,158
+Hearts of Iron IV,Simulation,Revenue,33,159
+DCS World Steam Edition,Simulation,Revenue,34,151
+Two Point Campus,Simulation,Revenue,35,139
+Train Sim World® 5,Simulation,Revenue,36,153
+Assetto Corsa Competizione,Simulation,Revenue,37,147
+shapez 2,Simulation,Revenue,38,160
+Ale & Tale Tavern,Simulation,Revenue,39,161
+7 Days to Die,Simulation,Revenue,40,162
+Garry's Mod,Simulation,Review,1,163
+Stardew Valley,Simulation,Review,2,102
+Euro Truck Simulator 2,Simulation,Review,3,133
+The Forest,Simulation,Review,4,48
+BeamNG.drive,Simulation,Review,5,137
+People Playground,Simulation,Review,6,164
+RimWorld,Simulation,Review,7,142
+Cities: Skylines,Simulation,Review,8,165
+American Truck Simulator,Simulation,Review,9,135
+Totally Accurate Battle Simulator,Simulation,Review,10,166
+Satisfactory,Simulation,Review,11,68
+Kerbal Space Program,Simulation,Review,12,167
+Project Zomboid,Simulation,Review,13,105
+Arma 3,Simulation,Review,14,169
+DAVE THE DIVER,Simulation,Review,15,121
+7 Days to Die,Simulation,Review,16,162
+Oxygen Not Included,Simulation,Review,17,168
+Hearts of Iron IV,Simulation,Review,18,159
+Dyson Sphere Program,Simulation,Review,19,149
+"Papers, Please",Simulation,Review,20,170
+Sid Meier’s Civilization® VI,Simulation,Review,21,171
+Teardown,Simulation,Review,22,172
+CarX Drift Racing Online,Simulation,Review,23,174
+Forza Horizon 5,Simulation,Review,24,92
+Assetto Corsa,Simulation,Review,25,140
+Game Dev Tycoon,Simulation,Review,26,173
+Slime Rancher,Simulation,Review,27,175
+Car Mechanic Simulator 2021,Simulation,Review,28,176
+The Sims™ 4,Simulation,Review,29,131
+Mount & Blade II: Bannerlord,Simulation,Review,30,125
+Stellaris,Simulation,Review,31,145
+Supermarket Simulator,Simulation,Review,32,157
+Tabletop Simulator,Simulation,Review,33,177
+PowerWash Simulator,Simulation,Review,34,178
+theHunter: Call of the Wild™,Simulation,Review,35,143
+Aimlabs,Simulation,Review,36,179
+My Summer Car,Simulation,Review,37,180
+House Flipper,Simulation,Review,38,181
+Plague Inc: Evolved,Simulation,Review,39,182
+Kenshi,Simulation,Review,40,126
+Frostpunk 2,Strategy,Sales,1,128
+TCG Card Shop Simulator,Strategy,Sales,2,130
+Dota 2,Strategy,Sales,3,7
+Total War: WARHAMMER III,Strategy,Sales,4,9
+Crusader Kings III,Strategy,Sales,5,98
+Persona 5 Royal,Strategy,Sales,6,99
+Persona 3 Reload,Strategy,Sales,7,69
+Shin Megami Tensei V: Vengeance,Strategy,Sales,8,71
+Age of Mythology: Retold,Strategy,Sales,9,183
+Anno 1800,Strategy,Sales,10,134
+Yu-Gi-Oh! Master Duel,Strategy,Sales,11,136
+Magic: The Gathering Arena,Strategy,Sales,12,184
+Total War: WARHAMMER II,Strategy,Sales,13,185
+Two Point Campus,Strategy,Sales,14,139
+Total War: WARHAMMER,Strategy,Sales,16,186
+RimWorld,Strategy,Sales,18,142
+Stellaris,Strategy,Sales,19,145
+Total War: WARHAMMER III - Shadows of Change,Strategy,Sales,20,187
+Dyson Sphere Program,Strategy,Sales,21,149
+Total War: THREE KINGDOMS,Strategy,Sales,22,188
+Jurassic World Evolution 2,Strategy,Sales,23,150
+Cities: Skylines II,Strategy,Sales,24,155
+Hearts of Iron IV,Strategy,Sales,25,159
+Total War: PHARAOH,Strategy,Sales,26,189
+Inscryption,Strategy,Sales,27,190
+Two Point Hospital,Strategy,Sales,28,191
+Company of Heroes 3,Strategy,Sales,29,192
+Total War: ROME II - Emperor Edition,Strategy,Sales,30,193
+Bloons TD 6,Strategy,Sales,31,194
+Manor Lords,Strategy,Sales,32,195
+Limbus Company,Strategy,Sales,33,108
+Persona 4 Golden,Strategy,Sales,34,112
+Transport Fever 2,Strategy,Sales,36,196
+"Warhammer 40,000: Rogue Trader",Strategy,Sales,38,197
+Sid Meier’s Civilization® VI,Strategy,Sales,39,171
+Stolen Realm,Strategy,Sales,40,198
+Crusader Kings III,Strategy,Revenue,1,98
+Total War: WARHAMMER III,Strategy,Revenue,2,9
+Dota 2,Strategy,Revenue,3,7
+Frostpunk 2,Strategy,Revenue,4,128
+Persona 3 Reload,Strategy,Revenue,5,69
+TCG Card Shop Simulator,Strategy,Revenue,6,130
+Age of Mythology: Retold,Strategy,Revenue,7,183
+Persona 5 Royal,Strategy,Revenue,8,99
+Yu-Gi-Oh! Master Duel,Strategy,Revenue,9,136
+Magic: The Gathering Arena,Strategy,Revenue,10,184
+Sid Meier’s Civilization® VI,Strategy,Revenue,11,171
+Total War: WARHAMMER II,Strategy,Revenue,12,185
+Stellaris,Strategy,Revenue,13,145
+Shin Megami Tensei V: Vengeance,Strategy,Revenue,14,71
+Anno 1800,Strategy,Revenue,15,134
+Hearts of Iron IV,Strategy,Revenue,16,159
+Total War: PHARAOH,Strategy,Revenue,17,189
+Manor Lords,Strategy,Revenue,18,195
+Sins of a Solar Empire II,Strategy,Revenue,19,199
+Total War: WARHAMMER,Strategy,Revenue,20,186
+RimWorld,Strategy,Revenue,21,142
+Limbus Company,Strategy,Revenue,22,108
+Summoners War,Strategy,Revenue,24,200
+Cities: Skylines II,Strategy,Revenue,25,155
+Total War: THREE KINGDOMS,Strategy,Revenue,26,188
+Two Point Campus,Strategy,Revenue,27,139
+Bloons TD 6,Strategy,Revenue,28,194
+Frostpunk,Strategy,Revenue,29,201
+Tabletop Simulator,Strategy,Revenue,30,177
+Total War: ROME II - Emperor Edition,Strategy,Revenue,31,193
+Jurassic World Evolution 2,Strategy,Revenue,32,150
+Age of Empires IV: Anniversary Edition,Strategy,Revenue,33,202
+Europa Universalis IV,Strategy,Revenue,34,203
+Balatro,Strategy,Revenue,35,204
+Age of Empires II: Definitive Edition,Strategy,Revenue,36,205
+"Warhammer 40,000: Rogue Trader",Strategy,Revenue,37,197
+MARVEL SNAP,Strategy,Revenue,38,206
+Inscryption,Strategy,Revenue,39,190
+Tactical Breach Wizards,Strategy,Revenue,40,207
+Dota 2,Strategy,Review,1,7
+Sid Meier’s Civilization® VI,Strategy,Review,2,171
+Sid Meier's Civilization® V,Strategy,Review,3,209
+Bloons TD 6,Strategy,Review,4,194
+Hearts of Iron IV,Strategy,Review,5,159
+Divinity: Original Sin 2 - Definitive Edition,Strategy,Review,6,109
+RimWorld,Strategy,Review,7,142
+Total War: WARHAMMER II,Strategy,Review,8,185
+Tabletop Simulator,Strategy,Review,9,177
+Crusader Kings III,Strategy,Review,10,98
+Slay the Spire,Strategy,Review,11,116
+Total War: MEDIEVAL II – Definitive Edition,Strategy,Review,12,208
+Age of Empires II: Definitive Edition,Strategy,Review,13,205
+Stellaris,Strategy,Review,14,145
+Inscryption,Strategy,Review,15,190
+Plants vs. Zombies GOTY Edition,Strategy,Review,16,210
+Kenshi,Strategy,Review,17,126
+Cities: Skylines,Strategy,Review,18,165
+Age of Empires II (Retired),Strategy,Review,19,211
+Dyson Sphere Program,Strategy,Review,20,149
+Ultimate General: Civil War,Strategy,Review,21,212
+Dune: Imperium,Strategy,Review,22,213
+For The King,Strategy,Review,23,215
+STAR WARS™ Empire at War - Gold Pack,Strategy,Review,24,214
+Armello,Strategy,Review,25,216
+Stacklands,Strategy,Review,26,217
+Balatro,Strategy,Review,27,204
+Manor Lords,Strategy,Review,28,195
+Europa Universalis IV,Strategy,Review,29,203
+ENDLESS™ Legend,Strategy,Review,30,218
+Dorfromantik,Strategy,Review,31,219
+Total War: ROME II - Emperor Edition,Strategy,Review,32,193
+"Warhammer 40,000: Gladius - Relics of War",Strategy,Review,33,220
+Frostpunk,Strategy,Review,34,201
+Northgard,Strategy,Review,35,221
+Age of Wonders 4,Strategy,Review,36,222
+Persona 4 Golden,Strategy,Review,37,112
+Total War: THREE KINGDOMS,Strategy,Review,38,188
+Scythe: Digital Edition,Strategy,Review,39,223
+Persona 5 Royal,Strategy,Review,40,99
+EA SPORTS FC™ 25,Sports & Racing,Sales,1,127
+NBA 2K25,Sports & Racing,Sales,2,129
+eFootball™,Sports & Racing,Sales,3,138
+The Crew Motorfest,Sports & Racing,Sales,4,224
+Assetto Corsa,Sports & Racing,Sales,5,140
+Forza Horizon 5,Sports & Racing,Sales,6,92
+EA SPORTS™ Madden NFL 25,Sports & Racing,Sales,7,141
+Assetto Corsa Competizione,Sports & Racing,Sales,8,147
+CarX Street,Sports & Racing,Sales,9,158
+Need for Speed™ Heat,Sports & Racing,Sales,10,225
+Need for Speed™ Unbound,Sports & Racing,Sales,11,226
+iRacing,Sports & Racing,Sales,12,227
+WWE 2K24,Sports & Racing,Sales,13,228
+F1® 24,Sports & Racing,Sales,14,229
+Fishing Planet,Sports & Racing,Sales,15,230
+Golf With Your Friends,Sports & Racing,Sales,16,231
+Tony Hawk's™ Pro Skater™ 1 + 2,Sports & Racing,Sales,17,233
+EA SPORTS™ WRC,Sports & Racing,Sales,18,232
+Russian Fishing 4,Sports & Racing,Sales,19,235
+Season 1 MyCAREER Bonus Offer,Sports & Racing,Sales,20,234
+Football Manager 2024,Sports & Racing,Sales,21,236
+NBA 2K25 Hall of Fame Pass: Season 1,Sports & Racing,Sales,23,237
+F1® Manager 2024,Sports & Racing,Sales,24,238
+Rooftops & Alleys: The Parkour Game,Sports & Racing,Sales,25,239
+Liftoff®: FPV Drone Racing,Sports & Racing,Sales,26,240
+EA SPORTS FC™ 24,Sports & Racing,Sales,27,241
+Undisputed,Sports & Racing,Sales,28,242
+Need for Speed™ Payback,Sports & Racing,Sales,29,243
+CarX Drift Racing Online,Sports & Racing,Sales,30,174
+PGA TOUR 2K23,Sports & Racing,Sales,31,244
+DiRT Rally 2.0,Sports & Racing,Sales,32,245
+Assetto Corsa Competizione - 24H Nürburgring Pack,Sports & Racing,Sales,33,246
+Automobilista 2,Sports & Racing,Sales,34,247
+NBA 2K24,Sports & Racing,Sales,37,248
+Steep™,Sports & Racing,Sales,38,249
+Riders Republic,Sports & Racing,Sales,39,250
+Season 1 MyTEAM Bonus Offer,Sports & Racing,Sales,40,251
+EA SPORTS FC™ 25,Sports & Racing,Revenue,1,127
+NBA 2K25,Sports & Racing,Revenue,2,129
+Riders Republic,Sports & Racing,Revenue,3,250
+eFootball™,Sports & Racing,Revenue,4,138
+EA SPORTS™ Madden NFL 25,Sports & Racing,Revenue,5,141
+Forza Horizon 5,Sports & Racing,Revenue,6,92
+The Crew Motorfest,Sports & Racing,Revenue,7,224
+Assetto Corsa,Sports & Racing,Revenue,8,140
+CarX Street,Sports & Racing,Revenue,9,158
+Assetto Corsa Competizione,Sports & Racing,Revenue,10,147
+All-In-One Sports VR,Sports & Racing,Revenue,11,252
+iRacing,Sports & Racing,Revenue,12,227
+Golf With Your Friends,Sports & Racing,Revenue,13,231
+WWE 2K24,Sports & Racing,Revenue,14,228
+F1® 24,Sports & Racing,Revenue,15,229
+Fishing Planet,Sports & Racing,Revenue,16,230
+Need for Speed™ Heat,Sports & Racing,Revenue,17,225
+EA SPORTS FC™ 24,Sports & Racing,Revenue,18,241
+Football Manager 2024,Sports & Racing,Revenue,19,236
+Need for Speed™ Unbound,Sports & Racing,Revenue,20,226
+Tony Hawk's™ Pro Skater™ 1 + 2,Sports & Racing,Revenue,21,233
+Downhill Pro Racer,Sports & Racing,Revenue,22,253
+Russian Fishing 4,Sports & Racing,Revenue,23,235
+F1® Manager 2024,Sports & Racing,Revenue,25,238
+Slime Volley,Sports & Racing,Revenue,26,256
+MX vs ATV Legends,Sports & Racing,Revenue,27,254
+All In One Sports - Hockey DLC,Sports & Racing,Revenue,28,255
+All In One Sports - Soccer DLC,Sports & Racing,Revenue,29,257
+Descenders,Sports & Racing,Revenue,30,258
+RIDE 5,Sports & Racing,Revenue,32,259
+Golf It!,Sports & Racing,Revenue,33,260
+PGA TOUR 2K23,Sports & Racing,Revenue,34,244
+Rooftops & Alleys: The Parkour Game,Sports & Racing,Revenue,35,239
+Motordoom,Sports & Racing,Revenue,36,261
+Sledders,Sports & Racing,Revenue,37,262
+The Ramp,Sports & Racing,Revenue,38,263
+Liftoff®: FPV Drone Racing,Sports & Racing,Revenue,39,240
+EA SPORTS™ WRC,Sports & Racing,Revenue,40,232
+All-In-One Sports VR,Sports & Racing,Review,1,252
+Riders Republic,Sports & Racing,Review,2,250
+The Ramp,Sports & Racing,Review,3,263
+Descenders,Sports & Racing,Review,4,258
+Motordoom,Sports & Racing,Review,5,261
+Sledders,Sports & Racing,Review,6,262
+Monster Energy Supercross - The Official Videogame,Sports & Racing,Review,7,264
+Golf With Your Friends,Sports & Racing,Review,8,231
+Skater XL - The Ultimate Skateboarding Game,Sports & Racing,Review,9,265
+TrackDayR,Sports & Racing,Review,10,266
+69 Balls,Sports & Racing,Review,11,267
+Steep™,Sports & Racing,Review,12,249
+Forza Horizon 5,Sports & Racing,Review,13,92
+MX vs. ATV Reflex,Sports & Racing,Review,14,268
+MXGP 2021 - The Official Motocross Videogame,Sports & Racing,Review,15,269
+CarX Drift Racing Online,Sports & Racing,Review,16,174
+Golf It!,Sports & Racing,Review,17,260
+Session: Skate Sim,Sports & Racing,Review,18,270
+MXGP3 - The Official Motocross Videogame,Sports & Racing,Review,19,271
+MXGP - The Official Motocross Videogame,Sports & Racing,Review,20,272
+Walkabout Mini Golf VR,Sports & Racing,Review,21,273
+MX vs ATV All Out,Sports & Racing,Review,22,274
+Driftwood,Sports & Racing,Review,23,275
+Assetto Corsa,Sports & Racing,Review,24,140
+RIDE 4,Sports & Racing,Review,25,276
+Gym Simulator 24,Sports & Racing,Review,26,277
+Wrestling Empire,Sports & Racing,Review,27,278
+RIDE 3,Sports & Racing,Review,28,279
+Fishing Planet,Sports & Racing,Review,29,230
+Need for Speed™ Heat,Sports & Racing,Review,30,225
+Golf Gang,Sports & Racing,Review,31,280
+Lonely Mountains: Downhill,Sports & Racing,Review,32,281
+GP Bikes,Sports & Racing,Review,33,282
+Golf Peaks,Sports & Racing,Review,34,283
+PIPE by BMX Streets,Sports & Racing,Review,35,284
+MXGP PRO,Sports & Racing,Review,36,285
+MXGP 2019 - The Official Motocross Videogame,Sports & Racing,Review,37,286
+Ride 2,Sports & Racing,Review,38,287
+Tanuki Sunset,Sports & Racing,Review,39,288
+Grand Mountain Adventure: Wonderlands,Sports & Racing,Review,40,289

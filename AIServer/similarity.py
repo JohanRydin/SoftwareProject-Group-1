@@ -85,3 +85,19 @@ def combine_matrixes(matrixes, weights):
                 matrix[n][m] += matrixes[i][n][m] * weights[i]
     return matrix
     
+# Add several vectors into one
+# PRE - vectors must be equal in length
+# vectors - the vectors to combine
+# returns one vector
+def combine_vectors(vectors):
+    size = len(vectors[0])
+    vector = list()
+    for n in range(0,size):
+        vector.append(0)
+
+    for i in range(0, len(vectors)):
+        for n in range(0,size):
+                vector[n] += vectors[i][n]
+    return vector
+    
+    

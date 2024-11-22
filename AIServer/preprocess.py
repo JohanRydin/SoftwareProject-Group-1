@@ -4,6 +4,14 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import re
 
+def init_game_id_dictionary(df):
+    game_dict = {}
+    id = 0
+    for n in df['name']:
+        game_dict[n] = id
+        id += 1
+    return game_dict
+
 # Remove uninteresting symbols from a string
 # docs - a single string
 # returns a string without the specified symbols
@@ -28,25 +36,47 @@ def filter_stopwords(data):
 
     return filtered_sentences
 
-df = pd.read_csv("./game_data/games_description.csv", usecols=["name","long_description","genres","overall_player_rating", "publisher", "link"])
+def preprocess_games_description():
 
-#print(df[df["short_description"].isna()].shape)
-#print(df[df["long_description"].isna()].shape)
-#print("Short average length: ", df['short_description'].dropna().str.len().mean())
-#print("Long average lenth: ", df['long_description'].dropna().str.len().mean())
+    df = pd.read_csv("./game_data/games_description.csv", usecols=["name","long_description","genres","overall_player_rating", "publisher", "link"])
+
+    #print(df[df["short_description"].isna()].shape)
+    #print(df[df["long_description"].isna()].shape)
+    #print("Short average length: ", df['short_description'].dropna().str.len().mean())
+    #print("Long average lenth: ", df['long_description'].dropna().str.len().mean())
 
 
-df["long_description"].fillna("", inplace=True)
+    df["long_description"].fillna("", inplace=True)
 
-filtered_descriptions = filter_stopwords(list(df["long_description"]))
+    filtered_descriptions = filter_stopwords(list(df["long_description"]))
 
-for n in range(0, len(filtered_descriptions)):
-    filtered_descriptions[n] = ' '.join(filtered_descriptions[n])
-print(filtered_descriptions)
+    for n in range(0, len(filtered_descriptions)):
+        filtered_descriptions[n] = ' '.join(filtered_descriptions[n])
+    #print(filtered_descriptions)
 
-df["filtered_descriptions"] = filtered_descriptions
-#print("Token average lenth: ", df['description_tokens'].apply((lambda x: sum(len(s) for s in x))).mean())
-#print(filtered_descriptions[0])
+    df["filtered_descriptions"] = filtered_descriptions
+    #print("Token average lenth: ", df['description_tokens'].apply((lambda x: sum(len(s) for s in x))).mean())
+    #print(filtered_descriptions[0])
 
-df.to_csv("./game_data/filtered_descriptions.csv", index=False)
+    df.to_csv("./game_data/filtered_descriptions.csv", index=True)
 
+def preprocess_games_ranking():
+    df = pd.read_csv("./game_data/games_ranking.csv")
+    games_dict = init_game_id_dictionary(pd.read_csv("./game_data/games_description.csv", usecols=["name","long_description","genres","overall_player_rating", "publisher", "link"]))
+    df['game_id'] = None
+
+    
+    for n in range(0, len(df['game_name'])):
+        if df['game_name'][n] in games_dict:
+            #df['game_id'][n] = games_dict[df['game_name'][n]]
+            game_name = df.loc[n, 'game_name']
+            df.loc[n, 'game_id'] = games_dict.get(game_name, None)
+
+    df = df.dropna()
+
+    df.to_csv("./game_data/games_ranking_indexed.csv", index=False)
+
+    # TODO: split this into smaller CSVS and then use it to make a new category of recommendations
+
+preprocess_games_ranking()
+    
