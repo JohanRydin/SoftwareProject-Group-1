@@ -1,0 +1,8 @@
+ services:
+  springapi:  # The service name
+    container_name: springapi  # Name the container explicitly
+    build:
+      context: /SpringAPI  # Path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Explicitly name the Dockerfile
+    ports:
+      - "8080:8080"  # Map host port 8080 to container port 8080
