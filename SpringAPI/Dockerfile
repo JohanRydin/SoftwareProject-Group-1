@@ -1,24 +1,30 @@
-# Step 1: Use the official Ubuntu image as the base
-FROM ubuntu:latest
+# Building from predefined Image maven 
+FROM maven:3.9.4-eclipse-temurin-17 AS build
 
-# Step 2: Install Java and Maven (required for building Spring Boot apps)
-RUN apt-get update && apt-get install -y \
-    openjdk-21-jdk \  
-    maven \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# Step 3: Set the working directory inside the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Step 4: Copy the entire project into the container (to build it)
+# Copy only the pom.xml file and download dependencies (should reduce build time)
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copy the entire project into the container
 COPY . .
 
-# Step 5: Run Maven to clean, install, and build the project
-RUN mvn clean install
+# Build the Spring Boot application
+RUN mvn clean package -DskipTests
 
-# Step 6: Expose the port that the Spring Boot app will run on (8080 by default)
+# Now we actually build the working java program
+FROM openjdk:21-jdk-slim
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the packaged JAR file from the build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Expose the port the application runs on (from Docker to your computer)
 EXPOSE 8080
 
-# Step 7: Run the Spring Boot application (can also use `mvn spring-boot:run` or `java -jar`)
-CMD ["mvn", "spring-boot:run"]
+# Command to run the Spring Boot application
+CMD ["java", "-jar", "app.jar"]
