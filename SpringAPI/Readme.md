@@ -13,7 +13,7 @@ run: mvn spring-boot:run
 
 Assuming you have Docker Engine (and Docker Desktop)
 
-docker build -t springapi:latest . # This takes 400s (TODO: Johan is naughy and downloads and entire ubuntu when there are better alternatives, will fix later)
+docker build -t springapi:latest .
 
 docker run -p 8080:8080 springapi:latest #This actually runs the container image
 
