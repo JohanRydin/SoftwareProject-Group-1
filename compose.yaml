@@ -1,0 +1,44 @@
+services:
+  db:
+    build:
+      context: ./db
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: storage
+    volumes:
+      - mysql-data:/var/lib/mysql  # Persistent storage for MySQL data
+      - ./db/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql  # Unsure what this does but it is our entrypoint for loading our database appearance
+    ports:
+      - "3306:3306" 
+    restart: always
+
+  springapi:
+    container_name: springapi
+    build:
+      context: ./SpringAPI  
+      dockerfile: Dockerfile #Can probably be deleted now, not sure when this wad required
+    ports:
+      - "8080:8080"  
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/storage 
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - db  # Ensure db starts before springapi
+    restart: always
+
+  adminer:  
+    container_name: adminer
+    image: adminer:latest
+    ports:
+      - "4000:8080"  # Access Adminer on port 4000 to make autofill easier...
+    restart: always
+    depends_on:
+      - db  # Ensure Adminer starts after the database
+
+volumes:
+  mysql-data:  # Define persistent volume for MySQL data
+
+
+
