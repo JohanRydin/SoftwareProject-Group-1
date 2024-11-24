@@ -7,10 +7,10 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: storage
     volumes:
-      - mysql-data:/var/lib/mysql  # Persistent storage for MySQL data
+      - ./db/mysql-data:/var/lib/mysql  # Persistent storage for MySQL data
       - ./db/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql  # Unsure what this does but it is our entrypoint for loading our database appearance
     ports:
-      - "3306:3306" 
+      - "3307:3306" 
     restart: always
 
   springapi:
@@ -21,7 +21,7 @@ services:
     ports:
       - "8080:8080"  
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/storage 
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3307/storage 
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
     depends_on:
