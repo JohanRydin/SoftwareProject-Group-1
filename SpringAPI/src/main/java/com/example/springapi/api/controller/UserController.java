@@ -2,8 +2,10 @@ package com.example.springapi.api.controller;
 
 import com.example.springapi.api.model.User;
 import com.example.springapi.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,20 +24,26 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<User> getUser(@RequestParam Integer id) {
-        Optional<User> user = userService.getUser(id);
+    public ResponseEntity<Integer> getUser(@RequestParam String username) {
+        Optional<User> user = userService.getUser(username);
         if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+            return ResponseEntity.ok(user.get().getId());
         }
         return ResponseEntity.notFound().build();
     }
     
     @PostMapping("/user")
-    public ResponseEntity<User> postUser(@RequestParam String username) {
+    public ResponseEntity<Integer> postUser(@RequestParam String username) {
         Optional<User> newUser = userService.newUser(username);
-        if (newUser.isPresent()) {
-            return ResponseEntity.ok(newUser.get());
+        if (newUser.isEmpty()) { 
+            return ResponseEntity.badRequest().body(null); // Bad request  if username already exists
         }
-        return ResponseEntity.badRequest().build(); // Bad request response if we already has such a user. 
+        return ResponseEntity.ok(newUser.get().getId());
+    }
+    
+
+    @DeleteMapping("/user")
+    public ResponseEntity<?> deleteUser(@RequestParam String username) {
+        return (ResponseEntity<?>) ResponseEntity.noContent(); //TODO: Fix when/if we allow deleting user 
     }
 }
