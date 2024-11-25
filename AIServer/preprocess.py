@@ -3,6 +3,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import re
+import ast
 
 def init_game_id_dictionary(df):
     game_dict = {}
@@ -80,5 +81,30 @@ def preprocess_games_ranking():
 
     df.to_csv("./game_data/games_ranking_indexed.csv", index=False)
 
-preprocess_games_ranking()
+# Create a list of genres ranked on their appearance in games
+# PRE: "./game_data/games_description.csv" exists
+# POST: "./game_data/genres.csv" exists with genres and their count
+# Returns None
+def do_genre_csv():
+    df = pd.read_csv("./game_data/games_description.csv", usecols=["genres"])
+    df['genres_list'] = df['genres'].apply(ast.literal_eval)
+    
+    genre_dict = {}
+    for genres in df['genres_list']:
+        for genre in genres:
+            if (genre in genre_dict):
+                genre_dict[genre] = genre_dict[genre] + 1
+            else:
+                genre_dict[genre] = 1
+            
+    sorted_genre_kvps = sorted(genre_dict.items(), key=lambda item: item[1], reverse=True)
+
+    keys, values = zip(*sorted_genre_kvps)
+    genre_df = pd.DataFrame({'Genre' : keys, 'Count' : values})
+
+    genre_df.to_csv("./game_data/genres.csv", index=False)
+    
+
+#preprocess_games_ranking()
+#do_genre_csv()
     
