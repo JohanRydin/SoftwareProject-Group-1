@@ -31,19 +31,28 @@ def find_similar_genres(game_ids, matrix, genre, df):
             vector[n] = 0
     return vector
 
-def find_best_sales(rank_df, genre):
-    return
+def find_best(rank_df, genre, num_of_games, rank_type):
+    df = rank_df[rank_df['genre'] == genre]
+    df = df[df['rank_type'] == rank_type]
+    vector = list()
+    for n in range(0, num_of_games):
+        vector.append(0)
+
+    count = len(df['game_id'])
+    current = count
+    for i in df['game_id']:
+        vector[i] = current / count
+        current = current - 1
+    return vector
 
 
 
 df = pd.read_csv("./game_data/filtered_descriptions.csv", usecols=['name', 'filtered_descriptions', 'genres'])
 df['genres_list'] = df['genres'].apply(ast.literal_eval)
 
-rank_df = pd.read_csv("./game_data/games_ranking.csv", usecols=['game_name', 'rank','rank_type', 'genre'])
-rank_df = rank_df[rank_df['rank_type'] == 'Sales']
+rank_df = pd.read_csv("./game_data/games_ranking_indexed.csv", usecols=['game_name', 'rank','rank_type', 'genre', 'game_id'])
 
-find_best_sales(rank_df, 'Action')
-
+num_of_games = len(df['name'])
 
 df = df.iloc[:100]
 
@@ -59,7 +68,9 @@ sim = find_similar_genres([1,55,56,57, 8, 4, 6, 86, 76, 75, 73], matrix, 'Aliens
 print("--- %s seconds ---" % (time.time() - start_time))
 
 amount = 10
-res = find_best_indices(amount, sim)
+best_sales = find_best(rank_df, 'Action', num_of_games, 'Sales')
+best_reviews = find_best(rank_df, 'Action', num_of_games, 'Review')
+res = find_best_indices(amount, best_sales)
 #Idea: filter out very similiar recomendations
 #print(df['name'][1])
 for n in range(0, amount):
