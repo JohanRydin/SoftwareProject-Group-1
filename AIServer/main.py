@@ -46,7 +46,7 @@ def find_best(rank_df, genre, num_of_games, rank_type):
     return vector
 
 # args: arguments on the form: {user: {name, [game_ids], [genres]}, rows: [similar_to : [1, 5, 2], best_reviewed : "Action", similar_to : [5], best_sales : "Adventure"]}
-def get_recommendations(args):
+def get_recommendations(user, row_requests):
     return None
 
 df = pd.read_csv("./game_data/filtered_descriptions.csv", usecols=['name', 'filtered_descriptions', 'genres'])
