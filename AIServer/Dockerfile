@@ -13,6 +13,9 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 COPY ./ /code/
 
 
+RUN python /code/initialize.py
+
+
 EXPOSE 80
 
 
