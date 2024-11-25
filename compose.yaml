@@ -1,17 +1,16 @@
 services:
   db:
-    build:
-      context: ./db
+    image: "mysql:latest"
     container_name: db
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: storage
-    volumes:
-      - ./db/mysql-data:/var/lib/mysql  # Persistent storage for MySQL data
-      - ./db/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql  # Unsure what this does but it is our entrypoint for loading our database appearance
     ports:
-      - "3307:3306" 
-    restart: always
+      - "3306:3306"  # Map MySQL default port
+    volumes:
+      - ./db/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql
+
 
   springapi:
     container_name: springapi
@@ -36,11 +35,8 @@ services:
     restart: always
     depends_on:
       - db  # Ensure Adminer starts after the database
-    environment:
-      ADMINER_DEFAULT_SERVER: db:3307
 
-volumes:
-  mysql-data:  # Define persistent volume for MySQL data
+      
 
 
 
