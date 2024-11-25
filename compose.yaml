@@ -36,6 +36,8 @@ services:
     restart: always
     depends_on:
       - db  # Ensure Adminer starts after the database
+    environment:
+      ADMINER_DEFAULT_SERVER: db:3307
 
 volumes:
   mysql-data:  # Define persistent volume for MySQL data
