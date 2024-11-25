@@ -46,4 +46,52 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@RequestParam String username) {
         return (ResponseEntity<?>) ResponseEntity.noContent(); //TODO: Fix when/if we allow deleting user 
     }
+
+
+
+    @GetMapping("user/genrepref")
+    public ResponseEntity<?> getUserGenrePref(@RequestParam String username) {
+        return (ResponseEntity<?>) ResponseEntity.noContent();
+    }
+    @PostMapping("user/genrepref")
+    public ResponseEntity<?> postUserGenrePref(@RequestParam String username) {
+        return (ResponseEntity<?>) ResponseEntity.noContent();
+    }
+    @DeleteMapping("user/genrepref")
+    public ResponseEntity<?> deleteUserGenrePref(@RequestParam String username) {
+        return (ResponseEntity<?>) ResponseEntity.noContent();
+    }
+
+
+    @GetMapping("user/gamepref")
+    public ResponseEntity<?> getUserGamePref(@RequestParam String username) {
+        return (ResponseEntity<?>) ResponseEntity.noContent();
+    }
+
+    @PostMapping("user/gamepref")
+    public ResponseEntity<?> postUserGamePref(@RequestParam String username) {
+        return (ResponseEntity<?>) ResponseEntity.noContent();
+    }
+
+    @DeleteMapping("user/gamepref")
+    public ResponseEntity<?> deleteUserGamePref(@RequestParam String username) {
+        return (ResponseEntity<?>) ResponseEntity.noContent();
+    }
+
+    
+    @GetMapping("user/wishlist")
+    public ResponseEntity<?> getUserWishlist(@RequestParam String username) {
+        return (ResponseEntity<?>) ResponseEntity.noContent();
+    }
+    @PostMapping("user/wishlist")
+    public ResponseEntity<?> postUserWishlist(@RequestParam String username) {
+        return (ResponseEntity<?>) ResponseEntity.noContent();
+    }
+
+    @DeleteMapping("user/wishlist")
+    public ResponseEntity<?> deleteUserWishlist(@RequestParam String username) {
+        return (ResponseEntity<?>) ResponseEntity.noContent();
+    }
+
+
 }
