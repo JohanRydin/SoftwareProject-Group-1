@@ -45,9 +45,39 @@ def find_best(rank_df, genre, num_of_games, rank_type):
         current = current - 1
     return vector
 
+def extract_games(indices, df):
+    games = list()
+    for n in indices:
+        games.append(df['name'][n])
+    return games
+
 # args: arguments on the form: {user: {name, [game_ids], [genres]}, rows: [similar_to : [1, 5, 2], best_reviewed : "Action", similar_to : [5], best_sales : "Adventure"]}
-def get_recommendations(user, row_requests):
-    return None
+def get_recommendations(user, row_requests, num = 10):
+    game_ids = user['game_ids']
+
+    games_list = list()
+
+    for request in row_requests:
+        command = list(request.keys())[0]
+        similar = None
+        if (command == 'similar_to_games'):
+            if (request[command] == 'all'):
+                similar = find_similar_games(game_ids, matrix)  # TODO: accessing global variable 'matrix'
+            else:
+                similar = find_similar_games(request[command], matrix)  # TODO: accessing global variable 'matrix'
+        elif (command == 'similar_to_genre'):
+            similar = find_similar_genres(game_ids, matrix, request[command], df)   # TODO: accessing global variables 'matrix', 'df'
+        elif (command == 'best_reviewed'):
+            similar = find_best(rank_df, request[command], len(df), 'Review')   # TODO: accessing global variables 'rank_df', 'df
+        elif (command == 'best_sales'):
+            similar = find_best(rank_df, request[command], len(df), 'Sales')   # TODO: accessing global variables 'rank_df', 'df
+        
+        if (similar):
+            indices = find_best_indices(num, similar)
+            games = extract_games(indices, df)
+            games_list.append(games)
+
+    return games_list
 
 df = pd.read_csv("./game_data/filtered_descriptions.csv", usecols=['name', 'filtered_descriptions', 'genres'])
 df['genres_list'] = df['genres'].apply(ast.literal_eval)

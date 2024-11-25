@@ -18,4 +18,4 @@ def read_recommendations(body: dict):
 
     recommendations = get_recommendations(user_data, rows_data)
 
-    return {"games": ["CS2", "Baldurs Gate 3"], "user_id":user_data['id']}
+    return {"games": recommendations}
