@@ -36,30 +36,32 @@ def filter_stopwords(data):
 
     return filtered_sentences
 
+# Preprocess games descriptions
+# PRE: './game_data/games_description.csv' and has columns "name","long_description","genres","overall_player_rating", "publisher", "link"
+# POST: creates "./game_data/filtered_descriptions.csv" with filtered descriptions
+# Returns None
 def preprocess_games_description():
-
     df = pd.read_csv("./game_data/games_description.csv", usecols=["name","long_description","genres","overall_player_rating", "publisher", "link"])
 
-    #print(df[df["short_description"].isna()].shape)
-    #print(df[df["long_description"].isna()].shape)
-    #print("Short average length: ", df['short_description'].dropna().str.len().mean())
-    #print("Long average lenth: ", df['long_description'].dropna().str.len().mean())
-
-
+    # Replace missing descriptions with an empty string
     df["long_description"].fillna("", inplace=True)
 
+    # Remove stopwords from the descriptions
     filtered_descriptions = filter_stopwords(list(df["long_description"]))
 
+    # Join stopwords into one string, we tokenize it later
     for n in range(0, len(filtered_descriptions)):
         filtered_descriptions[n] = ' '.join(filtered_descriptions[n])
-    #print(filtered_descriptions)
 
     df["filtered_descriptions"] = filtered_descriptions
-    #print("Token average lenth: ", df['description_tokens'].apply((lambda x: sum(len(s) for s in x))).mean())
-    #print(filtered_descriptions[0])
 
     df.to_csv("./game_data/filtered_descriptions.csv", index=True)
 
+# Preprocess games ranking
+# PRE: 'games_description.cvs' exists in subfolder 'game_data' and has columns "name","long_description","genres","overall_player_rating", "publisher", "link"
+#      './game_data/games_ranking.csv' exists
+# POST: creates "./game_data/games_ranking_indexed.csv" where games have an index
+# Returns None
 def preprocess_games_ranking():
     df = pd.read_csv("./game_data/games_ranking.csv")
     games_dict = init_game_id_dictionary(pd.read_csv("./game_data/games_description.csv", usecols=["name","long_description","genres","overall_player_rating", "publisher", "link"]))
@@ -68,15 +70,15 @@ def preprocess_games_ranking():
     
     for n in range(0, len(df['game_name'])):
         if df['game_name'][n] in games_dict:
-            #df['game_id'][n] = games_dict[df['game_name'][n]]
             game_name = df.loc[n, 'game_name']
             df.loc[n, 'game_id'] = games_dict.get(game_name, None)
 
     df = df.dropna()
 
-    df.to_csv("./game_data/games_ranking_indexed.csv", index=False)
+    # df contains both sales and revenue ranking, we remove revenue rankings since these are so highly correlated and sales is more interesting
+    df = df[df["rank_type"] != "Revenue"]
 
-    # TODO: split this into smaller CSVS and then use it to make a new category of recommendations
+    df.to_csv("./game_data/games_ranking_indexed.csv", index=False)
 
 preprocess_games_ranking()
     
