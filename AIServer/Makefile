@@ -13,3 +13,6 @@ clean_docker:
 
 stop_docker:
 	docker stop recommendations
+	
+recompile: clean_docker build_docker run_docker
+	

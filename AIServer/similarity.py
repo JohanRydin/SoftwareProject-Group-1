@@ -30,22 +30,11 @@ def similarity(docs, query):
     # building the index
     sims = gensim.similarities.Similarity('workdir/',tf_idf[corpus], num_features=len(dictionary))
 
-
     #query_doc = tokenize(query)
     query_doc_bow = dictionary.doc2bow(query_doc[0])
 
     query_doc_tf_idf = tf_idf[query_doc_bow]
-    # print(document_number, document_similarity)
-    #print('Comparing Result:', sims[query_doc_tf_idf]) 
     return sims[query_doc_tf_idf]
-    print(sims[query_doc_tf_idf])
-    sum_of_sims =(np.sum(sims[query_doc_tf_idf], dtype=np.float32))
-    similarity = round(float(sum_of_sims / len(docs)), 2)
-    #print(f'Average similarity float: {float(sum_of_sims / len(docs))}')
-    #print(f'Average similarity percentage: {float(sum_of_sims / len(docs)) * 100}')
-    #print(f'Average similarity rounded percentage: {percentage_of_similarity}')
-
-    return similarity
 
 # Creates similarity matrix for the given dataset of documents
 # docs - contains a list of descriptions
@@ -57,7 +46,6 @@ def sim_matrix(docs):
         sim = similarity(docs, [docs[n]])
         sim[n] = 0
         sim_matrix.append(sim)
-        #print(n)
     return sim_matrix
 
 # Finds the top X indices
@@ -66,7 +54,6 @@ def sim_matrix(docs):
 # returns a list of top indices
 def find_best_indices(number, similarities):
     return sorted(range(len(similarities)), key = lambda sub: similarities[sub], reverse=True)[:number]
-
 
 # Combine several matrixes into one, weighing them with different weights
 # PRE - each matrix must have the same dimensions, and len(matrixes) must be equal to len(weights)
@@ -99,5 +86,3 @@ def combine_vectors(vectors):
         for n in range(0,size):
                 vector[n] += vectors[i][n]
     return vector
-    
-    
