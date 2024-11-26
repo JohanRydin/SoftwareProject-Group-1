@@ -1,7 +1,8 @@
 from fastapi import FastAPI
-from main import get_recommendations
+from recommendations import Recommender
 
 app = FastAPI()
+recommender = Recommender(100)
 
 @app.get("/")
 def read_root():
@@ -16,6 +17,6 @@ def read_recommendations(body: dict):
     if not user_data or not rows_data:
         return {"error": "Missing required data"}
 
-    recommendations = get_recommendations(user_data, rows_data)
+    recommendations = recommender.get_recommendations(user_data, rows_data)
 
     return {"games": recommendations}

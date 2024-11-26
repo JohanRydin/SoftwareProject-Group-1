@@ -1,5 +1,6 @@
 from similarity import similarity
 import numpy as np
+from recommendations import Recommender
 
 def test1():
     docs = ["Mars is the fourth planet in our solar system.",
@@ -23,4 +24,8 @@ def test2():
 
 	assert similarity1[1] >= 0.99, "Incorrect similarity 1 with docs from example"
 	assert similarity2[0] >= 0.99, "Incorrect similarity 2 with docs from example"
+      
+def test_create_recommender():
+      rec = Recommender(10)
+      assert rec, "rec is None ! >:("
     
