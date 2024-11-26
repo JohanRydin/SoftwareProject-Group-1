@@ -38,11 +38,11 @@ def filter_stopwords(data):
     return filtered_sentences
 
 # Preprocess games descriptions
-# PRE: './game_data/games_description.csv' and has columns "name","long_description","genres","overall_player_rating", "publisher", "link"
+# PRE: './../csvs/games_description_indexed.csv' and has columns "name","long_description","genres","overall_player_rating", "publisher", "link"
 # POST: creates "./game_data/filtered_descriptions.csv" with filtered descriptions
 # Returns None
 def preprocess_games_description():
-    df = pd.read_csv("./game_data/games_description.csv", usecols=["name","long_description","genres","overall_player_rating", "publisher", "link"])
+    df = pd.read_csv("./../csvs/games_description_indexed.csv", usecols=["name","long_description","genres","overall_player_rating", "publisher", "link"])
 
     # Replace missing descriptions with an empty string
     df["long_description"].fillna("", inplace=True)
@@ -65,7 +65,7 @@ def preprocess_games_description():
 # Returns None
 def preprocess_games_ranking():
     df = pd.read_csv("./game_data/games_ranking.csv")
-    games_dict = init_game_id_dictionary(pd.read_csv("./game_data/games_description.csv", usecols=["name","long_description","genres","overall_player_rating", "publisher", "link"]))
+    games_dict = init_game_id_dictionary(pd.read_csv("./../csvs/games_description_indexed.csv", usecols=["name","long_description","genres","overall_player_rating", "publisher", "link"]))
     df['game_id'] = None
 
     
@@ -82,11 +82,11 @@ def preprocess_games_ranking():
     df.to_csv("./game_data/games_ranking_indexed.csv", index=False)
 
 # Create a list of genres ranked on their appearance in games
-# PRE: "./game_data/games_description.csv" exists
+# PRE: "./../csvs/games_description_indexed.csv" exists
 # POST: "./game_data/genres.csv" exists with genres and their count
 # Returns None
 def do_genre_csv():
-    df = pd.read_csv("./game_data/games_description.csv", usecols=["genres"])
+    df = pd.read_csv("./../csvs/games_description_indexed.csv", usecols=["genres"])
     df['genres_list'] = df['genres'].apply(ast.literal_eval)
     
     genre_dict = {}
@@ -105,17 +105,16 @@ def do_genre_csv():
     genre_df.to_csv("./game_data/genres.csv", index=True, index_label='genre_id')
 
 # Add ids to csv with list of games
-# PRE: "./game_data/games_description.csv" exists
-# POST: "./game_data/games_description.csv" contains the column 'game_id' with unique int indexes
+# PRE: "./../csvs/games_description_indexed.csv" exists
+# POST: "./../csvs/games_description_indexed.csv" contains the column 'game_id' with unique int indexes
 # Returns None
 def add_ids_to_csv():
-    df = pd.read_csv("./game_data/games_description.csv")
+    df = pd.read_csv("./../csvs/games_description_indexed.csv")
     df.to_csv("./game_data/games_description_indexed.csv", index=True, index_label='game_id')
 
+#preprocess_games_description()
 #preprocess_games_ranking()
 #do_genre_csv()
 #add_ids_to_csv()
-    
 
-# "./games_description.csv" -> "./../csvs/games_description.csv"
 
