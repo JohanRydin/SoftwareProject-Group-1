@@ -1,0 +1,8 @@
+$headers = @{
+    "Content-Type" = "application/json"
+}
+
+Invoke-WebRequest -Uri 'http://127.0.0.1:5000/recommendations' `
+  -Method Post `
+  -Headers $headers `
+  -Body '{"user": {"id": 5, "game_ids": [3, 5]}, "rows": [{"similar_to_games": [1, 7, 3]}, {"similar_to_games": "all"}, {"similar_to_games": "all"}, {"similar_to_genre": "Sports"}, {"best_reviewed": "Adventure"}, {"best_sales": "Action"}]}'
