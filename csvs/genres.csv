@@ -1,0 +1,351 @@
+genre_id,Genre,Count
+0,Singleplayer,225
+1,Multiplayer,200
+2,Action,165
+3,Simulation,150
+4,Adventure,121
+5,Co-op,112
+6,Open World,112
+7,Strategy,99
+8,Atmospheric,94
+9,First-Person,92
+10,RPG,81
+11,Online Co-Op,80
+12,Indie,80
+13,Sandbox,80
+14,PvP,78
+15,Sports,77
+16,Third Person,73
+17,Realistic,72
+18,Great Soundtrack,68
+19,3D,67
+20,Story Rich,66
+21,Casual,62
+22,Exploration,61
+23,Character Customization,55
+24,Tactical,49
+25,Early Access,49
+26,Fantasy,48
+27,Survival,48
+28,Funny,47
+29,Racing,47
+30,Shooter,46
+31,FPS,44
+32,Sci-fi,44
+33,Moddable,43
+34,Controller,42
+35,Management,42
+36,Difficult,41
+37,Building,39
+38,2D,37
+39,War,34
+40,Driving,34
+41,Turn-Based Strategy,33
+42,Violent,32
+43,Family Friendly,32
+44,Physics,32
+45,Action RPG,31
+46,PvE,31
+47,Horror,30
+48,eSports,28
+49,Immersive Sim,28
+50,Replay Value,28
+51,Free to Play,27
+52,RTS,27
+53,Base Building,27
+54,Massively Multiplayer,27
+55,Gore,26
+56,Crafting,26
+57,VR,26
+58,Team-Based,24
+59,Military,24
+60,Colorful,24
+61,Arcade,24
+62,Historical,24
+63,Combat,23
+64,Action-Adventure,23
+65,Automobile Sim,23
+66,Comedy,23
+67,Economy,23
+68,Competitive,22
+69,Third-Person Shooter,22
+70,Grand Strategy,22
+71,Choices Matter,22
+72,Relaxing,22
+73,Space,21
+74,Turn-Based,21
+75,Resource Management,21
+76,Local Multiplayer,20
+77,City Builder,20
+78,Cute,19
+79,Bikes,19
+80,Post-apocalyptic,18
+81,Puzzle,18
+82,Motorbike,18
+83,Dark Fantasy,17
+84,Lore-Rich,17
+85,Local Co-Op,17
+86,Dark,17
+87,Anime,16
+88,Pixel Graphics,15
+89,Hack and Slash,14
+90,Stealth,14
+91,Psychological Horror,14
+92,Medieval,14
+93,Multiple Endings,14
+94,Roguelite,14
+95,Isometric,14
+96,Party-Based RPG,14
+97,4X,14
+98,Mature,13
+99,Strategy RPG,13
+100,Female Protagonist,13
+101,Open World Survival Craft,13
+102,JRPG,13
+103,Magic,13
+104,Offroad,13
+105,Motocross,13
+106,Souls-like,12
+107,Cinematic,12
+108,Real Time Tactics,12
+109,Zombies,12
+110,Turn-Based Combat,12
+111,Survival Horror,12
+112,Card Game,12
+113,Sexual Content,11
+114,Classic,11
+115,Cartoony,11
+116,Procedural Generation,11
+117,Tactical RPG,11
+118,Turn-Based Tactics,11
+119,Deckbuilding,11
+120,Trading,10
+121,Loot,10
+122,MMORPG,10
+123,Looter Shooter,10
+124,Roguelike,10
+125,Dungeon Crawler,10
+126,Skateboarding,10
+127,Parkour,9
+128,Modern,9
+129,Platformer,9
+130,Life Sim,9
+131,Basketball,9
+132,Golf,9
+133,Wargame,8
+134,Futuristic,8
+135,Destruction,8
+136,Stylized,8
+137,Hand-drawn,8
+138,Dating Sim,8
+139,Tabletop,8
+140,Board Game,8
+141,Fast-Paced,7
+142,Nudity,7
+143,3D Fighter,7
+144,4 Player Local,7
+145,Flight,7
+146,World War II,7
+147,Aliens,7
+148,Action Roguelike,7
+149,Memes,7
+150,Class-Based,7
+151,Retro,7
+152,Mystery,7
+153,Education,7
+154,Nature,7
+155,Mod,7
+156,Hex Grid,7
+157,Split Screen,7
+158,Mini Golf,7
+159,Mythology,6
+160,Battle Royale,6
+161,Games Workshop,6
+162,Martial Arts,6
+163,Emotional,6
+164,Beautiful,6
+165,Top-Down,6
+166,Puzzle Platformer,6
+167,Real-Time with Pause,6
+168,Card Battler,6
+169,Football (Soccer),6
+170,Colony Sim,6
+171,Transportation,6
+172,Addictive,6
+173,Boxing,6
+174,Snowboarding,6
+175,Cycling,6
+176,BMX,6
+177,Drama,5
+178,Hero Shooter,5
+179,Fighting,5
+180,Dwarf,5
+181,Swordplay,5
+182,Crime,5
+183,Perma Death,5
+184,Cooking,5
+185,Soundtrack,5
+186,3D Platformer,5
+187,Level Editor,5
+188,3D Vision,5
+189,Remake,5
+190,CRPG,5
+191,Romance,5
+192,TrackIR,5
+193,Steampunk,5
+194,Farming Sim,5
+195,Vehicular Combat,5
+196,Fishing,5
+197,Political,5
+198,Trading Card Game,5
+199,6DOF,5
+200,Minimalist,5
+201,Combat Racing,5
+202,Skating,5
+203,Tower Defense,4
+204,Party Game,4
+205,Beat 'em up,4
+206,America,4
+207,Dark Humor,4
+208,Time Management,4
+209,LGBTQ+,4
+210,Point & Click,4
+211,Bullet Hell,4
+212,Heist,4
+213,Dinosaurs,4
+214,Dragons,4
+215,Automation,4
+216,Visual Novel,4
+217,Detective,4
+218,Real-Time,4
+219,Walking Simulator,4
+220,Gambling,4
+221,Inventory Management,4
+222,Capitalism,4
+223,Alternate History,4
+224,Diplomacy,4
+225,Space Sim,4
+226,Tutorial,4
+227,Skiing,4
+228,Tennis,4
+229,Pool,4
+230,ATV,4
+231,Music,3
+232,Cyberpunk,3
+233,Ninja,3
+234,Naval,3
+235,Epic,3
+236,Social Deduction,3
+237,Spectacle fighter,3
+238,NSFW,3
+239,Cartoon,3
+240,Choose Your Own Adventure,3
+241,Western,3
+242,Horses,3
+243,Psychological,3
+244,Minigames,3
+245,Science,3
+246,Demons,3
+247,Dystopian,3
+248,Surreal,3
+249,Short,3
+250,Artificial Intelligence,3
+251,2.5D,3
+252,Logic,3
+253,Politics,3
+254,Agriculture,3
+255,Snow,3
+256,Tanks,3
+257,Trains,3
+258,Touch-Friendly,3
+259,Action RTS,3
+260,Baseball,3
+261,Bowling,3
+262,Archery,3
+263,Warhammer 40K,2
+264,Party,2
+265,Robots,2
+266,Quick-Time Events,2
+267,Blood,2
+268,2D Fighter,2
+269,Pirates,2
+270,Sailing,2
+271,Investigation,2
+272,Gun Customization,2
+273,2D Platformer,2
+274,Dark Comedy,2
+275,Design & Illustration,2
+276,Gaming,2
+277,Side Scroller,2
+278,Mechs,2
+279,Score Attack,2
+280,1980s,2
+281,Co-op Campaign,2
+282,Creature Collector,2
+283,Mining,2
+284,Underwater,2
+285,Roguelike Deckbuilder,2
+286,Mouse only,2
+287,Superhero,2
+288,Sequel,2
+289,Collectathon,2
+290,Naval Combat,2
+291,Football (American),2
+292,Voxel,2
+293,Runner,2
+294,Wholesome,2
+295,Cozy,2
+296,Rome,2
+297,Wrestling,2
+298,Narration,1
+299,MOBA,1
+300,Illuminati,1
+301,Conversation,1
+302,Utilities,1
+303,Software,1
+304,Animation & Modeling,1
+305,Photo Editing,1
+306,Game Development,1
+307,Assassin,1
+308,Rhythm,1
+309,Metroidvania,1
+310,Time Travel,1
+311,Vampire,1
+312,Character Action Game,1
+313,Silent Protagonist,1
+314,Reboot,1
+315,Supernatural,1
+316,Dungeons & Dragons,1
+317,Gothic,1
+318,Thriller,1
+319,Conspiracy,1
+320,Foreign,1
+321,Lovecraftian,1
+322,Hacking,1
+323,1990's,1
+324,Extraction Shooter,1
+325,Old School,1
+326,RPGMaker,1
+327,Auto Battler,1
+328,Political Sim,1
+329,Cold War,1
+330,Hunting,1
+331,Farming,1
+332,GameMaker,1
+333,Sniper,1
+334,Outbreak Sim,1
+335,Experimental,1
+336,FMV,1
+337,Medical Sim,1
+338,Nonlinear,1
+339,Comic Book,1
+340,Satire,1
+341,Solitaire,1
+342,Vikings,1
+343,World War I,1
+344,Immersive,1
+345,Text-Based,1
+346,Time Manipulation,1
+347,Volleyball,1
+348,Hockey,1
+349,Arena Shooter,1

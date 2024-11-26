@@ -102,9 +102,20 @@ def do_genre_csv():
     keys, values = zip(*sorted_genre_kvps)
     genre_df = pd.DataFrame({'Genre' : keys, 'Count' : values})
 
-    genre_df.to_csv("./game_data/genres.csv", index=False)
-    
+    genre_df.to_csv("./game_data/genres.csv", index=True, index_label='genre_id')
+
+# Add ids to csv with list of games
+# PRE: "./game_data/games_description.csv" exists
+# POST: "./game_data/games_description.csv" contains the column 'game_id' with unique int indexes
+# Returns None
+def add_ids_to_csv():
+    df = pd.read_csv("./game_data/games_description.csv")
+    df.to_csv("./game_data/games_description_indexed.csv", index=True, index_label='game_id')
 
 #preprocess_games_ranking()
 #do_genre_csv()
+#add_ids_to_csv()
     
+
+# "./games_description.csv" -> "./../csvs/games_description.csv"
+
