@@ -1,16 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './Navbar';
+import Home from './Home';
+import MyList from './MyList';
+import Wishlist from './Wishlist';
+import './App.css';
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <div className="content"></div>
-    </>
+    <BrowserRouter>
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/mylist" element={<MyList />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

@@ -1,23 +1,50 @@
-import React from 'react';
-import './App.css';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import './Navbar.css';
 
-function Navbar() {
+const Navbar = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  
+
+
+  //TODO: handleSubmit and handleAutClick is from the odin proj, should be changed.
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Searching for:', searchQuery);
+  };
+
+  const handleAuthClick = () => {
+    setIsLoggedIn(!isLoggedIn);
+  };
+
   return (
     <nav className="navbar">
-      <div className="categories">
-        <ul>
-          <li><a href="https://test.com/action">Action</a></li>
-          <li><a href="https://test.com/adventure">Adventure</a></li>
-          <li><a href="https://test.com/racing">Racing</a></li>
-          <li><a href="https://test.com/something">Something</a></li>
-          <li><a href="https://test.com/something-else">Something Else</a></li>
-        </ul>
-      </div>
-      <div className="search_bar">
-        <input type="text" placeholder="Search..." />
+      <div className="nav-items">
+        <Link to="/" className="nav-item logo">GameHive</Link>
+        <Link to="/mylist" className="nav-item">My List</Link>
+        <Link to="/wishlist" className="nav-item">Wishlist</Link>
+
+        <button 
+          onClick={handleAuthClick} 
+          className="nav-item auth-button"
+        >
+          {isLoggedIn ? 'Logout' : 'Login'}
+        </button>
+        
+        <form onSubmit={handleSubmit} className="search-form">
+          <input
+            type="text"
+            placeholder="Search games..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+          <button type="submit" className="search-button">Search</button>
+        </form>
+
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;
