@@ -36,7 +36,11 @@ services:
     depends_on:
       - db  # Ensure Adminer starts after the database
 
-      
-
-
-
+  aiserver:
+    build:
+      context: ./AIServer
+      dockerfile: Dockerfile
+    container_name: aiserver
+    ports:
+      - "5000:5000"  # Expose the app on port 5000
+    restart: always
