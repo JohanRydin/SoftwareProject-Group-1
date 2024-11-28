@@ -1,3 +1,4 @@
+
 # SoftwareProject-Group-1
 Projekt i mjukvaruutveckling, 15 hp (1DL650) Grupp 1
 
@@ -6,4 +7,3 @@ Projekt i mjukvaruutveckling, 15 hp (1DL650) Grupp 1
 Prerequisite: Docker daemon and docker desktop exists. 
 
 docker compose up #Builds the containers
-
