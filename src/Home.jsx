@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
+import GameList from './GameList'
 
 function Home() {
   const [games, setGames] = useState([]);
@@ -44,22 +45,8 @@ function Home() {
   return (
     <div className="home">
       <div className="games-row">
-        <h2>Top 100 Games</h2>
-        <div className="games-posters">
-          {games.map((game) => (
-            <div key={game.id} className="game-poster">
-              <img
-                src={game.background_image}
-                alt={game.name}
-                className="poster-image"
-              />
-              <div className="game-info">
-                <h3>{game.name}</h3>
-                <p>Rating: {game.rating}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <GameList games={games} title="Top 100 games"/>
+        <GameList games={games} title="Top 1 games"/>
       </div>
     </div>
   );

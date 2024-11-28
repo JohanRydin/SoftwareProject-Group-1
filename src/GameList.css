@@ -1,0 +1,75 @@
+  .games-posters {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* det här krävs för att de ska ställas upp som kort */
+    gap: 15px;
+    padding: 20px;
+  }
+  .games-posters {
+    display: flex; /* Arrange children in a row */
+    flex-wrap: nowrap; /* Prevent wrapping to the next line */
+    overflow-x: auto; /* Allow horizontal scrolling */
+    gap: 1rem; /* Add spacing between posters */
+    padding: 1rem; /* Add padding around the row */
+    scrollbar-width: none; /* For Firefox, optional */
+  }
+  .games-posters::-webkit-scrollbar {
+    display: none;
+    }
+  .game-poster {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    min-width: 200px;
+  }
+  
+  .game-poster:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+  }
+  
+  .poster-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .game-info {
+    padding: 12px;
+    background: linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 1) 0%,         
+      rgba(255, 255, 255, 0.85) 70%,     
+      rgba(255, 255, 255, 0.7) 100%      
+    );
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    transform: translateY(100%);
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+  
+  .game-poster:hover .game-info {
+    transform: translateY(0);
+  }
+  
+  .game-info h3,
+  .game-info p {
+    color: #141414; 
+  }
+  
+  .game-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .game-info p {
+    font-size: 0.9rem;
+    opacity: 0.9;  
+  }
