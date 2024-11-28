@@ -1,0 +1,46 @@
+services:
+  db:
+    image: "mysql:latest"
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: storage
+    ports:
+      - "3306:3306"  # Map MySQL default port
+    volumes:
+      - ./db/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql
+
+
+  springapi:
+    container_name: springapi
+    build:
+      context: ./SpringAPI  
+      dockerfile: Dockerfile #Can probably be deleted now, not sure when this wad required
+    ports:
+      - "8080:8080"  
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3307/storage 
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - db  # Ensure db starts before springapi
+    restart: always
+
+  adminer:  
+    container_name: adminer
+    image: adminer:latest
+    ports:
+      - "4000:8080"  # Access Adminer on port 4000 to make autofill easier...
+    restart: always
+    depends_on:
+      - db  # Ensure Adminer starts after the database
+
+  aiserver:
+    build:
+      context: ./AIServer
+      dockerfile: Dockerfile
+    container_name: aiserver
+    ports:
+      - "5000:5000"  # Expose the app on port 5000
+    restart: always

@@ -1,1 +1,11 @@
 node_modules/
+
+__pycache__
+
+pytest_cache
+
+**/.0
+
+**/.DS_Store
+
+/db/mysql-data/
