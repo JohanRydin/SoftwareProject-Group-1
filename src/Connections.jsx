@@ -99,17 +99,49 @@ const deleteData = async (path) => {
   }
 };
 
-
-export const getUser = (userData) => {
-    return fetchData("/user", userData);
+export const getUser = (userID) => {
+    data = {userID: userID}
+    return fetchData("/user", data);
 }
 
-export const postUser = (userData) => {
-    return postData("/user", userData);
+export const postUser = (username) => {
+    data = {username: username}
+    return postData("/user", data);
 }
 
-export const getRecommendations = (userAndRowData) => {
-    return postData("recommended", userAndRowData)
+// userID example: 5
+// rows example:   [{"similar_to" : [1, 5, 2]}, {"best_reviewed" : "Action"}, {"similar_to" : "all"}, {"best_sales" : "Adventure"}]
+export const getRecommendations = (userID, rows) => {
+    data = {userID: userID, rows: rows}
+    return postData("/recommended", data)
 }
 
+export const postGamePreference = (userID, gameID) => {
+    data =  {userID: userID, gameID: gameID}
+    return postData("/gamePref", data)
+}
 
+export const postGenrePreference = (userID, genre) => {
+  data =  {userID: userID, genre: genre}
+  return postData("/genrePref", data)
+}
+
+export const postWishlistGame = (userID, gameID) => {
+  data =  {userID: userID, gameID: gameID}
+  return postData("/wishlist", data)
+}
+
+export const deleteGamePreference = (userID, gameID) => {
+  data =  {userID: userID, gameID: gameID}
+  return deleteData("/gamePref", data)
+}
+
+export const deleteGenrePreference = (userID, genre) => {
+data =  {userID: userID, genre: genre}
+return deleteData("/genrePref", data)
+}
+
+export const deleteWishlistGame = (userID, gameID) => {
+data =  {userID: userID, gameID: gameID}
+return deleteData("/wishlist", data)
+}
