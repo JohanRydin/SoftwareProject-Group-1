@@ -8,6 +8,7 @@
   font-weight: bold;
   background-color: #000000;
   font-family: Helvetica, sans-serif;
+  z-index: 100;
 }
 
 .nav-items {
