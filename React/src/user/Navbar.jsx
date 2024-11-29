@@ -2,19 +2,26 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
-const Navbar = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+const Navbar = ({setSearchQuery}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);  
-
+  const [inputValue, setInputValue] = useState('');
 
   //TODO: handleSubmit and handleAutClick is from the odin proj, should be changed.
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
+    console.log('Searching for:', inputValue);
+    setSearchQuery(inputValue);
   };
 
   const handleAuthClick = () => {
     setIsLoggedIn(!isLoggedIn);
+  };
+  const onChange = (e) => {
+    setInputValue(e.target.value)
+    if(e.target.value == ''){
+      setSearchQuery('')
+    }
+
   };
 
   return (
@@ -35,8 +42,8 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search games..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={inputValue}
+            onChange={onChange}
             className="search-input"
           />
           <button type="submit" className="search-button">Search</button>
