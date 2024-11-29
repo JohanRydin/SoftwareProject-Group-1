@@ -1,5 +1,8 @@
-make all:
+make up:
 	docker compose up -d
+
+make down: 
+	docker compose down
 
 make clean:
 	docker compose down --volumes --rmi all
