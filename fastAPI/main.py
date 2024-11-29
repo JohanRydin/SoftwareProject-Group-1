@@ -7,6 +7,7 @@ from models import User
 from schemas import UserCreate, UserResponse, RecommendationRequest
 import os
 import requests
+import httpx
 
 DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:root@db:3306/storage")
 
