@@ -18,7 +18,7 @@ Base = declarative_base()
 app = FastAPI()
 
 # Dependency to get the DB session
-def get_db():
+async def get_db():
     db = SessionLocal()
     try:
         yield db
@@ -27,7 +27,7 @@ def get_db():
 
 
 @app.post("/users/", response_model=UserResponse)
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
+async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(username=user.username)
     db.add(db_user)
     db.commit()
@@ -35,12 +35,12 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return db_user
 
 @app.get("/users/", response_model=list[UserResponse])
-def get_users(db: Session = Depends(get_db)):
+async def get_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return users
 
 @app.get("/user/{username}", response_model=UserResponse)
-def get_user(username: str, db: Session = Depends(get_db)):
+async def get_user(username: str, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.username == username).first()
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -48,7 +48,7 @@ def get_user(username: str, db: Session = Depends(get_db)):
 
 
 @app.post("/recommendation")
-def get_recommendation(request: RecommendationRequest, db: Session = Depends(get_db)):
+async def get_recommendation(request: RecommendationRequest, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.username == request.username).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -59,8 +59,14 @@ def get_recommendation(request: RecommendationRequest, db: Session = Depends(get
     }
 
     api_url = "http://localhost:5000/recommendations"
-    data = requests.get(api_url).json()
-    print(data)
+    items = {"user": {"id": 5, "game_ids": [3, 5], "genres": ["Action", "Strategy", "Adventure"]}}
+
+    async with httpx.AsyncClient() as client:
+        # Make a POST request to the external API with JSON data
+        response = await client.post(api_url, json=items.dict())
+        print(response)
+    # Return the response from the external API
+        return {"status_code": response.status_code, "response": response.json()}
     return recommendations
 
 
