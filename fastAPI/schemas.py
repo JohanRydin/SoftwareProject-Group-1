@@ -74,3 +74,7 @@ class GenrePrefRemove(GenrePref):
 
 class GenrePrefDelete(GenrePref):
     pass #TODO
+
+
+class RecommendationRequest(BaseModel):
+    username: str

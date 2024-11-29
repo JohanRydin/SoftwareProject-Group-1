@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
 from models import User
-from schemas import UserCreate, UserResponse
+from schemas import UserCreate, UserResponse, RecommendationRequest
 import os
 
 DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:root@db:3306/storage")
@@ -44,3 +44,17 @@ def get_user(username: str, db: Session = Depends(get_db)):
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
+
+
+@app.post("/recommendation")
+def get_recommendation(request: RecommendationRequest, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.username == request.username).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    recommendations = {
+        "username": db_user.username,
+        "recommended_games": ["Game A", "Game B", "Game C"] 
+    }
+
+    return recommendations
