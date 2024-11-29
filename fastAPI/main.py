@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from models import User
 from schemas import UserCreate, UserResponse, RecommendationRequest
 import os
+import requests
 
 DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:root@db:3306/storage")
 
@@ -57,4 +58,9 @@ def get_recommendation(request: RecommendationRequest, db: Session = Depends(get
         "recommended_games": ["Game A", "Game B", "Game C"] 
     }
 
+    api_url = "http://localhost:5000/recommendations"
+    data = requests.get(api_url).json()
+    print(data)
     return recommendations
+
+

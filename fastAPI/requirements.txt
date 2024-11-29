@@ -4,4 +4,5 @@ sqlalchemy
 pymysql
 alembic
 pydantic
-cryptography  # Add this line
+cryptography
+requests
