@@ -73,3 +73,32 @@
     font-size: 0.9rem;
     opacity: 0.9;  
   }
+
+  .scroll-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .scroll-button {
+    position: absolute;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .scroll-button.left {
+    left: 10px;
+  }
+  
+  .scroll-button.right {
+    right: 10px;
+  }

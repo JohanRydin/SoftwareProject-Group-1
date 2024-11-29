@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Home.css';
 import GameList from './GameList'
 
-function Home() {
+function Home({searchQuery}) {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -45,7 +45,11 @@ function Home() {
   return (
     <div className="home">
       <div className="games-row">
-        <GameList games={games} title="Top 100 games"/>
+        {searchQuery != '' && (<GameList games={games} title={searchQuery}/>)}
+        <GameList games={games} title="Top 1 games"/>
+        <GameList games={games} title="Top 1 games"/>
+        <GameList games={games} title="Top 1 games"/>
+        <GameList games={games} title="Top 1 games"/>
         <GameList games={games} title="Top 1 games"/>
       </div>
     </div>

@@ -145,3 +145,8 @@ export const deleteWishlistGame = (userID, gameID) => {
 data =  {userID: userID, gameID: gameID}
 return deleteData("/wishlist", data)
 }
+
+export const getSearch = (search) => {
+  data = {search: search}
+  return fetchData("/search", data);
+}
