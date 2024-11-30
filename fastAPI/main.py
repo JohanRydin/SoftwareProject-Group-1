@@ -48,26 +48,25 @@ async def get_user(username: str, db: Session = Depends(get_db)):
     return db_user
 
 
-@app.post("/recommendation")
-async def get_recommendation(request: RecommendationRequest, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.username == request.username).first()
-    if not db_user:
-        raise HTTPException(status_code=404, detail="User not found")
+@app.get("/recommendation")
+async def post_recommendation(): #(username: str, db: Session = Depends(get_db)):
+    
+    #db_user = db.query(User).filter(User.username == username).first()
 
-    recommendations = {
-        "username": db_user.username,
-        "recommended_games": ["Game A", "Game B", "Game C"] 
-    }
+    #if not db_user:
+    #    raise HTTPException(status_code=404, detail="User not found")
 
-    api_url = "http://localhost:5000/recommendations"
-    items = {"user": {"id": 5, "game_ids": [3, 5], "genres": ["Action", "Strategy", "Adventure"]}}
+    api_url = "http://aiserver:5000/recommendations"
+
+    items = {"user": {"id": 5, "game_ids": [3, 5], "genres": ["Action", "Strategy", "Adventure"]}, "rows": [{"similar_to_games": [1, 7, 3]}, {"similar_to_games": "all"}, 
+    {"similar_to_genre": "Sports"}, {"best_reviewed": "Adventure"}, {"best_sales": "Action"}]}
 
     async with httpx.AsyncClient() as client:
         # Make a POST request to the external API with JSON data
-        response = await client.post(api_url, json=items.dict())
+        response = await client.post(api_url, json=items)
         print(response)
     # Return the response from the external API
         return {"status_code": response.status_code, "response": response.json()}
-    return recommendations
+    return response
 
 
