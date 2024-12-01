@@ -43,6 +43,9 @@ class Wishlist(WishlistBase):
     class Config:
         orm_mode = True
 
+class WishlistResponse(BaseModel):
+    gameID: int
+
 class WishlistCreate(WishlistBase):
     pass #TODO
 

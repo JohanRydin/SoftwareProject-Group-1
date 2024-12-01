@@ -85,7 +85,7 @@ VALUES
 -- Insert data into wishlist
 INSERT INTO wishlist (userID, gameID) 
 VALUES 
-    (1, 5), 
+    (1, 2), 
     (3, 6), 
     (3, 7);
 

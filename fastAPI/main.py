@@ -1,10 +1,11 @@
+from typing import List
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
-from models import User
-from schemas import UserCreate, UserResponse, RecommendationRequest
+from models import User, Wishlist
+from schemas import UserCreate, UserResponse, RecommendationRequest, WishlistResponse
 import os
 import requests
 import httpx
@@ -26,7 +27,19 @@ async def get_db():
     finally:
         db.close()
 
+async def fetch_dbUser(username: str, db: Session=Depends(get_db)):
+    db_user = db.query(User).filter(User.username == username).first()
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_user
 
+async def fetch_dbUserWishlist(userId: int, db: Session=Depends(get_db)): 
+    db_wishlist = db.query(Wishlist.gameID).filter(Wishlist.userID == userId).all()
+    game_ids = [WishlistResponse(gameID=gameID) for gameID, in db_wishlist]
+    return game_ids
+
+
+# ------------- API ENDPOINTS ------------ #
 @app.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(username=user.username)
@@ -42,10 +55,15 @@ async def get_users(db: Session = Depends(get_db)):
 
 @app.get("/user/{username}", response_model=UserResponse)
 async def get_user(username: str, db: Session = Depends(get_db)):
-    db_user = db.query(User).filter(User.username == username).first()
-    if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-    return db_user
+    return await fetch_dbUser(username, db)
+
+
+@app.get("/user/{username}/wishlist", response_model=List[WishlistResponse])
+async def get_wishlist(username: str, db:Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID
+    return await fetch_dbUserWishlist(userId, db)
+
 
 
 @app.get("/recommendation")
