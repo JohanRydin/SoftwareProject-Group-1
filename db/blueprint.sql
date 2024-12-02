@@ -77,7 +77,7 @@ INSERT INTO Genre (Name) VALUES ('Action'), ('RPG'), ('Horror');
 INSERT INTO gamePref (userID, gameID) 
 VALUES 
     (1, 1), 
-    (1, 2), 
+    (1, 98), 
     (2, 3), 
     (3, 3), 
     (3, 4);
@@ -92,7 +92,8 @@ VALUES
 -- Insert data into genrePref
 INSERT INTO genrePref (userID, genreID) 
 VALUES 
-    (1, 1), 
+    (1, 1),
+    (1, 2), 
     (2, 2), 
     (3, 2), 
     (3, 3);
