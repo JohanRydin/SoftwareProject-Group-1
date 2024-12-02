@@ -1,5 +1,6 @@
 CREATE DATABASE IF NOT EXISTS storage;
 USE storage; 
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 
@@ -21,9 +22,17 @@ CREATE TABLE User (
 
 CREATE TABLE Genre (
 
-    genreID INT AUTO_INCREMENT PRIMARY KEY,
+    genreID INT PRIMARY KEY,
 
-    Name VARCHAR(50) UNIQUE NOT NULL
+    genrename VARCHAR(50) UNIQUE NOT NULL
+
+);
+
+CREATE TABLE Game (
+
+    gameID INT PRIMARY KEY,
+
+    gamename VARCHAR(50) UNIQUE NOT NULL
 
 );
 
@@ -37,6 +46,8 @@ CREATE TABLE gamePref (
 
     PRIMARY KEY (userID, gameID),
 
+    FOREIGN KEY (gameID) REFERENCES Game(gameID) ON DELETE CASCADE,
+
     FOREIGN KEY (userID) REFERENCES User(userID) ON DELETE CASCADE
 
 );
@@ -48,6 +59,8 @@ CREATE TABLE wishlist (
     gameID INT,
 
     PRIMARY KEY (userID, gameID),
+
+    FOREIGN KEY (gameID) REFERENCES Game(gameID) ON DELETE CASCADE,
 
     FOREIGN KEY (userID) REFERENCES User(userID) ON DELETE CASCADE
 
@@ -70,8 +83,23 @@ CREATE TABLE genrePref (
 -- Insert users
 INSERT INTO User (username) VALUES ('Erik'), ('Lisa'), ('Josefine');
 
--- Insert genres
-INSERT INTO Genre (Name) VALUES ('Action'), ('RPG'), ('Horror');
+-- Import data into Genre from CSV
+LOAD DATA INFILE '/var/lib/mysql-files/genres.csv'
+INTO TABLE Genre
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(genre_id, Genre)
+SET genreID = genre_id, genrename = Genre;
+
+-- Import data into Game from CSV
+LOAD DATA INFILE '/var/lib/mysql-files/games_description_indexed.csv'
+INTO TABLE Game
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(game_id, name)
+SET gameID = game_id, gamename = name;
 
 -- Insert data into gamePref
 INSERT INTO gamePref (userID, gameID) 
