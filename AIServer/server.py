@@ -1,7 +1,20 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from recommendations import Recommender
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:8000"
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Allow specific origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
+
 recommender = Recommender(100)
 
 @app.get("/")

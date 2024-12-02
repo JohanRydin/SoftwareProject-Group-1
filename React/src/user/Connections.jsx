@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8080/';  // TODO
+const BASE_URL = 'http://localhost:8000';
 
 /**
  * Helper function to make GET requests
@@ -10,7 +10,7 @@ const fetchData = async (path, params = {}) => {
   try {
     const queryString = new URLSearchParams(params).toString();
     const url = `${BASE_URL}${path}${queryString ? `?${queryString}` : ''}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {mode:'cors'});
 
     if (!response.ok) {
       throw new Error(`Error fetching data from ${path}: ${response.statusText}`);
@@ -33,10 +33,13 @@ const fetchData = async (path, params = {}) => {
  */
 const postData = async (path, data, headers = { 'Content-Type': 'application/json' }) => {
   try {
+    console.log(`${BASE_URL}${path}`)
+    console.log(JSON.stringify(data))
     const response = await fetch(`${BASE_URL}${path}`, {
       method: 'POST',
       headers,
       body: JSON.stringify(data),
+      mode:'cors',
     });
 
     if (!response.ok) {
@@ -64,6 +67,7 @@ const putData = async (path, data, headers = { 'Content-Type': 'application/json
       method: 'PUT',
       headers,
       body: JSON.stringify(data),
+      mode:'cors',
     });
 
     if (!response.ok) {
@@ -85,7 +89,7 @@ const putData = async (path, data, headers = { 'Content-Type': 'application/json
  */
 const deleteData = async (path) => {
   try {
-    const response = await fetch(`${BASE_URL}${path}`, { method: 'DELETE' });
+    const response = await fetch(`${BASE_URL}${path}`, { method: 'DELETE' , mode: 'cors'});
 
     if (!response.ok) {
       throw new Error(`Error deleting data at ${path}: ${response.statusText}`);
@@ -100,53 +104,53 @@ const deleteData = async (path) => {
 };
 
 export const getUser = (userID) => {
-    data = {userID: userID}
+    var data = {userID: userID}
     return fetchData("/user", data);
 }
 
 export const postUser = (username) => {
-    data = {username: username}
+    var data = {username: username}
     return postData("/user", data);
 }
 
 // userID example: 5
 // rows example:   [{"similar_to" : [1, 5, 2]}, {"best_reviewed" : "Action"}, {"similar_to" : "all"}, {"best_sales" : "Adventure"}]
 export const getRecommendations = (userID, rows) => {
-    data = {userID: userID, rows: rows}
-    return postData("/recommended", data)
+    var data = {userID: userID, rows: rows}
+    return postData("/recommendation", data)
 }
 
 export const postGamePreference = (userID, gameID) => {
-    data =  {userID: userID, gameID: gameID}
+    var data =  {userID: userID, gameID: gameID}
     return postData("/gamePref", data)
 }
 
 export const postGenrePreference = (userID, genre) => {
-  data =  {userID: userID, genre: genre}
+  var data =  {userID: userID, genre: genre}
   return postData("/genrePref", data)
 }
 
 export const postWishlistGame = (userID, gameID) => {
-  data =  {userID: userID, gameID: gameID}
+  var data =  {userID: userID, gameID: gameID}
   return postData("/wishlist", data)
 }
 
 export const deleteGamePreference = (userID, gameID) => {
-  data =  {userID: userID, gameID: gameID}
+  var data =  {userID: userID, gameID: gameID}
   return deleteData("/gamePref", data)
 }
 
 export const deleteGenrePreference = (userID, genre) => {
-data =  {userID: userID, genre: genre}
-return deleteData("/genrePref", data)
+  var data =  {userID: userID, genre: genre}
+  return deleteData("/genrePref", data)
 }
 
 export const deleteWishlistGame = (userID, gameID) => {
-data =  {userID: userID, gameID: gameID}
-return deleteData("/wishlist", data)
+  var data =  {userID: userID, gameID: gameID}
+  return deleteData("/wishlist", data)
 }
 
 export const getSearch = (search) => {
-  data = {search: search}
+  var data = {search: search}
   return fetchData("/search", data);
 }

@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -18,6 +19,16 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 app = FastAPI()
+origins = [
+    "http://localhost:8080"
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Allow specific origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 # Dependency to get the DB session
 async def get_db():
@@ -66,7 +77,7 @@ async def get_wishlist(username: str, db:Session = Depends(get_db)):
 
 
 
-@app.get("/recommendation")
+@app.post("/recommendation")
 async def post_recommendation(): #(username: str, db: Session = Depends(get_db)):
     
     #db_user = db.query(User).filter(User.username == username).first()
