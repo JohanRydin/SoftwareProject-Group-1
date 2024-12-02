@@ -4,8 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
-from models import User, Wishlist
-from schemas import UserCreate, UserResponse, RecommendationRequest, WishlistResponse
+from models import User, Wishlist, GamePref, GenrePref
+from schemas import UserCreate, UserResponse
 import os
 import requests
 import httpx
@@ -35,11 +35,22 @@ async def fetch_dbUser(username: str, db: Session=Depends(get_db)):
 
 async def fetch_dbUserWishlist(userId: int, db: Session=Depends(get_db)): 
     db_wishlist = db.query(Wishlist.gameID).filter(Wishlist.userID == userId).all()
-    game_ids = [WishlistResponse(gameID=gameID) for gameID, in db_wishlist]
+    game_ids = [gameID for gameID, in db_wishlist]
     return game_ids
+
+async def fetch_dbUsergamePref(userId: int, db: Session=Depends(get_db)): 
+    db_gamePref = db.query(GamePref.gameID).filter(GamePref.userID == userId).all()
+    game_ids = [gameID for gameID, in db_gamePref]
+    return game_ids
+
+async def fetch_dbUsergenrePref(userId: int, db: Session=Depends(get_db)): 
+    db_genrePref = db.query(GenrePref.genreID).filter(GenrePref.userID == userId).all()
+    genre_ids = [genreID for genreID, in db_genrePref]
+    return genre_ids
 
 
 # ------------- API ENDPOINTS ------------ #
+
 @app.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(username=user.username)
@@ -58,13 +69,25 @@ async def get_user(username: str, db: Session = Depends(get_db)):
     return await fetch_dbUser(username, db)
 
 
-@app.get("/user/{username}/wishlist", response_model=List[WishlistResponse])
+@app.get("/user/{username}/wishlist", response_model=List[int])
 async def get_wishlist(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
     return await fetch_dbUserWishlist(userId, db)
 
 
+@app.get("/user/{username}/gamepref", response_model=List[int])
+async def get_wishlist(username: str, db:Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID
+    return await fetch_dbUsergamePref(userId, db)
+
+
+@app.get("/user/{username}/genrepref", response_model=List[int])
+async def get_wishlist(username: str, db:Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID
+    return await fetch_dbUsergenrePref(userId, db)
 
 @app.get("/recommendation")
 async def post_recommendation(): #(username: str, db: Session = Depends(get_db)):
