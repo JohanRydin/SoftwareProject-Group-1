@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
+import Button from '@mui/material/Button';
 
-const Navbar = ({setSearchQuery}) => {
+const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);  
   const [inputValue, setInputValue] = useState('');
 
@@ -11,6 +12,8 @@ const Navbar = ({setSearchQuery}) => {
     e.preventDefault();
     console.log('Searching for:', inputValue);
     setSearchQuery(inputValue);
+    setDisplayWishlist(false)
+    setDisplayMyList(false)
   };
 
   const handleAuthClick = () => {
@@ -27,9 +30,25 @@ const Navbar = ({setSearchQuery}) => {
   return (
     <nav className="navbar">
       <div className="nav-items">
-        <Link to="/" className="nav-item logo">GameHive</Link>
-        <Link to="/mylist" className="nav-item">My List</Link>
-        <Link to="/wishlist" className="nav-item">Wishlist</Link>
+        <h1 className="nav-item logo" >GameHive</h1>
+        <button className="nav-item"
+          onClick={() => {setDisplayMyList(!displayMyList)
+            setDisplayWishlist(false)
+            setSearchQuery('')
+          }}
+          style={{background : displayMyList ? '#04820a63': '#4a4a4a63'}}
+        >
+          My List
+        </button>
+        <button className="nav-item"
+          onClick={() => {setDisplayWishlist(!displayWishlist)
+            setDisplayMyList(false)
+            setSearchQuery('')
+          }}
+          style={{background : displayWishlist ? '#04820a63': '#4a4a4a63'}}
+        >
+          Wishlist
+        </button>
 
         <button 
           onClick={handleAuthClick} 
