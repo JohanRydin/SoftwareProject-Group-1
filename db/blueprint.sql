@@ -32,7 +32,7 @@ CREATE TABLE Game (
 
     gameID INT PRIMARY KEY,
 
-    gamename VARCHAR(50) UNIQUE NOT NULL
+    gamename VARCHAR(100) UNIQUE NOT NULL
 
 );
 
@@ -86,20 +86,22 @@ INSERT INTO User (username) VALUES ('Erik'), ('Lisa'), ('Josefine');
 -- Import data into Genre from CSV
 LOAD DATA INFILE '/var/lib/mysql-files/genres.csv'
 INTO TABLE Genre
-FIELDS TERMINATED BY ',' 
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
-(genre_id, Genre)
-SET genreID = genre_id, genrename = Genre;
+(@col1, @col2, @dummy)
+SET genreID = @col1, genrename = @col2;
 
 -- Import data into Game from CSV
 LOAD DATA INFILE '/var/lib/mysql-files/games_description_indexed.csv'
 INTO TABLE Game
 FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
-(game_id, name)
-SET gameID = game_id, gamename = name;
+(@col1, @col2, @dummy3, @dummy4, @dummy5, @dummy6, @dummy7, @dummy8, @dummy9, @dummy10, @dummy11, @dummy12, @dummy13, @dummy14)
+SET gameID = @col1, gamename = @col2;
 
 -- Insert data into gamePref
 INSERT INTO gamePref (userID, gameID) 
