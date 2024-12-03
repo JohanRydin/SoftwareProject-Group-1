@@ -35,8 +35,6 @@ const fetchData = async (path, params = {}) => {
  */
 const postData = async (path, data, headers = { 'Content-Type': 'application/json' }) => {
   try {
-    console.log(`${BASE_URL}${path}`)
-    console.log(JSON.stringify(data))
     const response = await fetch(`${BASE_URL}${path}`, {
       method: 'POST',
       headers,
@@ -105,57 +103,73 @@ const deleteData = async (path) => {
   }
 };
 
-export const getUser = (userID) => {
-    var data = {userID: userID}
-    return fetchData("/user", data);
+export const getUser = (userName) => {
+    return fetchData(`/user/${userName}`);
 }
 
 export const postUser = (username) => {
     var data = {username: username}
-    return postData("/user", data);
+    return postData(`/users/`, data);
 }
+
+
+export const getGamePreferences = (userName) => {
+  return fetchData(`/user/${userName}/gamePref`);
+}
+
+export const getGenrePreferences = (userName) => {
+  return fetchData(`/user/${userName}/genrePref`);
+}
+
+export const getWishList = (userName) => {
+  return fetchData(`/user/${userName}/wishlist`);
+}
+
+
+export const postGamePreference = (userName, gameID) => {
+    var data = {gameID: gameID}
+    return postData(`/user/${userName}/gamePref`, data)
+}
+
+export const postGenrePreference = (userName, genre) => {
+  var data =  {genre: genre}
+  return postData(`/user/${userName}/genrePref`, data)
+}
+
+export const postWishlistGame = (userName, gameID) => {
+  var data =  {gameID: gameID}
+  return postData(`/user/${userName}/wishlist`, data)
+}
+
+
+export const deleteGamePreference = (userName, gameID) => {
+  var data =  {gameID: gameID}
+  return deleteData(`/user/${userName}/gamePref/`, data)
+}
+
+export const deleteGenrePreference = (userName, genre) => {
+  var data =  {genre: genre}
+  return deleteData(`/user/${userName}/genrePref`, data)
+}
+
+export const deleteWishlistGame = (userName, gameID) => {
+  var data =  {gameID: gameID}
+  return deleteData(`/user/${userName}/wishlist`, data)
+}
+
 
 // userID example: 5
 // rows example:   [{"similar_to" : [1, 5, 2]}, {"best_reviewed" : "Action"}, {"similar_to" : "all"}, {"best_sales" : "Adventure"}]
-export const getRecommendations = (userID, rows) => {
-    var data = {userID: userID, rows: rows}
-    return postData("/recommendation", data)
-}
-
-export const postGamePreference = (userID, gameID) => {
-    var data =  {userID: userID, gameID: gameID}
-    return postData("/gamePref", data)
-}
-
-export const postGenrePreference = (userID, genre) => {
-  var data =  {userID: userID, genre: genre}
-  return postData("/genrePref", data)
-}
-
-export const postWishlistGame = (userID, gameID) => {
-  var data =  {userID: userID, gameID: gameID}
-  return postData("/wishlist", data)
-}
-
-export const deleteGamePreference = (userID, gameID) => {
-  var data =  {userID: userID, gameID: gameID}
-  return deleteData("/gamePref", data)
-}
-
-export const deleteGenrePreference = (userID, genre) => {
-  var data =  {userID: userID, genre: genre}
-  return deleteData("/genrePref", data)
-}
-
-export const deleteWishlistGame = (userID, gameID) => {
-  var data =  {userID: userID, gameID: gameID}
-  return deleteData("/wishlist", data)
+export const getRecommendations = (userName, rows) => {
+  var data = {rows: rows}
+  return postData(`/user/${userName}/recommendation`, data)
 }
 
 export const getSearch = (search) => {
   var data = {search: search}
-  return fetchData("/search", data);
+  return fetchData(`/search`, data);
 }
+
 
 // Convert any string into a slug to be used in a url
 // str - string to convert
