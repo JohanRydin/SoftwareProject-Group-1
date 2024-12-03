@@ -9,3 +9,5 @@ pytest_cache
 **/.DS_Store
 
 /db/mysql-data/
+
+**/.env
