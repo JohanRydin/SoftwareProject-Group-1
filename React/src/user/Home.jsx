@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import GameList from './GameList'
+import { getRecommendations } from './Connections.jsx'
 
 const gameData = {
   gameId: 1,
@@ -48,9 +49,16 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
+        
+        //const data = await response.json();
 
-        const data = await response.json();
-        setGames(data.results);
+        var res = getRecommendations(userName, [{"similar_to" : "all"}, {"best_reviewed" : "Action"}, {"best_reviewed" : "Action"}, {"best_sales" : "Adventure"}]).then(data => {
+          const games = data.response.games;
+          console.log(games)
+          setGames(games);
+        })
+
+       //setGames(data.results);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching games:', err);
@@ -83,12 +91,12 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
         game={gameData|| selectedGame}
       />
 
-      <div className="games-row">
-        {searchQuery != '' && (<GameList userName={userName} games={games} title={searchQuery} onCardClick={handleCardClick}/>)}
-        {userName != '' && displayMyList && (<GameList userName={userName} games={games} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
-        {userName != '' && displayWishlist && (<GameList userName={userName} games={games} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
-        <GameList userName={userName} games={games} title="Top 1 games" onCardClick={handleCardClick}/>
-      </div>
+      {games != [] && <div className="games-row">
+        {searchQuery != '' && (<GameList userName={userName} games={games[0]} title={searchQuery} onCardClick={handleCardClick}/>)}
+        {userName != '' && displayMyList && (<GameList userName={userName} games={games[2]} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
+        {userName != '' && displayWishlist && (<GameList userName={userName} games={games[1]} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
+        <GameList userName={userName} games={games[0]} title="Top 1 games" onCardClick={handleCardClick}/>
+      </div>}
     </div>
   );
 }

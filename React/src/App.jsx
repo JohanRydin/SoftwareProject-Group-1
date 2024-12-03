@@ -10,7 +10,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [displayMyList, setDisplayMyList] = useState(false); 
   const [displayWishlist, setDisplayWishlist] = useState(false); 
-  const [userName, setUser] = useState('');
+  const [userName, setUser] = useState('Erik');
 
 
   return (

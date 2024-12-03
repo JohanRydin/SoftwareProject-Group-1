@@ -158,7 +158,7 @@ export const deleteWishlistGame = (userName, gameID) => {
 }
 
 
-// userID example: 5
+// username example: Erik
 // rows example:   [{"similar_to" : [1, 5, 2]}, {"best_reviewed" : "Action"}, {"similar_to" : "all"}, {"best_sales" : "Adventure"}]
 export const getRecommendations = (userName, rows) => {
   var data = {rows: rows}
