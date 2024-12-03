@@ -1,5 +1,7 @@
 const BASE_URL = 'http://localhost:8000';
 
+const API_KEY = import.meta.env.VITE_API_KEY;
+
 /**
  * Helper function to make GET requests
  * @param {string} path - The API endpoint path
@@ -153,4 +155,24 @@ export const deleteWishlistGame = (userID, gameID) => {
 export const getSearch = (search) => {
   var data = {search: search}
   return fetchData("/search", data);
+}
+
+// Convert any string into a slug to be used in a url
+// str - string to convert
+// ex: stringToSlug("Cyberpunk 2077") -> "cyberpunk-2077"
+function stringToSlug(str) {
+  return str
+    .toLowerCase()                      // Convert the string to lowercase
+    .trim()                             // Remove whitespace from both ends
+    .replace(/[^a-z0-9\s-]/g, '')       // Remove special characters
+    .replace(/\s+/g, '-')               // Replace spaces with hyphens
+    .replace(/-+/g, '-');               // Collapse consecutive hyphens
+}
+
+export const getGameImage = (gameName) => {
+  const slug = stringToSlug(gameName)
+  return fetch(`https://rawg.io/api/games/${slug}?key=${API_KEY}`)
+          .then(res => res.json())
+          .then(data => {return data.background_image})
+          .catch(error => console.error('Error:', error));
 }

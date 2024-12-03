@@ -1,21 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import GameList from './GameList'
+import { getRecommendations, getGameImage } from './Connections'
+const API_KEY = import.meta.env.VITE_API_KEY;
 
-function Home({searchQuery}) {
+
+const gameData = {
+  gameId: 1,
+  name: "cod444",
+  genres: ["action", "adventure"],
+  description: "Call of Duty is a fast paced action game that recreates various historical battles of modern times: second world war, Iraqi war etc...",
+  publisher: "gamehive production",
+  ranking: 10
+};
+
+const Modal = ({ isOpen, onClose, game }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <button className="close-button" onClick={onClose}>×</button>
+        <h2>{game.name}</h2>
+        <p>Genres: {game.genres.join(", ")}</p>
+        <p>Description: {game.description}</p>
+        <p>Publisher:{game.publisher}</p>
+        <p>Ranking: {game.ranking}</p>
+      </div>
+    </div>
+  );
+};
+
+function Home({ searchQuery }) {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedGame, setSelectedGame] = useState(null);
 
-  const API_KEY = 'cd1fef93051e4872ad6909f179bde3ea';
   const BASE_URL = 'https://api.rawg.io/api';
-
+  
   useEffect(() => {
     const fetchGames = async () => {
       try {
         const response = await fetch(
           `${BASE_URL}/games?key=${API_KEY}&ordering=-rating&page_size=100`
         );
+        
+        //const gameImage = await getGameImage("Cyberpunk 2077")
+        //console.log(gameImage);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -33,24 +66,47 @@ function Home({searchQuery}) {
 
     fetchGames();
   }, []);
+  
+  /*try
+  {
+    var res = getRecommendations(1, "").then(data => {
+      const games = data.response.games; // Navigate to the `games` property
+      console.log(games); // This should output the 2D array of games
+    })
+    .catch(error => {
+      console.error('Failed to fetch games:', error);
+    });
+  }
+  catch (err)
+  {
+    console.error(err)
+  }*/
+
+  const handleCardClick = (game) => {
+    setSelectedGame(game);
+    setIsModalOpen(true);
+  };
 
   if (loading) {
-    return <div className="loading">Loading games???</div>;
+    return <div className="loading">Loading games...</div>;
   }
 
   if (error) {
-    return <div className="error">Failed to load games???</div>;
+    return <div className="error">Failed to load games...</div>;
   }
 
   return (
     <div className="home">
+      <Modal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        game={gameData|| selectedGame}
+      />
+
       <div className="games-row">
-        {searchQuery != '' && (<GameList games={games} title={searchQuery}/>)}
-        <GameList games={games} title="Top 1 games"/>
-        <GameList games={games} title="Top 1 games"/>
-        <GameList games={games} title="Top 1 games"/>
-        <GameList games={games} title="Top 1 games"/>
-        <GameList games={games} title="Top 1 games"/>
+        {searchQuery !== '' && (<GameList games={games} title={searchQuery} onCardClick={handleCardClick} />)}
+        <GameList games={games} title="Top 1 games" onCardClick={handleCardClick} />
+
       </div>
     </div>
   );
