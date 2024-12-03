@@ -161,6 +161,7 @@ export const getSearch = (search) => {
 // str - string to convert
 // ex: stringToSlug("Cyberpunk 2077") -> "cyberpunk-2077"
 function stringToSlug(str) {
+  console.log(str)
   return str
     .toLowerCase()                      // Convert the string to lowercase
     .trim()                             // Remove whitespace from both ends
@@ -171,7 +172,7 @@ function stringToSlug(str) {
 
 export const getGameImage = (gameName) => {
   const slug = stringToSlug(gameName)
-  return fetch(`https://rawg.io/api/games/${slug}?key=${API_KEY}`)
+  return fetch(`https://rawg.io/api/games/${slug}?key=${API_KEY}`, {mode: 'cors'})
           .then(res => res.json())
           .then(data => {return data.background_image})
           .catch(error => console.error('Error:', error));

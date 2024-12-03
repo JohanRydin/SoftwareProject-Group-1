@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import GameList from './GameList'
-import { getRecommendations, getGameImage } from './Connections'
-const API_KEY = import.meta.env.VITE_API_KEY;
 
 function Home({searchQuery, displayMyList, displayWishlist}) {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  const API_KEY = 'cd1fef93051e4872ad6909f179bde3ea';
   const BASE_URL = 'https://api.rawg.io/api';
-  
+
   useEffect(() => {
     const fetchGames = async () => {
       try {
         const response = await fetch(
-          `${BASE_URL}/games?key=${API_KEY}&ordering=-rating&page_size=100`
+          `${BASE_URL}/games?key=${API_KEY}&ordering=-rating&page_size=10`, {mode: 'cors'}
         );
-        
-        //const gameImage = await getGameImage("Cyberpunk 2077")
-        //console.log(gameImage);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -37,21 +33,6 @@ function Home({searchQuery, displayMyList, displayWishlist}) {
 
     fetchGames();
   }, []);
-  
-  /*try
-  {
-    var res = getRecommendations(1, "").then(data => {
-      const games = data.response.games; // Navigate to the `games` property
-      console.log(games); // This should output the 2D array of games
-    })
-    .catch(error => {
-      console.error('Failed to fetch games:', error);
-    });
-  }
-  catch (err)
-  {
-    console.error(err)
-  }*/
 
   if (loading) {
     return <div className="loading">Loading games???</div>;
@@ -67,10 +48,6 @@ function Home({searchQuery, displayMyList, displayWishlist}) {
         {searchQuery != '' && (<GameList games={games} title={searchQuery}/>)}
         {displayMyList && (<GameList games={games} title ="My List"/>)}
         {displayWishlist && (<GameList games={games} title ="Wishlist"/>)}
-        <GameList games={games} title="Top 1 games"/>
-        <GameList games={games} title="Top 1 games"/>
-        <GameList games={games} title="Top 1 games"/>
-        <GameList games={games} title="Top 1 games"/>
         <GameList games={games} title="Top 1 games"/>
       </div>
     </div>
