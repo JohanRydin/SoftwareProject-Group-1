@@ -10,7 +10,7 @@ class User(Base):
 class Genre(Base):
     __tablename__ = "Genre"
     genreID = Column(Integer, primary_key=True, index=True)
-    name = Column(String(50), unique=True, nullable=False)
+    genrename = Column(String(50), unique=True, nullable=False)
 
 class GamePref(Base):
     __tablename__ = "gamePref"
@@ -28,4 +28,6 @@ class GenrePref(Base):
     __tablename__ = "genrePref"
     userID = Column(Integer, ForeignKey("User.userID", ondelete="CASCADE"), primary_key=True)
     genreID = Column(Integer, ForeignKey("Genre.genreID", ondelete="CASCADE"), primary_key=True)
+
+
 
