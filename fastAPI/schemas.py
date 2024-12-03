@@ -43,6 +43,9 @@ class Wishlist(WishlistBase):
     class Config:
         orm_mode = True
 
+class GameListResponse(BaseModel): 
+    gameID: int
+
 class WishlistResponse(BaseModel):
     gameID: int
 
@@ -78,6 +81,8 @@ class GenrePrefRemove(GenrePref):
 class GenrePrefDelete(GenrePref):
     pass #TODO
 
-
+class GenreListResponse(BaseModel): 
+    genreID: int
+    
 class RecommendationRequest(BaseModel):
     username: str

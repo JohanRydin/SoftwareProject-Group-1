@@ -10,6 +10,7 @@ services:
       - "3306:3306"
     volumes:
       - ./db/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql
+      - ./csvs:/var/lib/mysql-files  # Mount CSV directory inside the MySQL container
 
   adminer:  
     container_name: adminer
@@ -33,7 +34,8 @@ services:
     environment:
       DATABASE_URL: mysql+pymysql://root:root@db:3306/storage
     volumes:
-      - ./fastAPI:/fastAPI 
+      - ./fastAPI:/fastAPI  # Bind the local directory to the container
+      - /fastAPI/__pycache__ # Exclude cache if needed
 
   aiserver:
     build:
