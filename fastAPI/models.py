@@ -12,6 +12,11 @@ class Genre(Base):
     genreID = Column(Integer, primary_key=True, index=True)
     genrename = Column(String(50), unique=True, nullable=False)
 
+class Game(Base):
+    __tablename__ = "Game"
+    gameID = Column(Integer, primary_key=True, index=True)
+    gamename = Column(String(50), unique=True, nullable=False)
+
 class GamePref(Base):
     __tablename__ = "gamePref"
     userID = Column(Integer, ForeignKey("User.userID", ondelete="CASCADE"), primary_key=True)
