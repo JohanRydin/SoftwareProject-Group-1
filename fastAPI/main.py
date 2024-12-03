@@ -113,6 +113,30 @@ async def post_wishlist(username: str, wishlist_item: WishlistItem, db: Session 
         raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
 
 
+#Deleting a wishlist game 
+@app.patch("/user/{username}/wishlist")
+async def remove_game_from_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
+    # Fetch userId based on the username
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  # Assuming fetch_dbUser returns an object with userID attribute
+
+    try:
+        # Check if the game is in the user's wishlist
+        existing_entry = db.query(Wishlist).filter(Wishlist.userID == userId, Wishlist.gameID == wishlist_item.gameID).first()
+        if not existing_entry:
+            raise HTTPException(status_code=400, detail="Game is not in the wishlist")
+
+        # Remove the game from the wishlist (delete the existing entry)
+        db.delete(existing_entry)  # Delete the found entry from the session
+        db.commit()  # Commit the transaction to apply the changes
+
+        return {"message": "Game removed from wishlist", "wishlist_entry": {"userID": userId, "gameID": wishlist_item.gameID}}
+
+    except Exception as e:
+        db.rollback()  # Rollback in case of an error
+        raise HTTPException(status_code=500, detail=f"An error occurred while removing the game from the wishlist: {e}")
+
+
 @app.get("/user/{username}/gamepref", response_model=List[int])
 async def get_wishlist(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
