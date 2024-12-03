@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Navbar.css';
 import Button from '@mui/material/Button';
 
-const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist}) => {
+const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, setUser}) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);  
   const [inputValue, setInputValue] = useState('');
 
@@ -17,6 +17,7 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
   };
 
   const handleAuthClick = () => {
+    setUser('Erik')
     setIsLoggedIn(!isLoggedIn);
   };
   const onChange = (e) => {

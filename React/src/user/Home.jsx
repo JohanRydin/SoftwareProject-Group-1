@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Home.css';
 import GameList from './GameList'
 
-function Home({searchQuery, displayMyList, displayWishlist}) {
+function Home({searchQuery, displayMyList, displayWishlist, userName}) {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -45,10 +45,10 @@ function Home({searchQuery, displayMyList, displayWishlist}) {
   return (
     <div className="home">
       <div className="games-row">
-        {searchQuery != '' && (<GameList games={games} title={searchQuery}/>)}
-        {displayMyList && (<GameList games={games} title ="My List"/>)}
-        {displayWishlist && (<GameList games={games} title ="Wishlist"/>)}
-        <GameList games={games} title="Top 1 games"/>
+        {searchQuery != '' && (<GameList userName={userName} games={games} title={searchQuery}/>)}
+        {userName != '' && displayMyList && (<GameList userName={userName} games={games} title ={`${userName}'s List`}/>)}
+        {userName != '' && displayWishlist && (<GameList userName={userName} games={games} title ={`${userName}'s Wishlist`}/>)}
+        <GameList userName={userName} games={games} title="Top 1 games"/>
       </div>
     </div>
   );

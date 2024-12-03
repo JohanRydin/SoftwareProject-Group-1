@@ -1,9 +1,16 @@
 import React, { useRef, useState, useEffect } from "react";
 import './GamePoster.css';
-import  {getGameImage} from './Connections.jsx'
+import  {getGameImage, postGamePreference, postWishlistGame} from './Connections.jsx'
+import AddIcon from '@mui/icons-material/Add';
 
-function GamePoster({gameID, image, name = "Cyberpunk 2077", rating, description = '', onCardClick = null}) {
+
+function GamePoster({userName, gameID, image, name = "Cyberpunk 2077", rating, description = '', onCardClick = null}) {
     const [basedimage, setImage] = useState(image);
+
+    const postGamePref = () =>{
+        postGamePreference(userName, gameID)
+    }
+
 
     useEffect(() => {
         const getImage = async () => {
@@ -21,7 +28,7 @@ function GamePoster({gameID, image, name = "Cyberpunk 2077", rating, description
             className="poster-image" />
         <div className="game-info">
             <h3>{name}</h3>
-            <p>Rating: {rating}</p>
+            <button /*onClick={postGamePref}*/><AddIcon /></button>
         </div>
     </div>
    )
