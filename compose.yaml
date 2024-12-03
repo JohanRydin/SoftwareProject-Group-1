@@ -34,7 +34,8 @@ services:
     environment:
       DATABASE_URL: mysql+pymysql://root:root@db:3306/storage
     volumes:
-      - ./fastAPI:/fastAPI 
+      - ./fastAPI:/fastAPI  # Bind the local directory to the container
+      - /fastAPI/__pycache__ # Exclude cache if needed
 
   aiserver:
     build:
