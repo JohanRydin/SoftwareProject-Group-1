@@ -72,8 +72,9 @@ async def fetch_dbgenreNameFetch(genreId: List[int], db: Session = Depends(get_d
 async def gameID_to_string(ids: List[int], db: Session=Depends(get_db)):
     gamename = []
     for id in ids:
-        name = db.query(Game.gamename).filter(Game.gameID == id).all()
-        gamename.append(name)
+        # Flatten the result to get a list of game names
+        names = [name[0] for name in db.query(Game.gamename).filter(Game.gameID == id).all()]
+        gamename.extend(names)
     return gamename
 
 
@@ -202,15 +203,11 @@ async def post_recommendation(
     userid = await fetch_dbUser(username, db)
     userid = userid.userID
     game_ids = await fetch_dbUsergamePref(userid, db)
-    print(f"Game IDs: {game_ids}")
     genre_ids = await fetch_dbUsergenrePref(userid, db)
-    print(f"Genre Names: {genre_ids}")
     genre_names = await fetch_dbgenreNameFetch(genre_ids, db)
-    print(f"Genrenames: {genre_names}")
 
     # Convert the Pydantic model to a dictionary
     newbody = recommendationBody.dict()  # Convert the Pydantic model to a dictionary
-    print(f"Newbody before changes: {newbody}")
     
     # Ensure 'user' key exists in newbody and assign values
     newbody["user"] = {
@@ -221,23 +218,19 @@ async def post_recommendation(
     
     # External API URL
     api_url = "http://aiserver:5000/recommendations"
-    
+
     async with httpx.AsyncClient() as client:
         # Make a POST request to the external API with the updated body
         response = await client.post(api_url, json=newbody)
-
-        # Check if the response was successful (status code 200)
-        if response.status_code == 200:
-            body = response.json()
-
-            # Apply the number_to_str function to each number in the 'games' list
-            for i, game_list in enumerate(body["games"]):
-                body["games"][i] = [await gameID_to_string(num) for num in game_list]
-
-            # Return the updated response with the modified 'games' list
-            return {"status_code": response.status_code, "response": response.json()}
-
-        else:
-            # Handle the case where the API call failed
-            return {"status_code": response.status_code, "error": "Failed to fetch recommendations"}
+        
+        # Convert game IDs to game names
+        response_data = response.json()
+        print(response_data)
+        game_lists = response_data.get("games", [])
+        print(game_lists)
+        game_names_lists = [await gameID_to_string(game_list, db) for game_list in game_lists]
+        print(game_names_lists)
+        
+        # Return the response with game names
+        return {"status_code": response.status_code, "response": {"games": game_names_lists}}
 
