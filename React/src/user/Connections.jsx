@@ -104,7 +104,7 @@ const deleteData = async (path) => {
 };
 
 export const getUser = (userName) => {
-    return fetchData(`/user/${userName}`, "");
+    return fetchData(`/user/${userName}`);
 }
 
 export const postUser = (username) => {
@@ -114,15 +114,15 @@ export const postUser = (username) => {
 
 
 export const getGamePreferences = (userName) => {
-  return fetchData(`/user/${userName}/gamePref`, "");
+  return fetchData(`/user/${userName}/gamePref`);
 }
 
 export const getGenrePreferences = (userName) => {
-  return fetchData(`/user/${userName}/genrePref`, "");
+  return fetchData(`/user/${userName}/genrePref`);
 }
 
 export const getWishList = (userName) => {
-  return fetchData(`/user/${userName}/wishlist`, "");
+  return fetchData(`/user/${userName}/wishlist`);
 }
 
 
