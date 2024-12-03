@@ -171,7 +171,7 @@ function stringToSlug(str) {
 
 export const getGameImage = (gameName) => {
   const slug = stringToSlug(gameName)
-  return fetch(`https://rawg.io/api/games/${slug}?key=${API_KEY}`)
+  return fetch(`https://rawg.io/api/games/${slug}?key=${API_KEY}`, {mode: 'cors'})
           .then(res => res.json())
           .then(data => {return data.background_image})
           .catch(error => console.error('Error:', error));
