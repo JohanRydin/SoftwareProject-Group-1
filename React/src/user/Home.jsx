@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import GameList from './GameList'
+import { getRecommendations } from './Connections'
 
 function Home({searchQuery}) {
   const [games, setGames] = useState([]);
@@ -33,6 +34,21 @@ function Home({searchQuery}) {
 
     fetchGames();
   }, []);
+  
+  try
+  {
+    var res = getRecommendations(1, "").then(data => {
+      const games = data.response.games; // Navigate to the `games` property
+      console.log(games); // This should output the 2D array of games
+    })
+    .catch(error => {
+      console.error('Failed to fetch games:', error);
+    });
+  }
+  catch (err)
+  {
+    console.error(err)
+  }
 
   if (loading) {
     return <div className="loading">Loading games???</div>;
