@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
 from models import User, Wishlist, GamePref, GenrePref
-from schemas import UserCreate, UserResponse
+from schemas import UserCreate, UserResponse, WishlistItem
 import os
 import requests
 import httpx
@@ -85,6 +85,79 @@ async def get_wishlist(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
     return await fetch_dbUserWishlist(userId, db)
+
+@app.delete("/user/{username}/wishlist")
+async def delete_wishlist(username: str, db: Session = Depends(get_db)):
+    # Fetch userId based on the username
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  # Assuming fetch_dbUser returns an object with userID attribute
+
+    try:
+        wishlist_entries = db.query(Wishlist).filter(Wishlist.userID == userId).all()
+        
+        if not wishlist_entries:
+            raise HTTPException(status_code=404, detail="No wishlist entries found for this user")
+
+        for entry in wishlist_entries:
+            db.delete(entry)
+
+        db.commit()
+        return {"message": "All games removed from wishlist"}
+
+    except Exception as e:
+        db.rollback()  
+        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
+
+
+
+# Define the endpoint for adding a game to the wishlist
+@app.post("/user/{username}/wishlist")
+async def post_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
+    # Fetch userId based on the username
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  # Assuming fetch_dbUser returns an object with userID attribute
+
+    try:
+        # Check if the game is already in the user's wishlist
+        existing_entry = db.query(Wishlist).filter(Wishlist.userID == userId, Wishlist.gameID == wishlist_item.gameID).first()
+        if existing_entry:
+            raise HTTPException(status_code=400, detail="Game is already in the wishlist")
+
+        # Add the game to the wishlist
+        new_entry = Wishlist(userID=userId, gameID=wishlist_item.gameID)
+        db.add(new_entry)  # Add to the session
+        db.commit()  # Commit the changes
+        db.refresh(new_entry)  # Optional: Refresh to get updated data
+
+        return {"message": "Game added to wishlist", "wishlist_entry": {"userID": userId, "gameID": wishlist_item.gameID}}
+
+    except Exception as e:
+        db.rollback()  # Rollback in case of an error
+        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
+
+
+#Deleting a wishlist game 
+@app.patch("/user/{username}/wishlist")
+async def remove_game_from_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
+    # Fetch userId based on the username
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  # Assuming fetch_dbUser returns an object with userID attribute
+
+    try:
+        # Check if the game is in the user's wishlist
+        existing_entry = db.query(Wishlist).filter(Wishlist.userID == userId, Wishlist.gameID == wishlist_item.gameID).first()
+        if not existing_entry:
+            raise HTTPException(status_code=400, detail="Game is not in the wishlist")
+
+        # Remove the game from the wishlist (delete the existing entry)
+        db.delete(existing_entry)  # Delete the found entry from the session
+        db.commit()  # Commit the transaction to apply the changes
+
+        return {"message": "Game removed from wishlist", "wishlist_entry": {"userID": userId, "gameID": wishlist_item.gameID}}
+
+    except Exception as e:
+        db.rollback()  # Rollback in case of an error
+        raise HTTPException(status_code=500, detail=f"An error occurred while removing the game from the wishlist: {e}")
 
 
 @app.get("/user/{username}/gamepref", response_model=List[int])
