@@ -43,7 +43,7 @@ class Wishlist(WishlistBase):
     class Config:
         orm_mode = True
 
-class GameListResponse(BaseModel): 
+class WishlistItem(BaseModel): 
     gameID: int
 
 class WishlistResponse(BaseModel):
