@@ -97,5 +97,4 @@ class RecommendationRequest(BaseModel):
     username: str
 
 class RecommendationBody(BaseModel):
-    user: User
     rows: List[Any]
