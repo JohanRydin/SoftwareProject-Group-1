@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
-import GameList from './GameList';
+import GameList from './GameList'
+import { getRecommendations, getGameImage } from './Connections'
+const API_KEY = import.meta.env.VITE_API_KEY;
+
 
 const gameData = {
   gameId: 1,
@@ -35,15 +38,17 @@ function Home({ searchQuery }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
 
-  const API_KEY = 'cd1fef93051e4872ad6909f179bde3ea';
   const BASE_URL = 'https://api.rawg.io/api';
-
+  
   useEffect(() => {
     const fetchGames = async () => {
       try {
         const response = await fetch(
           `${BASE_URL}/games?key=${API_KEY}&ordering=-rating&page_size=100`
         );
+        
+        //const gameImage = await getGameImage("Cyberpunk 2077")
+        //console.log(gameImage);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -61,6 +66,21 @@ function Home({ searchQuery }) {
 
     fetchGames();
   }, []);
+  
+  /*try
+  {
+    var res = getRecommendations(1, "").then(data => {
+      const games = data.response.games; // Navigate to the `games` property
+      console.log(games); // This should output the 2D array of games
+    })
+    .catch(error => {
+      console.error('Failed to fetch games:', error);
+    });
+  }
+  catch (err)
+  {
+    console.error(err)
+  }*/
 
   const handleCardClick = (game) => {
     setSelectedGame(game);

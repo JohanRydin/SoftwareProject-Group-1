@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE 1  # Prevent Python from writing .pyc files
 ENV PYTHONUNBUFFERED 1        # Ensure Python output is displayed in real-time
 
 # Set working directory
-WORKDIR /app
+WORKDIR /fastAPI
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -25,4 +25,4 @@ COPY . .
 EXPOSE 8000
 
 # Command to start the FastAPI server
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--reload-dir", "/app"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
