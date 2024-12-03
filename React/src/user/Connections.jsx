@@ -161,7 +161,6 @@ export const getSearch = (search) => {
 // str - string to convert
 // ex: stringToSlug("Cyberpunk 2077") -> "cyberpunk-2077"
 function stringToSlug(str) {
-  console.log(str)
   return str
     .toLowerCase()                      // Convert the string to lowercase
     .trim()                             // Remove whitespace from both ends
