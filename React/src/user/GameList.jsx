@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import './GameList.css';
+import GamePoster from "./GamePoster.jsx";
 
 
 function GameList({ games, title }) {
@@ -30,16 +31,7 @@ function GameList({ games, title }) {
                 </button>
                 <div className="games-posters" ref={scrollRef}>
                     {games.map((game) => (
-                        <div key={game.id} className="game-poster">
-                            <img
-                                src={game.background_image}
-                                alt={game.name}
-                                className="poster-image" />
-                            <div className="game-info">
-                                <h3>{game.name}</h3>
-                                <p>Rating: {game.rating}</p>
-                            </div>
-                        </div>
+                        <GamePoster gameID={game.id} image={game.background_image} name={game.name} rating={game.rating}/>
                     ))}
                 </div>
                 <button
