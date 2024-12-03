@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from typing import Any, List, Optional, Union
+
 
 class UserCreate(BaseModel):
     username: str
@@ -9,7 +11,6 @@ class UserResponse(BaseModel):
 
     class Config:
         orm_mode = True  
-
 
 class GenreBase(BaseModel):
     Name: str
@@ -22,6 +23,14 @@ class Genre(GenreBase):
 
     class Config:
         orm_mode = True  
+
+class User(BaseModel):
+    userID: int
+    game_ids: Optional[List[int]] = []  # Optional, default to empty list
+    genres: Optional[List[str]] = []   # Optional, default to empty list
+
+    class Config:
+        orm_mode = True
 
 
 class GamePrefBase(BaseModel):
@@ -43,7 +52,7 @@ class Wishlist(WishlistBase):
     class Config:
         orm_mode = True
 
-class GameListResponse(BaseModel): 
+class WishlistItem(BaseModel): 
     gameID: int
 
 class WishlistResponse(BaseModel):
@@ -86,3 +95,7 @@ class GenreListResponse(BaseModel):
     
 class RecommendationRequest(BaseModel):
     username: str
+
+class RecommendationBody(BaseModel):
+    user: User
+    rows: List[Any]

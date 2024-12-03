@@ -3,7 +3,7 @@ import './GameList.css';
 import GamePoster from "./GamePoster.jsx";
 
 
-function GameList({ games, title , userName}) {
+function GameList({ games, title, userName, onCardClick}) {
     const scrollRef = useRef(null);
 
     const scroll = (direction) => {
@@ -31,7 +31,7 @@ function GameList({ games, title , userName}) {
                 </button>
                 <div className="games-posters" ref={scrollRef}>
                     {games.map((game) => (
-                        <GamePoster key={game.id} gameID={game.id} image={game.background_image} userName={userName} /*name={game.name}*/ rating={game.rating}/>
+                        <GamePoster key={game.id} gameID={game.id} image={game.background_image} userName={userName} /*name={game.name}*/ rating={game.rating} onCardClick={onCardClick}/>
                     ))}
                 </div>
                 <button
@@ -42,9 +42,11 @@ function GameList({ games, title , userName}) {
                     &gt;
                 </button>
            </div>  
-        </div>
 
-    );
+      </div>
+
+  );
 }
 
 export default GameList;
+
