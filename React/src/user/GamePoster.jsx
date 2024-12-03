@@ -21,8 +21,9 @@ function GamePoster({userName, gameID, image, name = "Cyberpunk 2077", rating, d
     }, []);
 
    return( 
-        <div className="game-poster">
+        <div className="game-poster" >
         <img
+            onClick={onCardClick}
             src={basedimage}
             alt={name}
             className="poster-image" />
