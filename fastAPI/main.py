@@ -11,6 +11,7 @@ import os
 import requests
 import httpx
 
+
 DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:root@db:3306/storage")
 
 # Set up SQLAlchemy engine and session
@@ -59,12 +60,13 @@ async def fetch_dbUsergenrePref(userId: int, db: Session=Depends(get_db)):
     genre_ids = [genreID for genreID, in db_genrePref]
     return genre_ids
 
-async def fetch_dbgenreNameFetch(genreId: List[int], db: Session=Depends(get_db)): 
+async def fetch_dbgenreNameFetch(genreId: List[int], db: Session = Depends(get_db)):
     genrelist = []
     for id in genreId:
-        genrelist.append(db.query(Genre.genrename).filter(Genre.genreID == id).all())
+        # Flatten the result to get a list of genre names
+        genres = [genre[0] for genre in db.query(Genre.genrename).filter(Genre.genreID == id).all()]
+        genrelist.extend(genres)  # Add genres to the main list
     return genrelist
-
 
 # ------------- API ENDPOINTS ------------ #
 
@@ -113,14 +115,23 @@ async def post_recommendation(
 ):
     # Fetch user preferences from the database
     game_ids = await fetch_dbUsergamePref(recommendationBody.user.userID, db)
+    print(f"Game IDs: {game_ids}")
     genre_ids = await fetch_dbUsergenrePref(recommendationBody.user.userID, db)
+    print(f"Genre Names: {genre_ids}")
     genre_names = await fetch_dbgenreNameFetch(genre_ids, db)
+    print(f"Genrenames: {genre_names}")
 
-    # Modify the body
-    newbody = recommendationBody.dict()  # Convert to a dictionary
-    newbody["user"]["game_ids"] = game_ids
-    newbody["user"]["genres"] = genre_names
+    # Convert the Pydantic model to a dictionary
+    newbody = recommendationBody.dict()  # Convert the Pydantic model to a dictionary
+    print(f"Newbody before changes: {newbody}")
 
+    # Ensure 'user' key exists in newbody and assign values
+    
+    newbody["user"]["game_ids"] = game_ids  # Set the game_ids
+    newbody["user"]["genres"] = genre_names  # Set the genres
+
+    # Return the updated body
+    # return {"status_code": 200, "response": newbody}
     # External API URL
     api_url = "http://aiserver:5000/recommendations"
 
@@ -131,6 +142,3 @@ async def post_recommendation(
         # Print and return the response
         print(response)
         return {"status_code": response.status_code, "response": response.json()}
-
-
-

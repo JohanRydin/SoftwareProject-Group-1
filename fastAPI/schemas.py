@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 
 
 class UserCreate(BaseModel):
@@ -11,7 +11,6 @@ class UserResponse(BaseModel):
 
     class Config:
         orm_mode = True  
-
 
 class GenreBase(BaseModel):
     Name: str
