@@ -86,6 +86,29 @@ async def get_wishlist(username: str, db:Session = Depends(get_db)):
     userId = userId.userID
     return await fetch_dbUserWishlist(userId, db)
 
+@app.delete("/user/{username}/wishlist")
+async def delete_wishlist(username: str, db: Session = Depends(get_db)):
+    # Fetch userId based on the username
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  # Assuming fetch_dbUser returns an object with userID attribute
+
+    try:
+        wishlist_entries = db.query(Wishlist).filter(Wishlist.userID == userId).all()
+        
+        if not wishlist_entries:
+            raise HTTPException(status_code=404, detail="No wishlist entries found for this user")
+
+        for entry in wishlist_entries:
+            db.delete(entry)
+
+        db.commit()
+        return {"message": "All games removed from wishlist"}
+
+    except Exception as e:
+        db.rollback()  
+        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
+
+
 
 # Define the endpoint for adding a game to the wishlist
 @app.post("/user/{username}/wishlist")
