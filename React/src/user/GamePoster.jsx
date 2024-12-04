@@ -8,7 +8,7 @@ function GamePoster({userName, gameID, image=null, name = "Cyberpunk 2077", rati
     const [basedimage, setImage] = useState(image);
 
     const postGamePref = () =>{
-        postGamePreference(userName, gameID)
+        postGamePreference(userName, 5)
     }
 
 
