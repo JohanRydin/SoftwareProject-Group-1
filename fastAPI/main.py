@@ -98,13 +98,13 @@ async def get_user(username: str, db: Session = Depends(get_db)):
     return await fetch_dbUser(username, db)
 
 
-@app.get("/user/{username}/wishlist", response_model=List[int])
+@app.get("/user/{username}/wishlist", response_model=List[int], summary="Fetch a complete wishlist")
 async def get_wishlist(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
     return await fetch_dbUserWishlist(userId, db)
 
-@app.delete("/user/{username}/wishlist")
+@app.delete("/user/{username}/wishlist/all", summary="Delete all games from users wishlist")
 async def delete_wishlist(username: str, db: Session = Depends(get_db)):
     # Fetch userId based on the username
     userId = await fetch_dbUser(username, db)
@@ -129,7 +129,7 @@ async def delete_wishlist(username: str, db: Session = Depends(get_db)):
 
 
 # Define the endpoint for adding a game to the wishlist
-@app.post("/user/{username}/wishlist")
+@app.post("/user/{username}/wishlist", summary="Add a new game to the wishlist")
 async def post_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
     # Fetch userId based on the username
     userId = await fetch_dbUser(username, db)
@@ -154,8 +154,8 @@ async def post_wishlist(username: str, wishlist_item: WishlistItem, db: Session 
         raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
 
 
-#Deleting a wishlist game 
-@app.patch("/user/{username}/wishlist")
+# Deleting a game from wishlist 
+@app.delete("/user/{username}/wishlist", summary="Removing a game from the wishlist")
 async def remove_game_from_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
     # Fetch userId based on the username
     userId = await fetch_dbUser(username, db)
@@ -179,14 +179,14 @@ async def remove_game_from_wishlist(username: str, wishlist_item: WishlistItem, 
 
 
 @app.get("/user/{username}/gamepref", response_model=List[int])
-async def get_wishlist(username: str, db:Session = Depends(get_db)):
+async def get_gamepref(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
     return await fetch_dbUsergamePref(userId, db)
 
 
 @app.get("/user/{username}/genrepref", response_model=List[int])
-async def get_wishlist(username: str, db:Session = Depends(get_db)):
+async def get_genrepref(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
     return await fetch_dbUsergenrePref(userId, db)
@@ -218,7 +218,7 @@ async def post_recommendation(
     
     # External API URL
     api_url = "http://aiserver:5000/recommendations"
-
+    print(f"SENDING TO SERVER: {newbody}")
     async with httpx.AsyncClient() as client:
         # Make a POST request to the external API with the updated body
         response = await client.post(api_url, json=newbody)
