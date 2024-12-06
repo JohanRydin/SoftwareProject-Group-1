@@ -43,13 +43,13 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await fetch(
+        /*const response = await fetch(
           `${BASE_URL}/games?key=${API_KEY}&ordering=-rating&page_size=10`, {mode: 'cors'}
         );
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
-        }
+        }*/
         
         //const data = await response.json();
 

@@ -19,7 +19,7 @@ function GameList({ games = [], title, userName, onCardClick}) {
     
 
     return (
-        <div>
+        <div className="gamelist-animator">
             <h2>{title}</h2>
             <div className="scroll-container">
                 <button

@@ -21,6 +21,27 @@
     display: flex;
     align-items: center;
   }
+
+  .gamelist-animator {
+    animation-name: poster-animation;
+    animation-duration: 0.4s;
+    animation-delay: 0.1s;
+    animation-fill-mode: backwards;
+    animation-timing-function: ease-out;
+  }
+  @keyframes poster-animation {
+    from {
+      transform: scale(1, 0);
+      transform-origin: top;
+      height: 0;
+    }
+    to {
+      transform: scale(1, 1);
+      transform-origin: top;
+      height: auto;
+    }
+  }
+
   
   .scroll-button {
     position: absolute;
