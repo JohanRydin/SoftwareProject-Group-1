@@ -32,7 +32,11 @@ CREATE TABLE Game (
 
     gameID INT PRIMARY KEY,
 
-    gamename VARCHAR(100) UNIQUE NOT NULL
+    gamename VARCHAR(100) UNIQUE NOT NULL,
+
+    shortdescription VARCHAR(300) NOT NULL,
+
+    genres VARCHAR(300) NOT NULL
 
 );
 
@@ -100,8 +104,8 @@ FIELDS TERMINATED BY ','
 ENCLOSED BY '"' 
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
-(@col1, @col2, @dummy3, @dummy4, @dummy5, @dummy6, @dummy7, @dummy8, @dummy9, @dummy10, @dummy11, @dummy12, @dummy13, @dummy14)
-SET gameID = @col1, gamename = @col2;
+(@col1, @col2, @col3, @dummy4, @col5, @dummy6, @dummy7, @dummy8, @dummy9, @dummy10, @dummy11, @dummy12, @dummy13, @dummy14)
+SET gameID = @col1, gamename = @col2, shortdescription = @col3, genres = @col5;
 
 -- Insert data into gamePref
 INSERT INTO gamePref (userID, gameID) 

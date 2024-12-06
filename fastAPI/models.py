@@ -16,6 +16,8 @@ class Game(Base):
     __tablename__ = "Game"
     gameID = Column(Integer, primary_key=True, index=True)
     gamename = Column(String(50), unique=True, nullable=False)
+    shortdescription = Column(String(300), nullable=False)
+    Genres = Column(String(300), nullable=False)
 
 class GamePref(Base):
     __tablename__ = "gamePref"
