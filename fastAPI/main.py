@@ -69,13 +69,24 @@ async def fetch_dbgenreNameFetch(genreId: List[int], db: Session = Depends(get_d
         genrelist.extend(genres)  # Add genres to the main list
     return genrelist
 
-async def gameID_to_string(ids: List[int], db: Session=Depends(get_db)):
-    gamename = []
+async def fetch_dbGame(ids: List[int], db: Session=Depends(get_db)):
+    game_details_list = []
+    
     for id in ids:
-        # Flatten the result to get a list of game names
-        names = [name[0] for name in db.query(Game.gamename).filter(Game.gameID == id).all()]
-        gamename.extend(names)
-    return gamename
+        # Query the database for all relevant details of the current game ID
+        game = db.query(Game).filter(Game.gameID == id).first()
+
+        # Ensure the game exists before proceeding
+        if game:
+            game_details = {
+                "id": id,
+                "gamename": game.gamename,
+                "description": game.shortdescription,
+                "genres": game.Genres
+            }
+            game_details_list.append(game_details)
+
+    return game_details_list
 
 
 # ------------- API ENDPOINTS ------------ #
@@ -228,7 +239,7 @@ async def post_recommendation(
         print(response_data)
         game_lists = response_data.get("games", [])
         print(game_lists)
-        game_names_lists = [await gameID_to_string(game_list, db) for game_list in game_lists]
+        game_names_lists = [await fetch_dbGame(game_list, db) for game_list in game_lists]
         print(game_names_lists)
         
         # Return the response with game names
