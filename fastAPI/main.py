@@ -109,6 +109,7 @@ async def get_user(username: str, db: Session = Depends(get_db)):
 
 
 # ----- Wishlist endpoints ----- # 
+
 @app.get("/user/{username}/wishlist", response_model=List[int])
 async def get_wishlist(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
