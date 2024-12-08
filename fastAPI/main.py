@@ -58,6 +58,7 @@ async def fetch_dbUsergamePref(userId: int, db: Session=Depends(get_db)):
 async def fetch_dbUsergenrePref(userId: int, db: Session=Depends(get_db)): 
     db_genrePref = db.query(GenrePref.genreID).filter(GenrePref.userID == userId).all()
     genre_ids = [genreID for genreID, in db_genrePref]
+    print(genre_ids)
     return genre_ids
 
 async def fetch_dbgenreNameFetch(genreId: List[int], db: Session = Depends(get_db)):
@@ -86,7 +87,6 @@ async def fetch_dbGame(ids: List[int], db: Session=Depends(get_db)):
             game_details_list.append(game_details)
 
     return game_details_list
-
 
 # ------------- USER ENDPOINTS ------------ #
 
@@ -182,21 +182,48 @@ async def delete_wishlist(username: str, db: Session = Depends(get_db)):
 
 
 
-# ------ GamePref endpoints ------ # 
+# ------ Genrepref endpoints ------ # 
 
-@app.get("/user/{username}/gamepref", response_model=List[int])
+@app.get("/user/{username}/genrepref", response_model=List[str])
 async def get_gamepref(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
-    return await fetch_dbUsergamePref(userId, db)
+    genreIDList = await fetch_dbUsergenrePref(userId, db)
+    genreList = await fetch_dbgenreNameFetch(genreIDList, db)
+    return genreList 
 
 
-@app.post("/user/{username}/genrepref", response_model=List[int])
-async def post_gamepref(username: str, db:Session = Depends(get_db)):
+@app.post("/user/{username}/genrepref")
+async def post_gamepref(username: str, genreid: int, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
-    return await fetch_dbUsergenrePref(userId, db)
 
+    try:
+        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreid).first()
+        if existing_entry:
+            raise HTTPException(status_code=400, detail="Game is already in the genrePref")
+
+        new_entry = GenrePref(userID=userId, genreID=GenrePref.genreID)
+        db.add(new_entry)  
+        db.commit() 
+        db.refresh(new_entry)
+
+        return {"message": "Genre added", "Entry": {"userID": userId, "genreID": GenrePref.gameID}}
+
+    except Exception as e:
+        db.rollback()  # Rollback in case of an error
+        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the genrePref: {e}")
+
+
+
+@app.delete("/user/{username}/genrepref/{genreid}")
+async def remove_genrepref(username: str, genreid: int, db:Session = Depends(get_db)):
+    pass
+
+
+@app.delete("/user/{username}/genrepref")
+async def delete_all_genrepref(username: str, genreid: int, db:Session = Depends(get_db)):
+    pass
 
 
 # ---- RECOMMENDATION endpoints ------ # 
