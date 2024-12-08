@@ -6,7 +6,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
 from models import User, Wishlist, GamePref, GenrePref, Genre, Game
-from schemas import UserCreate, UserResponse, RecommendationBody
 from schemas import UserCreate, UserResponse, WishlistItem, RecommendationBody
 import os
 import requests
@@ -59,6 +58,7 @@ async def fetch_dbUsergamePref(userId: int, db: Session=Depends(get_db)):
 async def fetch_dbUsergenrePref(userId: int, db: Session=Depends(get_db)): 
     db_genrePref = db.query(GenrePref.genreID).filter(GenrePref.userID == userId).all()
     genre_ids = [genreID for genreID, in db_genrePref]
+    print(genre_ids)
     return genre_ids
 
 async def fetch_dbgenreNameFetch(genreId: List[int], db: Session = Depends(get_db)):
@@ -88,8 +88,18 @@ async def fetch_dbGame(ids: List[int], db: Session=Depends(get_db)):
 
     return game_details_list
 
+async def fetch_dbGameName(ids: List[int], db: Session=Depends(get_db)):
+    lst = []
+    
+    for id in ids:
+        game = db.query(Game).filter(Game.gameID == id).first()
 
-# ------------- API ENDPOINTS ------------ #
+        if game:
+            lst.append(game.gamename)
+
+    return lst
+
+# ------------- USER ENDPOINTS ------------ #
 
 @app.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
@@ -109,17 +119,61 @@ async def get_user(username: str, db: Session = Depends(get_db)):
     return await fetch_dbUser(username, db)
 
 
+# ----- Wishlist endpoints ----- # 
+
 @app.get("/user/{username}/wishlist", response_model=List[int])
 async def get_wishlist(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
     return await fetch_dbUserWishlist(userId, db)
 
+
+@app.post("/user/{username}/wishlist")
+async def post_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  
+
+    try:
+        existing_entry = db.query(Wishlist).filter(Wishlist.userID == userId, Wishlist.gameID == wishlist_item.gameID).first()
+        if existing_entry:
+            raise HTTPException(status_code=400, detail="Game is already in the wishlist")
+
+        new_entry = Wishlist(userID=userId, gameID=wishlist_item.gameID)
+        db.add(new_entry)  
+        db.commit() 
+        db.refresh(new_entry)
+
+        return {"message": "Game added to wishlist", "wishlist_entry": {"userID": userId, "gameID": wishlist_item.gameID}}
+
+    except Exception as e:
+        db.rollback()  # Rollback in case of an error
+        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
+
+
+@app.delete("/user/{username}/wishlist/{item}")
+async def remove_game_from_wishlist(username: str, item: int, db: Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  
+
+    try:
+        existing_entry = db.query(Wishlist).filter(Wishlist.userID == userId, Wishlist.gameID == item).first()
+        if not existing_entry:
+            raise HTTPException(status_code=400, detail="Game is not in the wishlist")
+
+        db.delete(existing_entry) 
+        db.commit() 
+
+        return {"message": "Game removed from wishlist", "wishlist_entry": {"userID": userId, "gameID": item.gameID}}
+
+    except Exception as e:
+        db.rollback()  # Rollback in case of an error
+        raise HTTPException(status_code=500, detail=f"An error occurred while removing the game from the wishlist: {e}")
+    
+# WARNING: Deletes entire wishlist
 @app.delete("/user/{username}/wishlist")
 async def delete_wishlist(username: str, db: Session = Depends(get_db)):
-    # Fetch userId based on the username
     userId = await fetch_dbUser(username, db)
-    userId = userId.userID  # Assuming fetch_dbUser returns an object with userID attribute
+    userId = userId.userID  
 
     try:
         wishlist_entries = db.query(Wishlist).filter(Wishlist.userID == userId).all()
@@ -135,74 +189,163 @@ async def delete_wishlist(username: str, db: Session = Depends(get_db)):
 
     except Exception as e:
         db.rollback()  
-        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
+        raise HTTPException(status_code=500, detail=f"An error occurred while removing the wishlist: {e}")
 
 
 
-# Define the endpoint for adding a game to the wishlist
-@app.post("/user/{username}/wishlist")
-async def post_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
-    # Fetch userId based on the username
+# ------ Genrepref endpoints ------ # 
+
+@app.get("/user/{username}/genrepref", response_model=List[str])
+async def get_genrepref(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
-    userId = userId.userID  # Assuming fetch_dbUser returns an object with userID attribute
+    userId = userId.userID
+    genreIDList = await fetch_dbUsergenrePref(userId, db)
+    genreList = await fetch_dbgenreNameFetch(genreIDList, db)
+    return genreList 
+
+
+@app.post("/user/{username}/genrepref")
+async def post_genrepref(username: str, genreID: int, db:Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID
 
     try:
-        # Check if the game is already in the user's wishlist
-        existing_entry = db.query(Wishlist).filter(Wishlist.userID == userId, Wishlist.gameID == wishlist_item.gameID).first()
+        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreID).first()
         if existing_entry:
-            raise HTTPException(status_code=400, detail="Game is already in the wishlist")
+            raise HTTPException(status_code=400, detail="Game is already in the genrePref")
 
-        # Add the game to the wishlist
-        new_entry = Wishlist(userID=userId, gameID=wishlist_item.gameID)
-        db.add(new_entry)  # Add to the session
-        db.commit()  # Commit the changes
-        db.refresh(new_entry)  # Optional: Refresh to get updated data
+        new_entry = GenrePref(userID=userId, genreID=genreID)
+        db.add(new_entry)  
+        db.commit() 
+        db.refresh(new_entry)
 
-        return {"message": "Game added to wishlist", "wishlist_entry": {"userID": userId, "gameID": wishlist_item.gameID}}
+        return {"message": "Genre added", "Entry": {"userID": userId, "genreID":genreID}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error
-        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
+        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the genrePref: {e}")
 
 
-#Deleting a wishlist game 
-@app.patch("/user/{username}/wishlist")
-async def remove_game_from_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
-    # Fetch userId based on the username
+@app.delete("/user/{username}/genrepref/{genreid}")
+async def remove_genrepref(username: str, genreid: int, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
-    userId = userId.userID  # Assuming fetch_dbUser returns an object with userID attribute
+    userId = userId.userID  
 
     try:
-        # Check if the game is in the user's wishlist
-        existing_entry = db.query(Wishlist).filter(Wishlist.userID == userId, Wishlist.gameID == wishlist_item.gameID).first()
+        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreid).first()
         if not existing_entry:
-            raise HTTPException(status_code=400, detail="Game is not in the wishlist")
+            raise HTTPException(status_code=400, detail="Genre is not in the genrePref")
 
-        # Remove the game from the wishlist (delete the existing entry)
-        db.delete(existing_entry)  # Delete the found entry from the session
-        db.commit()  # Commit the transaction to apply the changes
+        db.delete(existing_entry) 
+        db.commit() 
 
-        return {"message": "Game removed from wishlist", "wishlist_entry": {"userID": userId, "gameID": wishlist_item.gameID}}
+        return {"message": "Game removed from GenrePref", "genrePref": {"userID": userId, "genreID": genreid}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error
-        raise HTTPException(status_code=500, detail=f"An error occurred while removing the game from the wishlist: {e}")
+        raise HTTPException(status_code=500, detail=f"An error occurred while removing the game from the genrePref: {e}")
+    
 
 
-@app.get("/user/{username}/gamepref", response_model=List[int])
-async def get_wishlist(username: str, db:Session = Depends(get_db)):
+@app.delete("/user/{username}/genrepref")
+async def delete_all_genrepref(username: str, db:Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  
+
+    try:
+        entries = db.query(GenrePref).filter(GenrePref.userID == userId).all()
+        
+        if not entries:
+            raise HTTPException(status_code=404, detail="No genrePref entries found for this user")
+
+        for entry in entries:
+            db.delete(entry)
+
+        db.commit()
+        return {"message": "All genrePres removed from genrePref"}
+
+    except Exception as e:
+        db.rollback()  
+        raise HTTPException(status_code=500, detail=f"An error occurred while removing the genrePref: {e}")
+
+# ----- GamePref endpoints ---------- # 
+
+@app.get("/user/{username}/gamepref", response_model=List[str])
+async def get_gamepref(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
-    return await fetch_dbUsergamePref(userId, db)
+    genreIDList = await fetch_dbUsergamePref(userId, db)
+    genreList = await fetch_dbGameName(genreIDList, db)
+    return genreList 
 
 
-@app.get("/user/{username}/genrepref", response_model=List[int])
-async def get_wishlist(username: str, db:Session = Depends(get_db)):
+@app.post("/user/{username}/gamepref")
+async def post_gamepref(username: str, gameID: int, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
-    return await fetch_dbUsergenrePref(userId, db)
+
+    try:
+        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameID).first()
+        if existing_entry:
+            raise HTTPException(status_code=400, detail="Game is already in the gamePref")
+
+        new_entry = GamePref(userID=userId, gameID=gameID)
+        db.add(new_entry)  
+        db.commit() 
+        db.refresh(new_entry)
+
+        return {"message": "Game added", "Entry": {"userID": userId, "gameID":gameID}}
+
+    except Exception as e:
+        db.rollback()  # Rollback in case of an error
+        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the gamePref: {e}")
 
 
+@app.delete("/user/{username}/gamepref/{gameID}")
+async def remove_gamepref(username: str, gameID: int, db:Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  
+
+    try:
+        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameID).first()
+        if not existing_entry:
+            raise HTTPException(status_code=400, detail="Game is not in the gamepref")
+
+        db.delete(existing_entry) 
+        db.commit() 
+
+        return {"message": "Game removed from gamePref", "gamePref": {"userID": userId, "gamePref": gameID}}
+
+    except Exception as e:
+        db.rollback()  # Rollback in case of an error
+        raise HTTPException(status_code=500, detail=f"An error occurred while removing the game from the gamePref: {e}")
+    
+
+
+@app.delete("/user/{username}/gamepref")
+async def delete_all_gamepref(username: str, db:Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  
+
+    try:
+        entries = db.query(GamePref).filter(GamePref.userID == userId).all()
+        
+        if not entries:
+            raise HTTPException(status_code=404, detail="No gamePref entries found for this user")
+
+        for entry in entries:
+            db.delete(entry)
+
+        db.commit()
+        return {"message": "All genrePres removed from GamePref"}
+
+    except Exception as e:
+        db.rollback()  
+        raise HTTPException(status_code=500, detail=f"An error occurred while removing the GamePref: {e}")
+
+
+
+# ---- RECOMMENDATION endpoints ------ # 
 
 @app.post("/user/{username}/recommendation")
 async def post_recommendation(
@@ -210,15 +353,13 @@ async def post_recommendation(
     recommendationBody: RecommendationBody, 
     db: Session = Depends(get_db)
 ):
-    # Fetch user preferences from the database
     userid = await fetch_dbUser(username, db)
     userid = userid.userID
     game_ids = await fetch_dbUsergamePref(userid, db)
     genre_ids = await fetch_dbUsergenrePref(userid, db)
     genre_names = await fetch_dbgenreNameFetch(genre_ids, db)
 
-    # Convert the Pydantic model to a dictionary
-    newbody = recommendationBody.dict()  # Convert the Pydantic model to a dictionary
+    newbody = recommendationBody.dict() 
     
     # Ensure 'user' key exists in newbody and assign values
     newbody["user"] = {
@@ -245,3 +386,15 @@ async def post_recommendation(
         # Return the response with game names
         return {"status_code": response.status_code, "response": {"games": game_names_lists}}
 
+'''
+POST:   http://localhost:8000/user/Erik/recommendation
+{
+    "rows": [
+        {"similar_to_games": [1, 7, 3]},
+        {"similar_to_games": "all"},
+        {"similar_to_genre": "Sports"},
+        {"best_reviewed": "Adventure"},
+        {"best_sales": "Action"}
+    ]
+}
+'''
