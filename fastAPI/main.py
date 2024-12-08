@@ -88,7 +88,7 @@ async def fetch_dbGame(ids: List[int], db: Session=Depends(get_db)):
     return game_details_list
 
 
-# ------------- API ENDPOINTS ------------ #
+# ------------- USER ENDPOINTS ------------ #
 
 @app.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
@@ -108,32 +108,12 @@ async def get_user(username: str, db: Session = Depends(get_db)):
     return await fetch_dbUser(username, db)
 
 
+# ----- Wishlist endpoints ----- # 
 @app.get("/user/{username}/wishlist", response_model=List[int])
 async def get_wishlist(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
     return await fetch_dbUserWishlist(userId, db)
-
-@app.delete("/user/{username}/wishlist")
-async def delete_wishlist(username: str, db: Session = Depends(get_db)):
-    userId = await fetch_dbUser(username, db)
-    userId = userId.userID  
-
-    try:
-        wishlist_entries = db.query(Wishlist).filter(Wishlist.userID == userId).all()
-        
-        if not wishlist_entries:
-            raise HTTPException(status_code=404, detail="No wishlist entries found for this user")
-
-        for entry in wishlist_entries:
-            db.delete(entry)
-
-        db.commit()
-        return {"message": "All games removed from wishlist"}
-
-    except Exception as e:
-        db.rollback()  
-        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
 
 
 @app.post("/user/{username}/wishlist")
@@ -158,40 +138,67 @@ async def post_wishlist(username: str, wishlist_item: WishlistItem, db: Session 
         raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
 
 
-@app.patch("/user/{username}/wishlist")
-async def remove_game_from_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
+@app.delete("/user/{username}/wishlist/{item}")
+async def remove_game_from_wishlist(username: str, item: int, db: Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
     try:
-        existing_entry = db.query(Wishlist).filter(Wishlist.userID == userId, Wishlist.gameID == wishlist_item.gameID).first()
+        existing_entry = db.query(Wishlist).filter(Wishlist.userID == userId, Wishlist.gameID == item).first()
         if not existing_entry:
             raise HTTPException(status_code=400, detail="Game is not in the wishlist")
 
         db.delete(existing_entry) 
         db.commit() 
 
-        return {"message": "Game removed from wishlist", "wishlist_entry": {"userID": userId, "gameID": wishlist_item.gameID}}
+        return {"message": "Game removed from wishlist", "wishlist_entry": {"userID": userId, "gameID": item.gameID}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error
         raise HTTPException(status_code=500, detail=f"An error occurred while removing the game from the wishlist: {e}")
+    
+# WARNING: Deletes entire wishlist
+@app.delete("/user/{username}/wishlist")
+async def delete_wishlist(username: str, db: Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  
 
+    try:
+        wishlist_entries = db.query(Wishlist).filter(Wishlist.userID == userId).all()
+        
+        if not wishlist_entries:
+            raise HTTPException(status_code=404, detail="No wishlist entries found for this user")
+
+        for entry in wishlist_entries:
+            db.delete(entry)
+
+        db.commit()
+        return {"message": "All games removed from wishlist"}
+
+    except Exception as e:
+        db.rollback()  
+        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
+
+
+
+# ------ GamePref endpoints ------ # 
 
 @app.get("/user/{username}/gamepref", response_model=List[int])
-async def get_wishlist(username: str, db:Session = Depends(get_db)):
+async def get_gamepref(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
     return await fetch_dbUsergamePref(userId, db)
 
 
-@app.get("/user/{username}/genrepref", response_model=List[int])
-async def get_wishlist(username: str, db:Session = Depends(get_db)):
+@app.post("/user/{username}/genrepref", response_model=List[int])
+async def post_gamepref(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
     return await fetch_dbUsergenrePref(userId, db)
 
 
+
+# ---- RECOMMENDATION endpoints ------ # 
 
 @app.post("/user/{username}/recommendation")
 async def post_recommendation(
@@ -232,3 +239,15 @@ async def post_recommendation(
         # Return the response with game names
         return {"status_code": response.status_code, "response": {"games": game_names_lists}}
 
+'''
+POST:   http://localhost:8000/user/Erik/recommendation
+{
+    "rows": [
+        {"similar_to_games": [1, 7, 3]},
+        {"similar_to_games": "all"},
+        {"similar_to_genre": "Sports"},
+        {"best_reviewed": "Adventure"},
+        {"best_sales": "Action"}
+    ]
+}
+'''

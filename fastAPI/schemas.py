@@ -31,6 +31,5 @@ class Wishlist(WishlistBase):
 class WishlistItem(BaseModel): 
     gameID: int
 
-
 class RecommendationBody(BaseModel):
     rows: List[Any]
