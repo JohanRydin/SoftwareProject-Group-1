@@ -6,7 +6,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
 from models import User, Wishlist, GamePref, GenrePref, Genre, Game
-from schemas import UserCreate, UserResponse, RecommendationBody
 from schemas import UserCreate, UserResponse, WishlistItem, RecommendationBody
 import os
 import requests
@@ -117,9 +116,8 @@ async def get_wishlist(username: str, db:Session = Depends(get_db)):
 
 @app.delete("/user/{username}/wishlist")
 async def delete_wishlist(username: str, db: Session = Depends(get_db)):
-    # Fetch userId based on the username
     userId = await fetch_dbUser(username, db)
-    userId = userId.userID  # Assuming fetch_dbUser returns an object with userID attribute
+    userId = userId.userID  
 
     try:
         wishlist_entries = db.query(Wishlist).filter(Wishlist.userID == userId).all()
@@ -138,25 +136,20 @@ async def delete_wishlist(username: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
 
 
-
-# Define the endpoint for adding a game to the wishlist
 @app.post("/user/{username}/wishlist")
 async def post_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
-    # Fetch userId based on the username
     userId = await fetch_dbUser(username, db)
-    userId = userId.userID  # Assuming fetch_dbUser returns an object with userID attribute
+    userId = userId.userID  
 
     try:
-        # Check if the game is already in the user's wishlist
         existing_entry = db.query(Wishlist).filter(Wishlist.userID == userId, Wishlist.gameID == wishlist_item.gameID).first()
         if existing_entry:
             raise HTTPException(status_code=400, detail="Game is already in the wishlist")
 
-        # Add the game to the wishlist
         new_entry = Wishlist(userID=userId, gameID=wishlist_item.gameID)
-        db.add(new_entry)  # Add to the session
-        db.commit()  # Commit the changes
-        db.refresh(new_entry)  # Optional: Refresh to get updated data
+        db.add(new_entry)  
+        db.commit() 
+        db.refresh(new_entry)
 
         return {"message": "Game added to wishlist", "wishlist_entry": {"userID": userId, "gameID": wishlist_item.gameID}}
 
@@ -165,22 +158,18 @@ async def post_wishlist(username: str, wishlist_item: WishlistItem, db: Session 
         raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
 
 
-#Deleting a wishlist game 
 @app.patch("/user/{username}/wishlist")
 async def remove_game_from_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
-    # Fetch userId based on the username
     userId = await fetch_dbUser(username, db)
-    userId = userId.userID  # Assuming fetch_dbUser returns an object with userID attribute
+    userId = userId.userID  
 
     try:
-        # Check if the game is in the user's wishlist
         existing_entry = db.query(Wishlist).filter(Wishlist.userID == userId, Wishlist.gameID == wishlist_item.gameID).first()
         if not existing_entry:
             raise HTTPException(status_code=400, detail="Game is not in the wishlist")
 
-        # Remove the game from the wishlist (delete the existing entry)
-        db.delete(existing_entry)  # Delete the found entry from the session
-        db.commit()  # Commit the transaction to apply the changes
+        db.delete(existing_entry) 
+        db.commit() 
 
         return {"message": "Game removed from wishlist", "wishlist_entry": {"userID": userId, "gameID": wishlist_item.gameID}}
 
@@ -210,15 +199,13 @@ async def post_recommendation(
     recommendationBody: RecommendationBody, 
     db: Session = Depends(get_db)
 ):
-    # Fetch user preferences from the database
     userid = await fetch_dbUser(username, db)
     userid = userid.userID
     game_ids = await fetch_dbUsergamePref(userid, db)
     genre_ids = await fetch_dbUsergenrePref(userid, db)
     genre_names = await fetch_dbgenreNameFetch(genre_ids, db)
 
-    # Convert the Pydantic model to a dictionary
-    newbody = recommendationBody.dict()  # Convert the Pydantic model to a dictionary
+    newbody = recommendationBody.dict() 
     
     # Ensure 'user' key exists in newbody and assign values
     newbody["user"] = {
