@@ -88,6 +88,17 @@ async def fetch_dbGame(ids: List[int], db: Session=Depends(get_db)):
 
     return game_details_list
 
+async def fetch_dbGameName(ids: List[int], db: Session=Depends(get_db)):
+    lst = []
+    
+    for id in ids:
+        game = db.query(Game).filter(Game.gameID == id).first()
+
+        if game:
+            lst.append(game.gamename)
+
+    return lst
+
 # ------------- USER ENDPOINTS ------------ #
 
 @app.post("/users/", response_model=UserResponse)
@@ -185,7 +196,7 @@ async def delete_wishlist(username: str, db: Session = Depends(get_db)):
 # ------ Genrepref endpoints ------ # 
 
 @app.get("/user/{username}/genrepref", response_model=List[str])
-async def get_gamepref(username: str, db:Session = Depends(get_db)):
+async def get_genrepref(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
     genreIDList = await fetch_dbUsergenrePref(userId, db)
@@ -194,7 +205,7 @@ async def get_gamepref(username: str, db:Session = Depends(get_db)):
 
 
 @app.post("/user/{username}/genrepref")
-async def post_gamepref(username: str, genreID: int, db:Session = Depends(get_db)):
+async def post_genrepref(username: str, genreID: int, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
 
@@ -256,6 +267,82 @@ async def delete_all_genrepref(username: str, db:Session = Depends(get_db)):
     except Exception as e:
         db.rollback()  
         raise HTTPException(status_code=500, detail=f"An error occurred while removing the genrePref: {e}")
+
+# ----- GamePref endpoints ---------- # 
+
+@app.get("/user/{username}/gamepref", response_model=List[str])
+async def get_gamepref(username: str, db:Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID
+    genreIDList = await fetch_dbUsergamePref(userId, db)
+    genreList = await fetch_dbGameName(genreIDList, db)
+    return genreList 
+
+
+@app.post("/user/{username}/gamepref")
+async def post_gamepref(username: str, gameID: int, db:Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID
+
+    try:
+        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameID).first()
+        if existing_entry:
+            raise HTTPException(status_code=400, detail="Game is already in the gamePref")
+
+        new_entry = GamePref(userID=userId, gameID=gameID)
+        db.add(new_entry)  
+        db.commit() 
+        db.refresh(new_entry)
+
+        return {"message": "Game added", "Entry": {"userID": userId, "gameID":gameID}}
+
+    except Exception as e:
+        db.rollback()  # Rollback in case of an error
+        raise HTTPException(status_code=500, detail=f"An error occurred while adding to the gamePref: {e}")
+
+
+@app.delete("/user/{username}/gamepref/{gameID}")
+async def remove_gamepref(username: str, gameID: int, db:Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  
+
+    try:
+        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameID).first()
+        if not existing_entry:
+            raise HTTPException(status_code=400, detail="Game is not in the gamepref")
+
+        db.delete(existing_entry) 
+        db.commit() 
+
+        return {"message": "Game removed from gamePref", "gamePref": {"userID": userId, "gamePref": gameID}}
+
+    except Exception as e:
+        db.rollback()  # Rollback in case of an error
+        raise HTTPException(status_code=500, detail=f"An error occurred while removing the game from the gamePref: {e}")
+    
+
+
+@app.delete("/user/{username}/gamepref")
+async def delete_all_gamepref(username: str, db:Session = Depends(get_db)):
+    userId = await fetch_dbUser(username, db)
+    userId = userId.userID  
+
+    try:
+        entries = db.query(GamePref).filter(GamePref.userID == userId).all()
+        
+        if not entries:
+            raise HTTPException(status_code=404, detail="No gamePref entries found for this user")
+
+        for entry in entries:
+            db.delete(entry)
+
+        db.commit()
+        return {"message": "All genrePres removed from GamePref"}
+
+    except Exception as e:
+        db.rollback()  
+        raise HTTPException(status_code=500, detail=f"An error occurred while removing the GamePref: {e}")
+
 
 
 # ---- RECOMMENDATION endpoints ------ # 
