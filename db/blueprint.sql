@@ -111,7 +111,9 @@ SET gameID = @col1, gamename = @col2, shortdescription = @col3, genres = @col5;
 INSERT INTO gamePref (userID, gameID) 
 VALUES 
     (1, 1), 
-    (1, 98), 
+    (1, 98),
+    (1, 14), 
+    (1, 33),
     (2, 3), 
     (3, 3), 
     (3, 4);
@@ -120,6 +122,9 @@ VALUES
 INSERT INTO wishlist (userID, gameID) 
 VALUES 
     (1, 2), 
+    (1, 3), 
+    (1, 14), 
+    (1, 33),
     (3, 6), 
     (3, 7);
 
@@ -127,6 +132,8 @@ VALUES
 INSERT INTO genrePref (userID, genreID) 
 VALUES 
     (1, 1),
+    (1, 4), 
+    (1, 5),
     (1, 2), 
     (2, 2), 
     (3, 2), 
