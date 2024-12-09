@@ -39,23 +39,6 @@ async def get_db():
     finally:
         db.close()
 
-TEST_DATABASE_URL = "sqlite:///:memory:"  # In-memory SQLite for testing
-
-Base = declarative_base()
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Function to switch to test database in tests
-def get_test_db():
-    test_engine = create_engine(TEST_DATABASE_URL, connect_args={"check_same_thread": False})
-    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
-    Base.metadata.create_all(bind=test_engine)  # Create tables
-    db = TestingSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 async def fetch_dbUser(username: str, db: Session=Depends(get_db)):
     db_user = db.query(User).filter(User.username == username).first()
     if db_user is None:
