@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 from main import app, get_db
 from sqlmodel import Session, SQLModel, create_engine, Field
 from models import User, GenrePref  # Make sure these are imported
-
+import os
 
 class User(SQLModel, table=True):
     __tablename__ = "user"  # Optional if you want to specify a table name
@@ -11,7 +11,14 @@ class User(SQLModel, table=True):
     userID: int = Field(primary_key=True)
     username: str = Field(index=True, unique=True)
     
-    
+# File path for the test database
+TEST_DB_PATH = "testing.db"
+
+def clean_test_db():
+    """Remove the testing.db file to ensure the database is clean before each test."""
+    if os.path.exists(TEST_DB_PATH):
+        os.remove(TEST_DB_PATH)
+
 # Use TestClient to simulate API requests
 client = TestClient(app)
 
@@ -22,6 +29,9 @@ def test_read_main():
 
 def test_get_users(): 
     # Set up a test SQLite database
+    clean_test_db()
+
+
     engine = create_engine("sqlite:///testing.db", connect_args={"check_same_thread": False})
 
     # Create all tables in the test database, ensure models are imported first
@@ -37,9 +47,14 @@ def test_get_users():
         app.dependency_overrides[get_db] = get_db_override
         #print("Tables created:", SQLModel.metadata.tables)
         # Insert test data into the database (add a user)
-        #users = [User(userID=2, username="another_user"),User(userID=3, username="third_user"),]
-        #session.add_all(users)
-        #session.commit()
+         # Insert test data into the database (add a user)
+        users = [
+            User(userID=1, username="first_user"),
+            User(userID=2, username="another_user"),
+            User(userID=3, username="third_user"),
+        ]
+        session.add_all(users)
+        session.commit()
         
         # Test the actual API endpoint
         response = client.get("/users")  # Ensure the endpoint is correct
