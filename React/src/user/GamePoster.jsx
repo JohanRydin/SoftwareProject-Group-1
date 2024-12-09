@@ -4,7 +4,7 @@ import  {getGameImage, postGamePreference, postWishlistGame} from './Connections
 import AddIcon from '@mui/icons-material/Add';
 
 
-function GamePoster({userName, gameID, image=null, name = "Cyberpunk 2077", rating = 0, description = '', onCardClick = null}) {
+function GamePoster({userName, gameID, image=null, name = "Cyberpunk 2077", rating = 0, description = '',genres=[], gameDict, onCardClick = null}) {
     const [basedimage, setImage] = useState(image);
 
     const postGamePref = () =>{
@@ -21,9 +21,9 @@ function GamePoster({userName, gameID, image=null, name = "Cyberpunk 2077", rati
     }, []);
 
    return( 
-        <div className="game-poster" >
+    <div className="game-poster" >
         {basedimage != null && <img
-            onClick={onCardClick}
+            onClick={(yourmom) => {onCardClick(gameDict)}}
             src={basedimage}
             alt={name}
             className="poster-image" />}

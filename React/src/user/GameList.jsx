@@ -31,7 +31,7 @@ function GameList({ games = [], title, userName, onCardClick}) {
                 </button>
                 <div className="games-posters" ref={scrollRef}>
                     {games.map((game) => (
-                        <GamePoster key={0} gameID={0} userName={userName} name={game} onCardClick={onCardClick}/>
+                        <GamePoster key={game["id"]} gameID={game["id"]} userName={userName} name={game["gamename"]} description={game["description"]} genres={game["genres"]} gameDict={game} onCardClick={onCardClick}/>
                     ))}
                 </div>
                 <button
