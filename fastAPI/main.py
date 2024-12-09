@@ -103,6 +103,10 @@ async def fetch_dbGameName(ids: List[int], db: Session=Depends(get_db)):
 
 # ------------- USER ENDPOINTS ------------ #
 
+@app.get("/")
+async def read_main(): 
+    return {"message": "Root url"}
+
 @app.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(username=user.username)
