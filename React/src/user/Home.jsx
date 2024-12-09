@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './Home.css';
 import GameList from './GameList'
 import { getRecommendations, getWishList } from './Connections.jsx'
+import starIcon from './star-icon.svg';  
 
 const gameData = {
   gameId: 1,
-  name: "cod444",
-  genres: ["action", "adventure"],
-  description: "Call of Duty is a fast paced action game that recreates various historical battles of modern times: second world war, Iraqi war etc...",
-  publisher: "gamehive production",
-  ranking: 10
+  name: "Cyberpunk 2077",
+  genres: ["Action", "Adventure", "ARPG"],
+  description: "Cyberpunk 2077 is an open-world, action-adventure RPG set in the megalopolis of Night City, where you play as a cyberpunk mercenary wrapped up in a do-or-die fight for survival. Improved and featuring all-new free additional content, customize your character and playstyle as you take on jobs, build a reputation, and unlock upgrades. The relationships you forge and the choices you make will shape the story and the world around you. Legends are made here. What will yours be?",
+  publisher: "CD PROJEKT RED",
+  ranking: 9
 };
 
 const Modal = ({ isOpen, onClose, game }) => {
@@ -19,15 +20,18 @@ const Modal = ({ isOpen, onClose, game }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>×</button>
-        <h2>{game.name}</h2>
-        <p>Genres: {game.genres.join(", ")}</p>
-        <p>Description: {game.description}</p>
-        <p>Publisher:{game.publisher}</p>
-        <p>Ranking: {game.ranking}</p>
+        <h2 className="modal-title">{game.name}</h2>
+        <hr className="modal-divider" />
+        <p className="modal-ranking">
+          Rating: {game.ranking} <img src={starIcon} alt="Star Icon" className="star-icon" />
+        </p>
+        <p className="modal-genres">Genres: {game.genres.join(", ")}</p>
+        <p className="modal-description">{game.description}</p>
       </div>
     </div>
   );
 };
+
 
 function Home({searchQuery, displayMyList, displayWishlist, userName}) {
   const [games, setGames] = useState([]);
