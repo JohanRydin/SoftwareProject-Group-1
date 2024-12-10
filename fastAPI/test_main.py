@@ -112,7 +112,16 @@ def override_get_db(test_session):
 client = TestClient(app)
 
 
+def populate_database(test_session): 
+    users = [
+    User(userID=1, username="first_user"),
+    User(userID=2, username="another_user"),
+    User(userID=3, username="third_user"),
+    ]
+    test_session.add_all(users)
+    test_session.commit()
 
+    
 # -------- TESTS ---------- #
 
 def test_read_main():
@@ -122,15 +131,7 @@ def test_read_main():
     
 # WARNING: override_get_db is greyed out but is necessary!!!! 
 def test_get_users(override_get_db, test_session):
-    # Insert test data into the database
-    users = [
-        User(userID=1, username="first_user"),
-        User(userID=2, username="another_user"),
-        User(userID=3, username="third_user"),
-    ]
-    test_session.add_all(users)
-    test_session.commit()
-
+    populate_database(test_session)
     # Test the API endpoint
     response = client.get("/users")
     assert response.status_code == 200
@@ -139,3 +140,20 @@ def test_get_users(override_get_db, test_session):
     assert isinstance(data, list)
     assert len(data) == 3
     assert data[0] == {"userID": 1, "username": "first_user"}
+    
+
+# WARNING: override_get_db is greyed out but is necessary!!!! 
+def test_get_user(override_get_db, test_session):
+    
+    populate_database(test_session)
+
+    # Test the API endpoint
+    response = client.get("/user/first_user")
+    assert response.status_code == 200
+
+    data = response.json()
+    assert isinstance(data, dict)
+    assert len(data) == 2
+    assert data == {"userID": 1, "username": "first_user"}
+    
+    
