@@ -111,17 +111,79 @@ def override_get_db(test_session):
 # Use the reusable fixtures in tests
 client = TestClient(app)
 
-
+# Thank god for chatGPT to generate fake data quickly
 def populate_database(test_session): 
+    # Create Users
     users = [
-    User(userID=1, username="first_user"),
-    User(userID=2, username="another_user"),
-    User(userID=3, username="third_user"),
+        User(userID=1, username="first_user"),
+        User(userID=2, username="another_user"),
+        User(userID=3, username="third_user"),
     ]
     test_session.add_all(users)
     test_session.commit()
 
-    
+    # Create Genres
+    genres = [
+        Genre(genreID=1, genrename="Action"),
+        Genre(genreID=2, genrename="Adventure"),
+        Genre(genreID=3, genrename="Puzzle"),
+    ]
+    test_session.add_all(genres)
+    test_session.commit()
+
+    # Create Games
+    games = [
+        Game(
+            gameID=1,
+            gamename="Action Game 1",
+            shortdescription="An exciting action-packed adventure.",
+            genres="Action, Adventure"
+        ),
+        Game(
+            gameID=2,
+            gamename="Puzzle Game 1",
+            shortdescription="A challenging puzzle game for all ages.",
+            genres="Puzzle"
+        ),
+        Game(
+            gameID=3,
+            gamename="Adventure Game 1",
+            shortdescription="Explore and uncover secrets in this adventure game.",
+            genres="Adventure"
+        ),
+    ]
+    test_session.add_all(games)
+    test_session.commit()
+
+    # Create Genre Preferences
+    genre_prefs = [
+        GenrePref(userID=1, genreID=1),  # first_user likes Action
+        GenrePref(userID=1, genreID=2),  # first_user also likes Adventure
+        GenrePref(userID=2, genreID=3),  # another_user likes Puzzle
+        GenrePref(userID=3, genreID=2),  # third_user likes Adventure
+    ]
+    test_session.add_all(genre_prefs)
+    test_session.commit()
+
+    # Create Wishlist entries
+    wishlists = [
+        Wishlist(userID=1, gameID=1),  # first_user wants Action Game 1
+        Wishlist(userID=2, gameID=2),  # another_user wants Puzzle Game 1
+        Wishlist(userID=3, gameID=3),  # third_user wants Adventure Game 1
+    ]
+    test_session.add_all(wishlists)
+    test_session.commit()
+
+    # Create Game Preferences
+    game_prefs = [
+        GamePref(userID=1, gameID=1),  # first_user prefers Action Game 1
+        GamePref(userID=1, gameID=3),  # first_user also prefers Adventure Game 1
+        GamePref(userID=2, gameID=2),  # another_user prefers Puzzle Game 1
+        GamePref(userID=3, gameID=3),  # third_user prefers Adventure Game 1
+    ]
+    test_session.add_all(game_prefs)
+    test_session.commit()
+  
 # -------- TESTS ---------- #
 
 def test_read_main():
@@ -156,4 +218,58 @@ def test_get_user(override_get_db, test_session):
     assert len(data) == 2
     assert data == {"userID": 1, "username": "first_user"}
     
-    
+def test_get_wishlist(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+def test_post_wishlist(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+def test_remove_wishlist(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+def test_delete_wishlist(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+def test_get_genrepref(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+def test_post_genrepref(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+def test_remove_genrepref(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+def test_delete_all_genrepref(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+
+def test_get_gampreff(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+def test_post_gamepref(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+def test_remove_gamepref(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+def test_delete_all_gamepref(override_get_db, test_session): 
+    populate_database(test_session)
+
+
+def test_post_recommendation(override_get_db, test_session):
+    populate_database(test_session)
+
+
+
+
