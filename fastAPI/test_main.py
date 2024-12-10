@@ -67,3 +67,5 @@ def test_get_users():
         data = response.json()
         assert isinstance(data, list)  # Check if the response is a list
         assert len(data) == 3  # Check if there are any users returned
+        assert data[0] == {"userID": 1, "username": "first_user"}
+
