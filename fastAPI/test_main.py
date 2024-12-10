@@ -406,7 +406,18 @@ def test_delete_all_gamepref(override_get_db, test_session):
 
 def test_post_recommendation(override_get_db, test_session):
     populate_database(test_session)
+    
+    # Remove all game preferences for the user
+    response = client.delete("/user/first_user/gamepref")
+    assert response.status_code == 200  # Check that the request is successful
 
+    data = response.json()
+    assert "message" in data
+    assert data["message"] == "All genrePres removed from GamePref"
+
+    # Validate that all entries were removed from the database
+    remaining_entries = test_session.query(GamePref).filter_by(userID=1).all()
+    assert len(remaining_entries) == 0
 
 
 
