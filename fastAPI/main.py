@@ -169,7 +169,7 @@ async def remove_game_from_wishlist(username: str, item: int, db: Session = Depe
         db.delete(existing_entry) 
         db.commit() 
 
-        return {"message": "Game removed from wishlist", "wishlist_entry": {"userID": userId, "gameID": item.gameID}}
+        return {"message": "Game removed from wishlist", "wishlist_entry": {"userID": userId, "gameID": item}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error

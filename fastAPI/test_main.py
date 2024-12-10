@@ -220,16 +220,52 @@ def test_get_user(override_get_db, test_session):
     
 def test_get_wishlist(override_get_db, test_session): 
     populate_database(test_session)
+    
+    # Test the API endpoint
+    response = client.get("/user/first_user/wishlist")
+    assert response.status_code == 200
 
+    data = response.json()
+    assert isinstance(data, list)
+    assert data == [1]
+    
 
 def test_post_wishlist(override_get_db, test_session): 
     populate_database(test_session)
-
+    wishlist_item = {
+        "gameID": 123 
+    }
+    
+    response = client.post("/user/first_user/wishlist", json=wishlist_item)
+    
+    assert response.status_code == 200 
+    
+    data = response.json()
+    
+    assert "message" in data
+    assert data["message"] == "Game added to wishlist"
+    assert "wishlist_entry" in data
+    assert data["wishlist_entry"] == {"userID": 1, "gameID": 123}
+    
+    new_entry = test_session.query(Wishlist).filter_by(userID=1, gameID=123).first()
+    assert new_entry is not None
+    assert new_entry.userID == 1
+    assert new_entry.gameID == 123
 
 def test_remove_wishlist(override_get_db, test_session): 
     populate_database(test_session)
 
-
+    response = client.delete("/user/first_user/wishlist/1")
+    
+    #assert response.status_code == 200 
+    
+    data = response.json()
+    
+    assert "message" in data
+    assert data["message"] == "Game removed from wishlist"
+    assert "wishlist_entry" in data
+    assert data["wishlist_entry"] == {"userID": 1, "gameID": 1}
+    
 def test_delete_wishlist(override_get_db, test_session): 
     populate_database(test_session)
 
