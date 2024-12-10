@@ -257,7 +257,7 @@ def test_remove_wishlist(override_get_db, test_session):
 
     response = client.delete("/user/first_user/wishlist/1")
     
-    #assert response.status_code == 200 
+    assert response.status_code == 200 
     
     data = response.json()
     
@@ -269,6 +269,15 @@ def test_remove_wishlist(override_get_db, test_session):
 def test_delete_wishlist(override_get_db, test_session): 
     populate_database(test_session)
 
+    response = client.delete("/user/first_user/wishlist")
+    
+    assert response.status_code == 200 
+    
+    data = response.json()
+    
+    assert "message" in data
+    assert data["message"] == "All games removed from wishlist"
+    
 
 def test_get_genrepref(override_get_db, test_session): 
     populate_database(test_session)
