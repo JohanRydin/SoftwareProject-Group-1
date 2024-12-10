@@ -185,8 +185,14 @@ function stringToSlug(str) {
 
 export const getGameImage = (gameName) => {
   const slug = stringToSlug(gameName)
+  const defaultImage = 'https://img.freepik.com/premium-photo/vedio-games-illustration_1252102-47756.jpg?w=1480'; // Replace with your default image URL
   return fetch(`https://rawg.io/api/games/${slug}?key=${API_KEY}`, {mode: 'cors'})
           .then(res => res.json())
-          .then(data => {return data.background_image})
-          .catch(error => console.error('Error:', error));
+          .then((data) => {
+            return data.background_image || defaultImage; // Use default image if background_image is missing
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+            return defaultImage; // Use default image in case of an error
+          });
 }
