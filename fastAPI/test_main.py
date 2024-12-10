@@ -293,7 +293,27 @@ def test_get_genrepref(override_get_db, test_session):
 
 def test_post_genrepref(override_get_db, test_session): 
     populate_database(test_session)
-
+    
+    # Adding a new genre preference
+    entry = {
+        "genreID": 3  # Assuming genreID 2 corresponds to "Adventure"
+    }
+    
+    response = client.post("/user/first_user/genrepref", json=entry)
+    
+    assert response.status_code == 200  # Verify the request was successful
+    
+    data = response.json()
+    assert "message" in data
+    assert data["message"] == "Genre added"
+    assert "Entry" in data
+    assert data["Entry"] == {'genreID': 3, 'userID': 1}
+    
+    # Verify the database entry
+    new_entry = test_session.query(GenrePref).filter_by(userID=1, genreID=2).first()
+    assert new_entry is not None
+    assert new_entry.userID == 1
+    assert new_entry.genreID == 2
 
 def test_remove_genrepref(override_get_db, test_session): 
     populate_database(test_session)
