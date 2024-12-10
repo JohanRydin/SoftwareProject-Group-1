@@ -5,20 +5,10 @@ from pydantic import BaseModel
 from main import app, get_db
 from sqlmodel import Session, SQLModel, create_engine, Field, Relationship
 from typing import Optional, List
-#from models import User, GenrePref
+from unittest.mock import AsyncMock 
+import httpx 
+import requests
 import os
-
-mock_server = FastAPI()
-
-class RecommendationRequest(BaseModel):
-    rows: list
-
-@mock_server.post("/recommendations")
-async def mock_recommendation_api(body: RecommendationRequest):
-    # Mocked response based on input
-    return {
-        "games": [[1, 2, 3], [4, 5, 6], [7, 8, 9]]  # Example game IDs
-    }
 
 
 '''
@@ -431,9 +421,56 @@ def test_delete_all_gamepref(override_get_db, test_session):
     remaining_entries = test_session.query(GamePref).filter_by(userID=1).all()
     assert len(remaining_entries) == 0
 
+class RecommendationBody(BaseModel):
+    rows: list[dict]
 
-def test_post_recommendation(override_get_db, test_session):
-    populate_database(test_session)
- 
+# Mock external server using httpx.MockTransport
+@pytest.fixture
+def mock_aiserver():
+    async def mock_handler(request: httpx.Request):
+        # Mocked response for the aiserver endpoint
+        return httpx.Response(
+            status_code=200,
+            json={
+                "games": [
+                    [1, 2, 3],  # Example mocked game recommendations
+                    [4, 5, 6]
+                ]
+            }
+        )
 
+    transport = httpx.MockTransport(mock_handler)
+    return transport
 
+@pytest.mark.asyncio
+async def test_post_recommendation(override_get_db, test_session, mock_aiserver):
+    async with httpx.AsyncClient(transport=mock_aiserver) as mock_client:
+        app.dependency_overrides[httpx.AsyncClient] = lambda: mock_client
+
+        populate_database(test_session)
+
+        recommendation_body = {
+        "rows": [
+        {"similar_to_games": [1, 2, 3]},
+        {"similar_to_games": "all"},
+        {"similar_to_genre": "Sports"},
+        {"best_reviewed": "Adventure"},
+        {"best_sales": "Action"}
+    ]
+}
+        response = client.post(
+            "/user/first_user/recommendation",
+            json=recommendation_body
+        )
+
+        data = response.json()
+
+        assert response.status_code == 200
+        assert "response" in data
+        assert "games" in data["response"]
+
+        expected_game_names = [
+            ["GameName1", "GameName2", "GameName3"],
+            ["GameName4", "GameName5", "GameName6"]
+        ]
+        assert data["response"]["games"] == expected_game_names
