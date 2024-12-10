@@ -281,7 +281,14 @@ def test_delete_wishlist(override_get_db, test_session):
 
 def test_get_genrepref(override_get_db, test_session): 
     populate_database(test_session)
+   
+    # Test the API endpoint for retrieving genre preferences
+    response = client.get("/user/first_user/genrepref")
+    assert response.status_code == 200
 
+    data = response.json()
+    assert isinstance(data, list)
+    assert data == ["Action", "Adventure"]  # Adjust according to your test data
 
 def test_post_genrepref(override_get_db, test_session): 
     populate_database(test_session)
