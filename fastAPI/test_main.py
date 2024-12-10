@@ -1,14 +1,30 @@
 import pytest
 from fastapi.testclient import TestClient
+from fastapi import FastAPI
+from pydantic import BaseModel
 from main import app, get_db
 from sqlmodel import Session, SQLModel, create_engine, Field, Relationship
 from typing import Optional, List
 #from models import User, GenrePref
 import os
 
+mock_server = FastAPI()
+
+class RecommendationRequest(BaseModel):
+    rows: list
+
+@mock_server.post("/recommendations")
+async def mock_recommendation_api(body: RecommendationRequest):
+    # Mocked response based on input
+    return {
+        "games": [[1, 2, 3], [4, 5, 6], [7, 8, 9]]  # Example game IDs
+    }
+
+
 '''
 This is a hack solution to get our database structure into the test-database
 '''
+
 class User(SQLModel, table=True):
     __tablename__ = "user"
 
@@ -402,11 +418,7 @@ def test_remove_gamepref(override_get_db, test_session):
 
 def test_delete_all_gamepref(override_get_db, test_session): 
     populate_database(test_session)
-
-
-def test_post_recommendation(override_get_db, test_session):
-    populate_database(test_session)
-    
+   
     # Remove all game preferences for the user
     response = client.delete("/user/first_user/gamepref")
     assert response.status_code == 200  # Check that the request is successful
@@ -419,5 +431,9 @@ def test_post_recommendation(override_get_db, test_session):
     remaining_entries = test_session.query(GamePref).filter_by(userID=1).all()
     assert len(remaining_entries) == 0
 
+
+def test_post_recommendation(override_get_db, test_session):
+    populate_database(test_session)
+ 
 
 
