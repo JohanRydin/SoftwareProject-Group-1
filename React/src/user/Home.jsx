@@ -16,29 +16,36 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
   const BASE_URL = 'https://api.rawg.io/api';
 
   useEffect(() => {
-    const fetchGames = async () => {
-      try {
-        getRecommendations(userName, [{"similar_to_games" : [1,7,3]}, {"best_reviewed" : "Action"}, {"best_sales" : "Adventure"}]).then(data => {
-          const games = data.response.games;
-          setGames(games);
-        })
-        
-        getGamePreferences(userName).then(data => {
-          const _myList = data;
-          console.log(_myList)
-          setMyList(["Black Myth: Wukong", "Terraria"]);
-        })
+      const fetchGames = async () => {
+        var commands = [{"similar_to_games" : "all"}, {"best_reviewed" : "Action"}, {"best_sales" : "Adventure"}] // TODO: Make logic to set commands
+        var _userName = userName
+        try {
+          if (userName == null) // TODO: If no user is logged in, set default value. Decide something better later
+          {
+            _userName = "Erik"
+            commands = [{"similar_to_games" : [9]}, {"best_reviewed" : "Action"}, {"best_sales" : "Adventure"}]
+          }
 
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching games:', err);
-        setError(true);
-        setLoading(false);
-      }
+          getRecommendations(_userName, commands).then(data => {
+            const games = data.response.games;
+            setGames(games);
+          })
+          
+          getGamePreferences(_userName).then(data => {
+            const _myList = data;
+            setMyList(["Black Myth: Wukong", "Terraria"]);
+          })
+
+          setLoading(false);
+        } catch (err) {
+          console.error('Error fetching games:', err);
+          setError(true);
+          setLoading(false);
+        }
     };
 
     fetchGames();
-  }, []);
+  }, [userName]);
 
   const handleCardClick = (game) => {
     setSelectedGame(game);
@@ -66,6 +73,8 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
         {userName != '' && displayMyList && (<GameList userName={userName} games={myList} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
         {userName != '' && displayWishlist && (<GameList userName={userName} games={games[1]} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
         <GameList userName={userName} games={games[0]} title="Top 1 games" onCardClick={handleCardClick}/>
+        <GameList userName={userName} games={games[1]} title="Best reviewed action games" onCardClick={handleCardClick}/>
+        <GameList userName={userName} games={games[2]} title="Most popular" onCardClick={handleCardClick}/>
       </div>}
     </div>
   );
