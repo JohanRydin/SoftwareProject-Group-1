@@ -336,6 +336,18 @@ def test_remove_genrepref(override_get_db, test_session):
 def test_delete_all_genrepref(override_get_db, test_session): 
     populate_database(test_session)
 
+    # Remove all genre preferences for the user
+    response = client.delete("/user/first_user/genrepref")
+    
+    assert response.status_code == 200  # Verify the request was successful
+    
+    data = response.json()
+    assert "message" in data
+    assert data["message"] == "All genrePres removed from genrePref"
+    
+    # Verify the database no longer contains any genre preferences for the user
+    remaining_prefs = test_session.query(GenrePref).filter_by(userID=1).all()
+    assert len(remaining_prefs) == 0
 
 
 def test_get_gampreff(override_get_db, test_session): 
