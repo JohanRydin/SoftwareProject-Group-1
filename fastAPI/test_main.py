@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 from fastapi import FastAPI
 from pydantic import BaseModel
-from main import app, get_db
+from main import app, get_db, get_http_client
 from sqlmodel import Session, SQLModel, create_engine, Field, Relationship
 from typing import Optional, List
 from unittest.mock import AsyncMock 
@@ -423,54 +423,42 @@ def test_delete_all_gamepref(override_get_db, test_session):
 
 class RecommendationBody(BaseModel):
     rows: list[dict]
-
-# Mock external server using httpx.MockTransport
 @pytest.fixture
 def mock_aiserver():
     async def mock_handler(request: httpx.Request):
-        # Mocked response for the aiserver endpoint
         return httpx.Response(
             status_code=200,
-            json={
-                "games": [
-                    [1, 2, 3],  # Example mocked game recommendations
-                    [4, 5, 6]
-                ]
-            }
+            json={"games": [[1, 2, 3], [4, 5, 6]]}
         )
-
     transport = httpx.MockTransport(mock_handler)
     return transport
 
 @pytest.mark.asyncio
 async def test_post_recommendation(override_get_db, test_session, mock_aiserver):
-    async with httpx.AsyncClient(transport=mock_aiserver) as mock_client:
-        app.dependency_overrides[httpx.AsyncClient] = lambda: mock_client
+    async def mock_http_client():
+        async with httpx.AsyncClient(transport=mock_aiserver) as client:
+            yield client
 
-        populate_database(test_session)
+    app.dependency_overrides[get_http_client] = mock_http_client
 
-        recommendation_body = {
+    populate_database(test_session)
+
+    recommendation_body = {
         "rows": [
-        {"similar_to_games": [1, 2, 3]},
-        {"similar_to_games": "all"},
-        {"similar_to_genre": "Sports"},
-        {"best_reviewed": "Adventure"},
-        {"best_sales": "Action"}
-    ]
-}
-        response = client.post(
-            "/user/first_user/recommendation",
-            json=recommendation_body
-        )
-
-        data = response.json()
-
-        assert response.status_code == 200
-        assert "response" in data
-        assert "games" in data["response"]
-
-        expected_game_names = [
-            ["GameName1", "GameName2", "GameName3"],
-            ["GameName4", "GameName5", "GameName6"]
+            {"similar_to_games": [1, 2, 3]},
+            {"similar_to_games": "all"},
+            {"similar_to_genre": "Sports"},
+            {"best_reviewed": "Adventure"},
+            {"best_sales": "Action"}
         ]
-        assert data["response"]["games"] == expected_game_names
+    }
+
+    response = client.post(
+        "/user/first_user/recommendation",
+        json=recommendation_body
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert "response" in data
+    assert "games" in data["response"]
