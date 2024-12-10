@@ -385,7 +385,20 @@ def test_post_gamepref(override_get_db, test_session):
 
 def test_remove_gamepref(override_get_db, test_session): 
     populate_database(test_session)
+ 
+    # Remove a specific game preference
+    response = client.delete("/user/first_user/gamepref/1")
+    assert response.status_code == 200  # Check that the request is successful
 
+    data = response.json()
+    assert "message" in data
+    assert data["message"] == "Game removed from gamePref"
+    assert "gamePref" in data
+    assert data["gamePref"] == {"userID": 1, "gamePref": 1}
+
+    # Validate that the entry was removed from the database
+    removed_entry = test_session.query(GamePref).filter_by(userID=1, gameID=1).first()
+    assert removed_entry is None
 
 def test_delete_all_gamepref(override_get_db, test_session): 
     populate_database(test_session)

@@ -311,19 +311,19 @@ async def post_gamepref(username: str, gameItem: GamePrefItem, db:Session = Depe
 
 
 @app.delete("/user/{username}/gamepref/{gameID}")
-async def remove_gamepref(username: str, gameItem: GamePrefItem, db:Session = Depends(get_db)):
+async def remove_gamepref(username: str, gameID: int, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
     try:
-        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameItem.gameID).first()
+        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameID).first()
         if not existing_entry:
             raise HTTPException(status_code=400, detail="Game is not in the gamepref")
 
         db.delete(existing_entry) 
         db.commit() 
 
-        return {"message": "Game removed from gamePref", "gamePref": {"userID": userId, "gamePref": gameItem.gameID}}
+        return {"message": "Game removed from gamePref", "gamePref": {"userID": userId, "gamePref": gameID}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error
