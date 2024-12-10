@@ -11,15 +11,41 @@ class User(SQLModel, table=True):
     userID: int = Field(primary_key=True)
     username: str = Field(index=True, unique=True)
     
-# File path for the test database
+    
+# Define the test database path
 TEST_DB_PATH = "testing.db"
+TEST_DB_URL = f"sqlite:///{TEST_DB_PATH}"
 
+# Clean up the test database before running tests
 def clean_test_db():
-    """Remove the testing.db file to ensure the database is clean before each test."""
     if os.path.exists(TEST_DB_PATH):
         os.remove(TEST_DB_PATH)
 
-# Use TestClient to simulate API requests
+# Reusable database engine for tests
+@pytest.fixture(scope="function")
+def test_engine():
+    clean_test_db()
+    engine = create_engine(TEST_DB_URL, connect_args={"check_same_thread": False})
+    SQLModel.metadata.create_all(engine)  # Create tables for all models
+    yield engine
+    clean_test_db()  # Cleanup after test
+
+# Reusable session fixture
+@pytest.fixture(scope="function")
+def test_session(test_engine):
+    with Session(test_engine) as session:
+        yield session
+
+# Override the FastAPI `get_db` dependency
+@pytest.fixture(scope="function")
+def override_get_db(test_session):
+    def _override_get_db():
+        return test_session
+    app.dependency_overrides[get_db] = _override_get_db
+    yield
+    app.dependency_overrides.clear()
+
+# Use the reusable fixtures in tests
 client = TestClient(app)
 
 def test_read_main():
@@ -27,45 +53,21 @@ def test_read_main():
     assert response.status_code == 200
     assert response.json() == {"message": "Root url"}
 
-def test_get_users(): 
-    # Set up a test SQLite database
-    clean_test_db()
+def test_get_users(override_get_db, test_session):
+    # Insert test data into the database
+    users = [
+        User(userID=1, username="first_user"),
+        User(userID=2, username="another_user"),
+        User(userID=3, username="third_user"),
+    ]
+    test_session.add_all(users)
+    test_session.commit()
 
+    # Test the API endpoint
+    response = client.get("/users")
+    assert response.status_code == 200
 
-    engine = create_engine("sqlite:///testing.db", connect_args={"check_same_thread": False})
-
-    # Create all tables in the test database, ensure models are imported first
-    SQLModel.metadata.create_all(engine)  # This will create the User and other tables
-
-    # Create a session to interact with the test database
-    with Session(engine) as session:
-        
-        # Override the get_db dependency to use the test session
-        def get_db_override():
-            return session
-        
-        app.dependency_overrides[get_db] = get_db_override
-        #print("Tables created:", SQLModel.metadata.tables)
-        # Insert test data into the database (add a user)
-         # Insert test data into the database (add a user)
-        users = [
-            User(userID=1, username="first_user"),
-            User(userID=2, username="another_user"),
-            User(userID=3, username="third_user"),
-        ]
-        session.add_all(users)
-        session.commit()
-        
-        # Test the actual API endpoint
-        response = client.get("/users")  # Ensure the endpoint is correct
-
-        # Clear the dependency override after the test
-        app.dependency_overrides.clear()
-        
-        # Check the response
-        assert response.status_code == 200
-        data = response.json()
-        assert isinstance(data, list)  # Check if the response is a list
-        assert len(data) == 3  # Check if there are any users returned
-        assert data[0] == {"userID": 1, "username": "first_user"}
-
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) == 3
+    assert data[0] == {"userID": 1, "username": "first_user"}
