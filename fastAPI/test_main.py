@@ -350,10 +350,18 @@ def test_delete_all_genrepref(override_get_db, test_session):
     assert len(remaining_prefs) == 0
 
 
-def test_get_gampreff(override_get_db, test_session): 
+def test_get_gampref(override_get_db, test_session): 
     populate_database(test_session)
+    
+    # Fetch the game preferences for the user
+    response = client.get("/user/first_user/gamepref")
+    assert response.status_code == 200  # Check that the request is successful
 
-
+    data = response.json()
+    assert isinstance(data, list)  # Ensure the response is a list
+    print(data)
+    # Validate the expected game preferences (adjust based on your test data)
+    assert data == [{'id': 1, 'gamename': 'Action Game 1', 'description': 'An exciting action-packed adventure.', 'genres': 'Action, Adventure'}, {'id': 3, 'gamename': 'Adventure Game 1', 'description': 'Explore and uncover secrets in this adventure game.', 'genres': 'Adventure'}]
 def test_post_gamepref(override_get_db, test_session): 
     populate_database(test_session)
 
