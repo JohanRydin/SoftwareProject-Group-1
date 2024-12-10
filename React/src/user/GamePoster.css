@@ -69,8 +69,8 @@
     display: flex;                /* Make the button a flex container */
     justify-content: center;      /* Center content horizontally */
     align-items: center;          /* Center content vertically */
-    height: 1.7rem;
-    width: 1.7rem;
+    height: 1.9rem;
+    width: 1.9rem;
     color: rgb(0, 0, 0);
     margin-bottom: 15px;
     padding: 0;  
@@ -79,10 +79,12 @@
     border-width: 1px;
     border-color: white;
     border-style: solid;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
   }
 
   .game-info button:hover::after {
-    content: "Add to My List";
+    content: attr(data-hover-text); /* Use data attribute for dynamic content */
     position: absolute;
     top: -30px;    /* Adjust positioning above the button */
     left: 50%;
@@ -96,10 +98,18 @@
     opacity: 1;
     visibility: visible;
   }
+
   
   .game-info button::after {
     content: "";
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s, visibility 0.3s;
+  }
+
+  .buttons{
+    display: flex;
+    flex-direction: row; /* Stack items vertically */
+    align-items: center;   /* Center items horizontally */
+    justify-content: center;
   }
