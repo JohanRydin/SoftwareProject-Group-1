@@ -1,3 +1,6 @@
+
+.PHONY: test
+
 make up:
 	docker compose up -d
 
@@ -10,3 +13,6 @@ make clean:
 
 make total_clean:
 	docker system prune -a --volumes
+
+make test: 
+	cd fastAPI && pytest
