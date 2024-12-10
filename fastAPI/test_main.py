@@ -317,7 +317,21 @@ def test_post_genrepref(override_get_db, test_session):
 
 def test_remove_genrepref(override_get_db, test_session): 
     populate_database(test_session)
-
+  
+    # Remove a specific genre preference (e.g., Adventure with genreID=2)
+    response = client.delete("/user/first_user/genrepref/2")
+    
+    assert response.status_code == 200  # Verify the request was successful
+    
+    data = response.json()
+    assert "message" in data
+    assert data["message"] == "Game removed from GenrePref"
+    assert "removed" in data
+    assert data["removed"] == {"userID": 1, "genreID": 2}
+    
+    # Verify the database entry was removed
+    removed_entry = test_session.query(GenrePref).filter_by(userID=1, genreID=2).first()
+    assert removed_entry is None
 
 def test_delete_all_genrepref(override_get_db, test_session): 
     populate_database(test_session)

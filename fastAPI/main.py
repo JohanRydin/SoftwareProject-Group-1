@@ -235,20 +235,20 @@ async def post_genrepref(username: str, genreItem: GenrePrefItem, db:Session = D
         raise HTTPException(status_code=500, detail=f"An error occurred while adding to the genrePref: {e}")
 
 
-@app.delete("/user/{username}/genrepref/{genreid}")
-async def remove_genrepref(username: str,genreItem: GenrePrefItem, db:Session = Depends(get_db)):
+@app.delete("/user/{username}/genrepref/{genreID}")
+async def remove_genrepref(username: str,genreID:int, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
     try:
-        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreItem.genreID).first()
+        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreID).first()
         if not existing_entry:
             raise HTTPException(status_code=400, detail="Genre is not in the genrePref")
 
         db.delete(existing_entry) 
         db.commit() 
 
-        return {"message": "Game removed from GenrePref", "genrePref": {"userID": userId, "genreID": genreItem.genreID}}
+        return {"message": "Game removed from GenrePref", "removed": {"userID": userId, "genreID": genreID}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error
