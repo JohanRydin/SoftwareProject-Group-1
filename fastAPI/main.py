@@ -279,12 +279,12 @@ async def delete_all_genrepref(username: str, db:Session = Depends(get_db)):
 
 # ----- GamePref endpoints ---------- # 
 
-@app.get("/user/{username}/gamepref", response_model=List[str])
+@app.get("/user/{username}/gamepref")
 async def get_gamepref(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
-    genreIDList = await fetch_dbUsergamePref(userId, db)
-    genreList = await fetch_dbGameName(genreIDList, db)
+    gameIDList = await fetch_dbUsergamePref(userId, db)
+    genreList = await fetch_dbGame(gameIDList, db)
     return genreList 
 
 
