@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
 from database import SessionLocal, Base
 from models import User, Wishlist, GamePref, GenrePref, Genre, Game
-from schemas import UserCreate, UserResponse, WishlistItem, RecommendationBody
+from schemas import UserCreate, UserResponse, WishlistItem, RecommendationBody, GamePrefItem, GenrePrefItem
 import os
 import requests
 import httpx
@@ -211,21 +211,21 @@ async def get_genrepref(username: str, db:Session = Depends(get_db)):
 
 
 @app.post("/user/{username}/genrepref")
-async def post_genrepref(username: str, genreID: int, db:Session = Depends(get_db)):
+async def post_genrepref(username: str, genreItem: GenrePrefItem, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
 
     try:
-        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreID).first()
+        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreItem.genreID).first()
         if existing_entry:
             raise HTTPException(status_code=400, detail="Game is already in the genrePref")
 
-        new_entry = GenrePref(userID=userId, genreID=genreID)
+        new_entry = GenrePref(userID=userId, genreID=genreItem.genreID)
         db.add(new_entry)  
         db.commit() 
         db.refresh(new_entry)
 
-        return {"message": "Genre added", "Entry": {"userID": userId, "genreID":genreID}}
+        return {"message": "Genre added", "Entry": {"userID": userId, "genreID":genreItem.genreID}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error
@@ -233,19 +233,19 @@ async def post_genrepref(username: str, genreID: int, db:Session = Depends(get_d
 
 
 @app.delete("/user/{username}/genrepref/{genreid}")
-async def remove_genrepref(username: str, genreid: int, db:Session = Depends(get_db)):
+async def remove_genrepref(username: str,genreItem: GenrePrefItem, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
     try:
-        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreid).first()
+        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreItem.genreID).first()
         if not existing_entry:
             raise HTTPException(status_code=400, detail="Genre is not in the genrePref")
 
         db.delete(existing_entry) 
         db.commit() 
 
-        return {"message": "Game removed from GenrePref", "genrePref": {"userID": userId, "genreID": genreid}}
+        return {"message": "Game removed from GenrePref", "genrePref": {"userID": userId, "genreID": genreItem.genreID}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error
@@ -286,21 +286,21 @@ async def get_gamepref(username: str, db:Session = Depends(get_db)):
 
 
 @app.post("/user/{username}/gamepref")
-async def post_gamepref(username: str, gameID: int, db:Session = Depends(get_db)):
+async def post_gamepref(username: str, gameItem: GamePrefItem, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
 
     try:
-        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameID).first()
+        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameItem.gameID).first()
         if existing_entry:
             raise HTTPException(status_code=400, detail="Game is already in the gamePref")
 
-        new_entry = GamePref(userID=userId, gameID=gameID)
+        new_entry = GamePref(userID=userId, gameID=gameItem.gameID)
         db.add(new_entry)  
         db.commit() 
         db.refresh(new_entry)
 
-        return {"message": "Game added", "Entry": {"userID": userId, "gameID":gameID}}
+        return {"message": "Game added", "Entry": {"userID": userId, "gameID":gameItem.gameID}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error
@@ -308,19 +308,19 @@ async def post_gamepref(username: str, gameID: int, db:Session = Depends(get_db)
 
 
 @app.delete("/user/{username}/gamepref/{gameID}")
-async def remove_gamepref(username: str, gameID: int, db:Session = Depends(get_db)):
+async def remove_gamepref(username: str, gameItem: GamePrefItem, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
     try:
-        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameID).first()
+        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameItem.gameID).first()
         if not existing_entry:
             raise HTTPException(status_code=400, detail="Game is not in the gamepref")
 
         db.delete(existing_entry) 
         db.commit() 
 
-        return {"message": "Game removed from gamePref", "gamePref": {"userID": userId, "gamePref": gameID}}
+        return {"message": "Game removed from gamePref", "gamePref": {"userID": userId, "gamePref": gameItem.gameID}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error

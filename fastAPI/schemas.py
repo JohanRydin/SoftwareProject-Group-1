@@ -38,5 +38,5 @@ class GamePrefItem(BaseModel):
     gameID: int
 
 class GenrePrefItem(BaseModel):
-    gameID: int
+    genreID: int
     
