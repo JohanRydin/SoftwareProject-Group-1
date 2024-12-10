@@ -226,8 +226,9 @@ def test_get_wishlist(override_get_db, test_session):
     assert response.status_code == 200
 
     data = response.json()
+    print(data)
     assert isinstance(data, list)
-    assert data == [1]
+    assert data == [{'id': 1, 'gamename': 'Action Game 1', 'description': 'An exciting action-packed adventure.', 'genres': 'Action, Adventure'}]
     
 
 def test_post_wishlist(override_get_db, test_session): 
