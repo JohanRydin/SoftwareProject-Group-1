@@ -7,13 +7,12 @@ import Modal from './Modal.jsx'
 function Home({searchQuery, displayMyList, displayWishlist, userName}) {
   const [games, setGames] = useState([]);
   const [myList, setMyList] = useState([]);
+  const [wishList, setwishList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
-
-  const API_KEY = 'cd1fef93051e4872ad6909f179bde3ea';
-  const BASE_URL = 'https://api.rawg.io/api';
+  
 
   useEffect(() => {
       const fetchGames = async () => {
@@ -34,6 +33,10 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
           getGamePreferences(_userName).then(data => {
             const _myList = data;
             setMyList(_myList);
+          })
+
+          getWishList(_userName).then(data => {
+            setwishList(data)
           })
 
           setLoading(false);
@@ -71,7 +74,7 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
       {games != [] && <div className="games-row">
         {searchQuery != '' && (<GameList userName={userName} games={games[0]} title={searchQuery} onCardClick={handleCardClick}/>)}
         {userName != '' && displayMyList && (<GameList userName={userName} games={myList} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
-        {userName != '' && displayWishlist && (<GameList userName={userName} games={games[1]} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
+        {userName != '' && displayWishlist && (<GameList userName={userName} games={wishList} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
         <GameList userName={userName} games={games[0]} title="Top 1 games" onCardClick={handleCardClick}/>
         <GameList userName={userName} games={games[1]} title="Best reviewed action games" onCardClick={handleCardClick}/>
         <GameList userName={userName} games={games[2]} title="Most popular" onCardClick={handleCardClick}/>
