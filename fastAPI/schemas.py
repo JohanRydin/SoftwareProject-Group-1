@@ -33,3 +33,10 @@ class WishlistItem(BaseModel):
 
 class RecommendationBody(BaseModel):
     rows: List[Any]
+    
+class GamePrefItem(BaseModel): 
+    gameID: int
+
+class GenrePrefItem(BaseModel):
+    gameID: int
+    
