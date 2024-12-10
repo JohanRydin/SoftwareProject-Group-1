@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
 import GameList from './GameList'
-import { getRecommendations, getWishList } from './Connections.jsx'
+import { getGamePreferences, getRecommendations, getWishList } from './Connections.jsx'
 import Modal from './Modal.jsx'
 
 function Home({searchQuery, displayMyList, displayWishlist, userName}) {
@@ -31,9 +31,9 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
             setGames(games);
           })
           
-          getWishList(_userName).then(data => {
+          getGamePreferences(_userName).then(data => {
             const _myList = data;
-            setMyList(["Black Myth: Wukong", "Terraria"]);
+            setMyList(_myList);
           })
 
           setLoading(false);

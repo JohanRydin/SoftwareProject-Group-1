@@ -2,13 +2,17 @@ import React, { useRef, useState, useEffect } from "react";
 import './GamePoster.css';
 import  {getGameImage, postGamePreference, postWishlistGame} from './Connections.jsx'
 import AddIcon from '@mui/icons-material/Add';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 
 function GamePoster({userName, gameID, image=null, name = "Cyberpunk 2077", rating = 0, description = '',genres=[], gameDict, onCardClick = null}) {
     const [basedimage, setImage] = useState(image);
 
     const postGamePref = () =>{
-        postGamePreference(userName, 5)
+        postGamePreference(userName, gameID)
+    }
+    const postToWishlist = () =>{
+        postWishlistGame(userName, gameID)
     }
 
 
@@ -29,7 +33,11 @@ function GamePoster({userName, gameID, image=null, name = "Cyberpunk 2077", rati
             className="poster-image" />}
         <div className="game-info">
             <h3>{name}</h3>
-            <button /*onClick={postGamePref}*/><AddIcon /></button>
+            <div className="buttons">
+                <button data-hover-text="Add to My List" onClick={postGamePref}><ThumbUpIcon /></button>
+                <button data-hover-text="Add to Wishlist" onClick={postToWishlist}><AddIcon /></button>
+            </div>
+                
         </div>
     </div>
    )
