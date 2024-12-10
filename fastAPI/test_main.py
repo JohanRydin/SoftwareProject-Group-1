@@ -362,9 +362,26 @@ def test_get_gampref(override_get_db, test_session):
     print(data)
     # Validate the expected game preferences (adjust based on your test data)
     assert data == [{'id': 1, 'gamename': 'Action Game 1', 'description': 'An exciting action-packed adventure.', 'genres': 'Action, Adventure'}, {'id': 3, 'gamename': 'Adventure Game 1', 'description': 'Explore and uncover secrets in this adventure game.', 'genres': 'Adventure'}]
+
 def test_post_gamepref(override_get_db, test_session): 
     populate_database(test_session)
+    # Add a new game preference
+    new_game_pref = {"gameID": 2}  # Assuming gameID=3 is a valid game in your test data
+    
+    response = client.post("/user/first_user/gamepref", json=new_game_pref)
+    assert response.status_code == 200  # Check that the request is successful
 
+    data = response.json()
+    assert "message" in data
+    assert data["message"] == "Game added"
+    assert "Entry" in data
+    assert data["Entry"] == {"userID": 1, "gameID": 2}
+
+    # Validate that the new entry exists in the database
+    new_entry = test_session.query(GamePref).filter_by(userID=1, gameID=3).first()
+    assert new_entry is not None
+    assert new_entry.userID == 1
+    assert new_entry.gameID == 3
 
 def test_remove_gamepref(override_get_db, test_session): 
     populate_database(test_session)
