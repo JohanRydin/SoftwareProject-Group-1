@@ -33,7 +33,7 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
           
           getGamePreferences(_userName).then(data => {
             const _myList = data;
-            setMyList(["Black Myth: Wukong", "Terraria"]);
+            setMyList(_myList);
           })
 
           setLoading(false);
