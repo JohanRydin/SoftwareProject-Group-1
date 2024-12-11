@@ -29,6 +29,7 @@ function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
               const games = data.response.games;
               setGames(games);
             })
+            setLoading(false);
             return;
           }
           
