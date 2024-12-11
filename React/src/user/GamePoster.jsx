@@ -27,7 +27,7 @@ function GamePoster({userName, gameID, image=null, name = "Cyberpunk 2077", rati
    return( 
     <div className="game-poster" >
         {basedimage != null && <img
-            onClick={(yourmom) => {onCardClick(gameDict)}}
+            onClick={() => {onCardClick(gameDict)}}
             src={basedimage}
             alt={name}
             className="poster-image" />}
