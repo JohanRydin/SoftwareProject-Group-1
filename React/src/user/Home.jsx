@@ -5,7 +5,7 @@ import { getGamePreferences, getRecommendations, getWishList, getGenrePreference
 import Modal from './Modal.jsx'
 import { SelectRows } from './RowSelector.jsx'
 
-function Home({searchQuery, displayMyList, displayWishlist, userName}) {
+function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
   const [games, setGames] = useState([]);
   const [titles, setTitles] = useState([]);
   const [myList, setMyList] = useState([]);
@@ -17,6 +17,7 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
   
 
   useEffect(() => {
+
       const fetchGames = async () => {
         var _userName = userName
         try {
@@ -58,13 +59,18 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
             setTitles(rows[1]);
             setGames(games);
           })
+          
+        getGamePreferences(_userName).then(data => {
+          const _myList = data;
+          setMyList(_myList);
+        })
 
-          setLoading(false);
-        } catch (err) {
-          console.error('Error fetching games:', err);
-          setError(true);
-          setLoading(false);
-        }
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching games:', err);
+        setError(true);
+        setLoading(false);
+      }
     };
 
     fetchGames();
@@ -85,13 +91,14 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
 
   return (
     <div className="home">
-      <Modal 
+      <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         game={selectedGame}
       />
 
       {games != [] && <div className="games-row">
+
         {searchQuery != '' && (<GameList userName={userName} games={games[0]} title={searchQuery} onCardClick={handleCardClick}/>)}
         {userName != '' && displayMyList && (<GameList userName={userName} games={myList} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
         {userName != '' && displayWishlist && (<GameList userName={userName} games={wishList} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
