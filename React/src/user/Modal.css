@@ -76,13 +76,14 @@
 .modal-genres {
   font-size: 16px;
   margin-bottom: 10px;
+  line-height: 1.2;  
+
   text-align: center;
 }
 
 .modal-description {
   font-size: 18px;  
   margin: 15px 0;  
-  padding: 10px;  
-  line-height: 1.5;  
+  line-height: 1.2;  
   text-align: justify;  
 }
