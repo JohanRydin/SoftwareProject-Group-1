@@ -85,7 +85,7 @@ CREATE TABLE genrePref (
 ); 
 
 -- Insert users
-INSERT INTO User (username) VALUES ('Erik'), ('Lisa'), ('Josefine');
+INSERT INTO User (username) VALUES ('Erik'), ('Lisa'), ('Josefine'), ('Johan');
 
 -- Import data into Genre from CSV
 LOAD DATA INFILE '/var/lib/mysql-files/genres.csv'
@@ -116,7 +116,15 @@ VALUES
     (1, 33),
     (2, 3), 
     (3, 3), 
-    (3, 4);
+    (4, 1), 
+    (4, 2), 
+    (4, 9), 
+    (4, 29), 
+    (4, 83), 
+    (4, 110), 
+    (4, 145), 
+    (4, 203), 
+    (3, 208);
 
 -- Insert data into wishlist
 INSERT INTO wishlist (userID, gameID) 
@@ -126,7 +134,11 @@ VALUES
     (1, 14), 
     (1, 33),
     (3, 6), 
-    (3, 7);
+    (4, 222), 
+    (4, 277), 
+    (4, 50), 
+    (4, 59), 
+    (3, 67);
 
 -- Insert data into genrePref
 INSERT INTO genrePref (userID, genreID) 
@@ -137,4 +149,11 @@ VALUES
     (1, 2), 
     (2, 2), 
     (3, 2), 
+    (4, 0), 
+    (4, 1), 
+    (4, 2), 
+    (4, 7), 
+    (4, 9), 
+    (4, 10), 
+    (4, 20), 
     (3, 3);
