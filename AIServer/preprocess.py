@@ -117,4 +117,11 @@ def add_ids_to_csv():
 #do_genre_csv()
 #add_ids_to_csv()
 
+def count_length_genre_csv(column):
+    df = pd.read_csv("./../csvs/games_description_indexed.csv", usecols=[column])
 
+    max_length = df[df[column].isna() == False].apply(len).max()
+
+    print(max_length)
+
+count_length_genre_csv('short_description')

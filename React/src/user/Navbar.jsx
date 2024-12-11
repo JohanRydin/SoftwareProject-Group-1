@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import './Navbar.css';
 import Button from '@mui/material/Button';
 
-const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, setUser}) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);  
+const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn}) => {
   const [inputValue, setInputValue] = useState('');
 
   //TODO: handleSubmit and handleAutClick is from the odin proj, should be changed.
@@ -17,8 +16,15 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
   };
 
   const handleAuthClick = () => {
-    setUser('Erik')
-    setIsLoggedIn(!isLoggedIn);
+    if (isLoggedIn)
+    {
+      setIsLoggedIn(false)
+      setUser(null)
+    }
+    else
+    {
+      setLoginModalOpen(!loginModalOpen)
+    }
   };
   const onChange = (e) => {
     setInputValue(e.target.value)
@@ -50,13 +56,6 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
         >
           Wishlist
         </button>
-
-        <button 
-          onClick={handleAuthClick} 
-          className="nav-item auth-button"
-        >
-          {isLoggedIn ? 'Logout' : 'Login'}
-        </button>
         
         <form onSubmit={handleSubmit} className="search-form">
           <input
@@ -68,6 +67,13 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
           />
           <button type="submit" className="search-button">Search</button>
         </form>
+        
+        <button 
+          onClick={handleAuthClick} 
+          className="nav-item auth-button"
+        >
+          {isLoggedIn ? 'Logout' : 'Login'}
+        </button>
 
       </div>
     </nav>

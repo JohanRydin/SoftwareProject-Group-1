@@ -102,7 +102,10 @@ class Recommender:
     # returns a list of lists of recommendations where each recommendation ID
     # Example: example post that the API ggets: {user: {name, [game_ids], [genres]}, rows: [similar_to : [1, 5, 2], best_reviewed : "Action", similar_to : [5], best_sales : "Adventure"]}
     def get_recommendations(self, user, row_requests, num = 10):
-        game_ids = user['game_ids']
+        game_id_strings = user['game_ids']
+        game_ids = list()
+        for id_string in game_id_strings:
+            game_ids.append(int(id_string))
 
         games_list = list()
 
@@ -123,6 +126,9 @@ class Recommender:
                 if (request_data == 'all'): # Compare to all the games the user likes
                     similar = self.find_similar_games(game_ids, self.matrix)
                 else:   # Compare to a custom set of games
+                    data_ids = list()
+                    for id in request_data:
+                        data_ids.append(int(id))
                     similar = self.find_similar_games(request_data, self.matrix)
             elif (command == 'similar_to_genre'):   # Compare all the games the user likes that are part of a specific genre
                 similar = self.find_similar_genres(game_ids, self.matrix, request_data, self.df)

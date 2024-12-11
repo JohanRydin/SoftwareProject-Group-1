@@ -114,11 +114,11 @@ export const postUser = (username) => {
 
 
 export const getGamePreferences = (userName) => {
-  return fetchData(`/user/${userName}/gamePref`);
+  return fetchData(`/user/${userName}/gamepref`);
 }
 
 export const getGenrePreferences = (userName) => {
-  return fetchData(`/user/${userName}/genrePref`);
+  return fetchData(`/user/${userName}/genrepref`);
 }
 
 export const getWishList = (userName) => {
@@ -128,12 +128,12 @@ export const getWishList = (userName) => {
 
 export const postGamePreference = (userName, gameID) => {
     var data = {gameID: gameID}
-    return postData(`/user/${userName}/gamePref`, data)
+    return postData(`/user/${userName}/gamepref`, data)
 }
 
 export const postGenrePreference = (userName, genre) => {
   var data =  {genre: genre}
-  return postData(`/user/${userName}/genrePref`, data)
+  return postData(`/user/${userName}/genrepref`, data)
 }
 
 export const postWishlistGame = (userName, gameID) => {
@@ -144,12 +144,12 @@ export const postWishlistGame = (userName, gameID) => {
 
 export const deleteGamePreference = (userName, gameID) => {
   var data =  {gameID: gameID}
-  return deleteData(`/user/${userName}/gamePref/`, data)
+  return deleteData(`/user/${userName}/gamepref/`, data)
 }
 
 export const deleteGenrePreference = (userName, genre) => {
   var data =  {genre: genre}
-  return deleteData(`/user/${userName}/genrePref`, data)
+  return deleteData(`/user/${userName}/genrepref`, data)
 }
 
 export const deleteWishlistGame = (userName, gameID) => {
@@ -158,7 +158,7 @@ export const deleteWishlistGame = (userName, gameID) => {
 }
 
 
-// userID example: 5
+// username example: Erik
 // rows example:   [{"similar_to" : [1, 5, 2]}, {"best_reviewed" : "Action"}, {"similar_to" : "all"}, {"best_sales" : "Adventure"}]
 export const getRecommendations = (userName, rows) => {
   var data = {rows: rows}
@@ -185,8 +185,14 @@ function stringToSlug(str) {
 
 export const getGameImage = (gameName) => {
   const slug = stringToSlug(gameName)
+  const defaultImage = 'https://img.freepik.com/premium-photo/vedio-games-illustration_1252102-47756.jpg?w=1480'; // Replace with your default image URL
   return fetch(`https://rawg.io/api/games/${slug}?key=${API_KEY}`, {mode: 'cors'})
           .then(res => res.json())
-          .then(data => {return data.background_image})
-          .catch(error => console.error('Error:', error));
+          .then((data) => {
+            return data.background_image || defaultImage; // Use default image if background_image is missing
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+            return defaultImage; // Use default image in case of an error
+          });
 }

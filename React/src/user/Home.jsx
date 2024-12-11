@@ -1,60 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
-import GameList from './GameList';
-import starIcon from './star-icon.svg';  
+import GameList from './GameList'
+import { getGamePreferences, getRecommendations, getWishList, getGenrePreferences } from './Connections.jsx'
+import Modal from './Modal.jsx'
+import { SelectRows } from './RowSelector.jsx'
 
-const gameData = {
-  gameId: 1,
-  name: "Cyberpunk 2077",
-  genres: ["Action", "Adventure", "ARPG"],
-  description: "Cyberpunk 2077 is an open-world, action-adventure RPG set in the megalopolis of Night City, where you play as a cyberpunk mercenary wrapped up in a do-or-die fight for survival. Improved and featuring all-new free additional content, customize your character and playstyle as you take on jobs, build a reputation, and unlock upgrades. The relationships you forge and the choices you make will shape the story and the world around you. Legends are made here. What will yours be?",
-  publisher: "CD PROJEKT RED",
-  ranking: 9
-};
-
-const Modal = ({ isOpen, onClose, game }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <button className="close-button" onClick={onClose}>×</button>
-        <h2 className="modal-title">{game.name}</h2>
-        <hr className="modal-divider" />
-        <p className="modal-ranking">
-          Rating: {game.ranking} <img src={starIcon} alt="Star Icon" className="star-icon" />
-        </p>
-        <p className="modal-genres">Genres: {game.genres.join(", ")}</p>
-        <p className="modal-description">{game.description}</p>
-      </div>
-    </div>
-  );
-};
-
-
-function Home({searchQuery, displayMyList, displayWishlist, userName}) {
+function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
   const [games, setGames] = useState([]);
+  const [titles, setTitles] = useState([]);
+  const [myList, setMyList] = useState([]);
+  const [wishList, setwishList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
-
-  const API_KEY = 'cd1fef93051e4872ad6909f179bde3ea';
-  const BASE_URL = 'https://api.rawg.io/api';
+  
 
   useEffect(() => {
-    const fetchGames = async () => {
-      try {
-        const response = await fetch(
-          `${BASE_URL}/games?key=${API_KEY}&ordering=-rating&page_size=10`, {mode: 'cors'}
-        );
 
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+      const fetchGames = async () => {
+        var _userName = userName
+        try {
+          if (userName == null) // TODO: If no user is logged in, set default value. Decide something better later
+          {
+            _userName = "Erik"
+            const commands = [{"similar_to_games" : [9]}, {"best_reviewed" : "Action"}, {"best_sales" : "Adventure"}]
+            getRecommendations(_userName, commands).then(data => {
+              const games = data.response.games;
+              setGames(games);
+            })
+            setLoading(false);
+            return;
+          }
+          
+          // Get game preferences for the user
+          const gamePrefs = await getGamePreferences(_userName).then(data => {
+            const _myList = data;
+            setMyList(_myList);
+            return _myList;
+          })
 
-        const data = await response.json();
-        setGames(data.results);
+          // Get genre preferences for the user
+          const genrePrefs = await getGenrePreferences(_userName).then(data => {
+            const _myList = data;
+            //setMyList(_myList);
+            return _myList;
+          })
+
+          // Get wishlist for the user
+          const _wishlist = await getWishList(_userName).then(data => {
+            setwishList(data)
+            return data;
+          })
+
+          // Select rows based on the users preferences
+          const rows = SelectRows(gamePrefs, genrePrefs, _wishlist);
+          getRecommendations(_userName, rows[0]).then(data => {
+            const games = data.response.games;
+            setTitles(rows[1]);
+            setGames(games);
+          })
+          
+        getGamePreferences(_userName).then(data => {
+          const _myList = data;
+          setMyList(_myList);
+        })
+
         setLoading(false);
       } catch (err) {
         console.error('Error fetching games:', err);
@@ -64,7 +75,7 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
     };
 
     fetchGames();
-  }, []);
+  }, [userName]);
 
   const handleCardClick = (game) => {
     setSelectedGame(game);
@@ -81,18 +92,27 @@ function Home({searchQuery, displayMyList, displayWishlist, userName}) {
 
   return (
     <div className="home">
-      <Modal 
+      <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        game={gameData|| selectedGame}
+        game={selectedGame}
       />
 
-      <div className="games-row">
-        {searchQuery != '' && (<GameList userName={userName} games={games} title={searchQuery} onCardClick={handleCardClick}/>)}
-        {userName != '' && displayMyList && (<GameList userName={userName} games={games} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
-        {userName != '' && displayWishlist && (<GameList userName={userName} games={games} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
-        <GameList userName={userName} games={games} title="Top 1 games" onCardClick={handleCardClick}/>
-      </div>
+      {games != [] && <div className="games-row">
+
+        {searchQuery != '' && (<GameList userName={userName} games={games[0]} title={searchQuery} onCardClick={handleCardClick}/>)}
+        {userName != '' && displayMyList && (<GameList userName={userName} games={myList} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
+        {userName != '' && displayWishlist && (<GameList userName={userName} games={wishList} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
+        {games.map((game, index) => (
+          <GameList
+            key={index}
+            userName={userName}
+            games={game}
+            title={titles[index]}
+            onCardClick={handleCardClick}
+          />
+        ))}
+      </div>}
     </div>
   );
 }
