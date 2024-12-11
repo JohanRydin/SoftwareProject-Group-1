@@ -4,23 +4,19 @@ FROM node:22.11.0
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files to the container
+# Copy only the package.json and package-lock.json for dependency installation
 COPY package*.json ./
 
+# Install dependencies
 RUN npm install
 
-RUN npm i -g serve
-
+# Copy the rest of the application files
 COPY . .
 
-RUN npm run build
+# Expose the port used by the development server
+EXPOSE 8080  
+# Default port for Vite dev server
 
-EXPOSE 3000
+# Run the development server
+CMD ["npx", "vite", "-l", "8080"]
 
-CMD [ "serve", "-s", "dist" ]
-
-
-#docker build . -t "sample-project:v1.0"
-#docker images
-#docker run -p 3000:3000 sample-project:v1.0
-#https://thedkpatel.medium.com/dockerizing-react-application-built-with-vite-a-simple-guide-4c41eb09defa

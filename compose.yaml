@@ -45,3 +45,15 @@ services:
     ports:
       - "5000:5000"  # Expose the app on port 5000
     restart: always
+
+  react: 
+    build: 
+      context: ./React
+      dockerfile: Dockerfile 
+    ports: 
+      - "8080:8080"
+    volumes: 
+      - ./React:/app  # Mount the local React directory to the container
+      - /app/node_modules  # Ignore node_modules to avoid overwriting during development
+    environment: 
+      CHOKIDAR_USEPOLLING: "true"
