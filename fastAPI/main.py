@@ -235,20 +235,20 @@ async def post_genrepref(username: str, genreItem: GenrePrefItem, db:Session = D
         raise HTTPException(status_code=500, detail=f"An error occurred while adding to the genrePref: {e}")
 
 
-@app.delete("/user/{username}/genrepref/{genreid}")
-async def remove_genrepref(username: str,genreItem: GenrePrefItem, db:Session = Depends(get_db)):
+@app.delete("/user/{username}/genrepref/{genreID}")
+async def remove_genrepref(username: str,genreID:int, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
     try:
-        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreItem.genreID).first()
+        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreID).first()
         if not existing_entry:
             raise HTTPException(status_code=400, detail="Genre is not in the genrePref")
 
         db.delete(existing_entry) 
         db.commit() 
 
-        return {"message": "Game removed from GenrePref", "genrePref": {"userID": userId, "genreID": genreItem.genreID}}
+        return {"message": "Game removed from GenrePref", "removed": {"userID": userId, "genreID": genreID}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error
@@ -311,19 +311,19 @@ async def post_gamepref(username: str, gameItem: GamePrefItem, db:Session = Depe
 
 
 @app.delete("/user/{username}/gamepref/{gameID}")
-async def remove_gamepref(username: str, gameItem: GamePrefItem, db:Session = Depends(get_db)):
+async def remove_gamepref(username: str, gameID: int, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
     try:
-        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameItem.gameID).first()
+        existing_entry = db.query(GamePref).filter(GamePref.userID == userId, GamePref.gameID == gameID).first()
         if not existing_entry:
             raise HTTPException(status_code=400, detail="Game is not in the gamepref")
 
         db.delete(existing_entry) 
         db.commit() 
 
-        return {"message": "Game removed from gamePref", "gamePref": {"userID": userId, "gamePref": gameItem.gameID}}
+        return {"message": "Game removed from gamePref", "gamePref": {"userID": userId, "gamePref": gameID}}
 
     except Exception as e:
         db.rollback()  # Rollback in case of an error
@@ -355,12 +355,16 @@ async def delete_all_gamepref(username: str, db:Session = Depends(get_db)):
 
 
 # ---- RECOMMENDATION endpoints ------ # 
-
+async def get_http_client():
+    async with httpx.AsyncClient() as client:
+        yield client
+        
 @app.post("/user/{username}/recommendation")
 async def post_recommendation(
     username: str, 
     recommendationBody: RecommendationBody, 
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db), 
+    client: httpx.AsyncClient = Depends(get_http_client)
 ):
     userid = await fetch_dbUser(username, db)
     userid = userid.userID
@@ -368,32 +372,21 @@ async def post_recommendation(
     genre_ids = await fetch_dbUsergenrePref(userid, db)
     genre_names = await fetch_dbgenreNameFetch(genre_ids, db)
 
-    newbody = recommendationBody.dict() 
-    
-    # Ensure 'user' key exists in newbody and assign values
+    newbody = recommendationBody.dict()
     newbody["user"] = {
-        "userID": userid,        # Assign userID
-        "game_ids": game_ids,    # Assign game IDs
-        "genres": genre_names    # Assign genre names
+        "userID": userid,
+        "game_ids": game_ids,
+        "genres": genre_names
     }
-    
-    # External API URL
-    api_url = "http://aiserver:5000/recommendations"
 
-    async with httpx.AsyncClient() as client:
-        # Make a POST request to the external API with the updated body
-        response = await client.post(api_url, json=newbody)
-        
-        # Convert game IDs to game names
-        response_data = response.json()
-        print(response_data)
-        game_lists = response_data.get("games", [])
-        print(game_lists)
-        game_names_lists = [await fetch_dbGame(game_list, db) for game_list in game_lists]
-        print(game_names_lists)
-        
-        # Return the response with game names
-        return {"status_code": response.status_code, "response": {"games": game_names_lists}}
+    api_url = "http://aiserver:5000/recommendations"
+    response = await client.post(api_url, json=newbody)
+
+    response_data = response.json()
+    game_lists = response_data.get("games", [])
+    game_names_lists = [await fetch_dbGame(game_list, db) for game_list in game_lists]
+
+    return {"status_code": response.status_code, "response": {"games": game_names_lists}}
 
 '''
 POST:   http://localhost:8000/user/Erik/recommendation
