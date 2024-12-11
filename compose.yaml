@@ -51,7 +51,7 @@ services:
       context: ./React
       dockerfile: Dockerfile 
     ports: 
-      - "5173:5173"
+      - "8080:8080"
     volumes: 
       - ./React:/app  # Mount the local React directory to the container
       - /app/node_modules  # Ignore node_modules to avoid overwriting during development

@@ -14,9 +14,9 @@ RUN npm install
 COPY . .
 
 # Expose the port used by the development server
-EXPOSE 5173  
+EXPOSE 8080  
 # Default port for Vite dev server
 
 # Run the development server
-CMD ["npx", "vite"]
+CMD ["npx", "vite", "-l", "8080"]
 
