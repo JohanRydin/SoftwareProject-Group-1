@@ -44,6 +44,8 @@ services:
     container_name: aiserver
     ports:
       - "5000:5000"  # Expose the app on port 5000
+    volumes: 
+      - ./AIServer:/code  # Mount the local React directory to the container
     restart: always
 
   react: 
