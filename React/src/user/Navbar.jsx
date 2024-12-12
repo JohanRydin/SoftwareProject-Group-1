@@ -44,11 +44,12 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        setGenres(getGenres)// TODO: Fix when endpoint implemented
-        /*getGenres().then(data => {
+        //setGenres(getGenres)// TODO: Fix when endpoint implemented
+        getGenres().then(data => {
           const _genres = data.response.genres;
+          console.log(data)
           setGenres(_genres);
-        })*/
+        })
       }
       catch (e) {
         console.log(e)
@@ -64,6 +65,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
         try {
           getGenrePreferences(userName).then(data => {
             setLikedGenres(data);
+            console.log(data)
           })
         }
         catch (e) {

@@ -132,7 +132,7 @@ export const postGamePreference = (userName, gameID) => {
 }
 
 export const postGenrePreference = (userName, genre) => {
-  var data =  {genre: genre}
+  var data =  {genrename: genre}
   return postData(`/user/${userName}/genrepref`, data)
 }
 
@@ -148,8 +148,7 @@ export const deleteGamePreference = (userName, gameID) => {
 }
 
 export const deleteGenrePreference = (userName, genre) => {
-  var data =  {genre: genre}
-  return deleteData(`/user/${userName}/genrepref`, data)
+  return deleteData(`/user/${userName}/genrepref/${genre}`)
 }
 
 export const deleteWishlistGame = (userName, gameID) => {
@@ -171,14 +170,14 @@ export const getSearch = (search) => {
 }
 
 export const getGenres = () => {  // TODO: Fix when endpoint implemented
-  return [
+  /*return [
     "Action", "Adventure", "Comedy", "Drama",
     "Fantasy", "Horror", "Mystery", "Romance",
     "Sci-Fi", "Thriller", "Western", "Biography",
     "Crime", "Documentary", "Animation", "Family",
     "History", "Music", "Sport", "War",
-  ];
-  return fetchData(`/search/genre`);
+  ];*/
+  return fetchData(`/search/genres?input=&numbers=20`);
 }
 
 
@@ -203,7 +202,7 @@ export const getGameImage = (gameName) => {
             return data.background_image || defaultImage; // Use default image if background_image is missing
           })
           .catch((error) => {
-            console.error('Error:', error);
+            //console.error('Error:', error);
             return defaultImage; // Use default image in case of an error
           });
 }
