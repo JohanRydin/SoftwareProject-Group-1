@@ -4,6 +4,8 @@ import { getGameImage, postGamePreference, postWishlistGame, deleteGamePreferenc
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { useGameContext } from './Home';  // Import the context
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
 
 
 function truncateText(text, maxLength) {
@@ -66,7 +68,7 @@ function GamePoster({ userName, gameID, image = null, name = "Cyberpunk 2077", r
       <h3>{truncateText(name, 25)}</h3>
         <div className="buttons">
           <button data-hover-text="Add to My List" onClick={postGamePref} style={{ backgroundColor: inMyList ? 'green' : 'gray' }}><ThumbUpIcon /></button>
-          <button data-hover-text="Add to Wishlist" onClick={postToWishlist} style={{ backgroundColor: inWishlist ? 'green' : 'gray' }}><FavoriteBorderIcon /></button>
+          <button data-hover-text="Add to Wishlist" onClick={postToWishlist} style={{ backgroundColor: inWishlist ? 'green' : 'gray' }}>{inWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}</button>
         </div>
       </div>
     </div>
