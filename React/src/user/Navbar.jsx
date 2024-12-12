@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Navbar.css';
 import Button from '@mui/material/Button';
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import QuestionProfile from '@mui/icons-material/Help';
+import QuestionProfile from '@mui/icons-material/MeetingRoom';
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ThumbUp from '@mui/icons-material/ThumbUp';
