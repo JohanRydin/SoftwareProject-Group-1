@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import GradeIcon from '@mui/icons-material/Grade';
+import ThumbUp from '@mui/icons-material/ThumbUp';
 const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn }) => {
   const [inputValue, setInputValue] = useState('');
 
@@ -35,6 +35,10 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
 
   };
 
+  const searchStart = () => {
+    alert("Search functinality here (if user presses button instead of pressing Enter")
+  }
+
   return (
     <nav className="navbar">
       <div className="nav-items">
@@ -47,7 +51,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
           }}
           style={{ background: displayMyList ? '#04820a63' : '#4a4a4a63' }}
         >
-          <GradeIcon></GradeIcon>
+          <ThumbUp></ThumbUp>
         </button>
         <button className="nav-item"
           onClick={() => {
@@ -68,13 +72,13 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
             onChange={onChange}
             className="search-input"
           />
-          {/*<button type="submit" className="search-button">Search</button>*/}
+          <SearchIcon sx={{ color: 'black', width: '2%', height: '80%', minWidth: '40px', minHeight: '40px' }} onClick={searchStart} />
+
         </form>
-        <SearchIcon sx={{ color: 'white' }} />
 
         <button
           onClick={handleAuthClick}
-          className="nav-item auth-button"
+          className="nav-item"
         >
           {/*isLoggedIn ? 'Logout' : 'Login'*/}
           <AccountBoxIcon></AccountBoxIcon>
