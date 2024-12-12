@@ -111,6 +111,16 @@ async def fetch_searchedGameMatches(input: str, db:Session=Depends(get_db)):
     return lst
 
 
+#TODO: WAnt to send whole games and not just gamename 
+async def fetch_searchedGenreMatches(input: str, db:Session=Depends(get_db)): 
+    lst = []
+    # Use the like operator for the start of the gamename
+    genre = db.query(Genre.genreID).filter(Genre.genrename.like(f'{input}%')).all()
+    lst = [g[0] for g in genre]
+    lst = await fetch_dbgenreNameFetch(lst, db)
+    return lst
+
+
 
 # ------------- USER ENDPOINTS ------------ #
 
@@ -415,5 +425,11 @@ POST:   http://localhost:8000/user/Erik/recommendation
 @app.get("/search/games")
 async def get_searched_games(input:str, numbers: int, db:Session=Depends(get_db)): 
     lst = await fetch_searchedGameMatches(input, db)
+    lst = lst[:numbers]
+    return  lst 
+
+@app.get("/search/genres")
+async def get_searched_genres(input:str, numbers: int, db:Session=Depends(get_db)): 
+    lst = await fetch_searchedGenreMatches(input, db)
     lst = lst[:numbers]
     return  lst 
