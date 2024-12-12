@@ -30,7 +30,7 @@ function App() {
 
       <div className="App">
         <Navbar setSearchQuery={setSearchQuery} displayMyList={displayMyList} setDisplayMyList={setDisplayMyList} displayWishlist={displayWishlist} setDisplayWishlist={setDisplayWishlist}
-         setUser={setUser} loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+         userName={userName} setUser={setUser} loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         <Routes>
           <Route path="/" element={<Home searchQuery={searchQuery} displayMyList={displayMyList} displayWishlist={displayWishlist} userName={userName} />} />
           <Route path="/mylist" element={<MyList />} />

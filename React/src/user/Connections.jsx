@@ -170,6 +170,17 @@ export const getSearch = (search) => {
   return fetchData(`/search`, data);
 }
 
+export const getGenres = () => {  // TODO: Fix when endpoint implemented
+  return [
+    "Action", "Adventure", "Comedy", "Drama",
+    "Fantasy", "Horror", "Mystery", "Romance",
+    "Sci-Fi", "Thriller", "Western", "Biography",
+    "Crime", "Documentary", "Animation", "Family",
+    "History", "Music", "Sport", "War",
+  ];
+  return fetchData(`/search/genre`);
+}
+
 
 // Convert any string into a slug to be used in a url
 // str - string to convert

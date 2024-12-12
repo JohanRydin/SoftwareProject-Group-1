@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import "./GenreDropdown.css";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
-const GenreDropdown = ({ genres, activeGenres }) => {
+const GenreDropdown = ({ genres, likedGenres }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [toggledItems, setToggledItems] = useState({});
 
   useEffect(() => {
     const initialToggled = {};
-    activeGenres.forEach((genre) => {
+    likedGenres.forEach((genre) => {
       initialToggled[genre] = true;
     });
     setToggledItems(initialToggled);
-  }, [activeGenres]);
+  }, [likedGenres]);
 
   const columns = genres.reduce((result, genre, index) => {
     const columnIndex = index % 4;

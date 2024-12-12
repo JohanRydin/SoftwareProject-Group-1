@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import Button from '@mui/material/Button';
 import GenreDropdown from './GenreDropdown.jsx'
+import { getGenres, getGenrePreferences } from './Connections.jsx'
 
-const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn}) => {
+const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, userName, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn}) => {
   const [inputValue, setInputValue] = useState('');
+  const [genres, setGenres] = useState([]);
+  const [likedGenres, setLikedGenres] = useState([]);
 
   //TODO: handleSubmit and handleAutClick is from the odin proj, should be changed.
   const handleSubmit = (e) => {
@@ -35,14 +38,44 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
 
   };
 
-  const genres = [
-    "Action", "Adventure", "Comedy", "Drama",
-    "Fantasy", "Horror", "Mystery", "Romance",
-    "Sci-Fi", "Thriller", "Western", "Biography",
-    "Crime", "Documentary", "Animation", "Family",
-    "History", "Music", "Sport", "War",
-  ];
-  const activeGenres = ["Action", "Comedy", "Drama"];
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        setGenres(getGenres)// TODO: Fix when endpoint implemented
+        /*getGenres().then(data => {
+          const _genres = data.response.genres;
+          setGenres(_genres);
+        })*/
+      }
+      catch (e) {
+        console.log(e)
+      }
+    };
+
+    fetchGenres();
+  }, []);
+  useEffect(() => {
+    const fetchGenresPrefs = async () => {
+      if (userName != null)
+      {
+        try {
+          getGenrePreferences(userName).then(data => {
+            setLikedGenres(data);
+          })
+        }
+        catch (e) {
+          console.log(e);
+          setLikedGenres([]);
+        }
+      }
+      else
+      {
+        setLikedGenres([]);
+      }
+    };
+
+    fetchGenresPrefs();
+  }, [userName]);
 
   return (
     <nav className="navbar">
@@ -66,7 +99,7 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
         >
           Wishlist
         </button>
-        {<GenreDropdown genres={genres} activeGenres={activeGenres}/>}
+        {<GenreDropdown genres={genres} likedGenres={likedGenres}/>}
         
         <form onSubmit={handleSubmit} className="search-form">
           <input
