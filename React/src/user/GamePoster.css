@@ -14,6 +14,7 @@
     z-index: 1;
   }
   
+  
   .poster-image {
     width: 100%;
     height: 300px;
@@ -26,9 +27,6 @@
     flex-direction: column; /* Stack items vertically */
     align-items: center;   /* Center items horizontally */
     justify-content: center; /* Optional: center items vertically if needed */
-  }
-
-  .game-info {
     padding: 0px;
     background: linear-gradient(
       0deg,
@@ -39,12 +37,16 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    transform: translateY(101%);
     transition: transform 0.3s ease, background 0.3s ease;
   }
+
   
   .game-poster:hover .game-info {
     transform: translateY(0);
+  }
+
+  .game-poster:hover .buttons {
+    display: flex;
   }
   
   .game-info h3,
@@ -60,7 +62,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   .game-info p {
     font-size: 0.9rem;
     opacity: 0.9;  
@@ -107,9 +109,10 @@
     transition: opacity 0.3s, visibility 0.3s;
   }
 
-  .buttons{
-    display: flex;
-    flex-direction: row; /* Stack items vertically */
-    align-items: center;   /* Center items horizontally */
+
+  .buttons {
+    display: none;
+    flex-direction: row;
     justify-content: center;
+    align-items: center;
   }

@@ -4,8 +4,13 @@ import './Navbar.css';
 import Button from '@mui/material/Button';
 import GenreDropdown from './GenreDropdown.jsx'
 import { getGenres, getGenrePreferences } from './Connections.jsx'
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import QuestionProfile from '@mui/icons-material/MeetingRoom';
+import SearchIcon from "@mui/icons-material/Search";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ThumbUp from '@mui/icons-material/ThumbUp';
 
-const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, userName, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn}) => {
+const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, userName, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn }) => {
   const [inputValue, setInputValue] = useState('');
   const [genres, setGenres] = useState([]);
   const [likedGenres, setLikedGenres] = useState([]);
@@ -20,19 +25,17 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
   };
 
   const handleAuthClick = () => {
-    if (isLoggedIn)
-    {
+    if (isLoggedIn) {
       setIsLoggedIn(false)
       setUser(null)
     }
-    else
-    {
+    else {
       setLoginModalOpen(!loginModalOpen)
     }
   };
   const onChange = (e) => {
     setInputValue(e.target.value)
-    if(e.target.value == ''){
+    if (e.target.value == '') {
       setSearchQuery('')
     }
 
@@ -76,28 +79,34 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
 
     fetchGenresPrefs();
   }, [userName]);
+  
+  const searchStart = () => {
+    alert("Search functinality here (if user presses button instead of pressing Enter")
+  }
 
   return (
     <nav className="navbar">
       <div className="nav-items">
         <h1 className="nav-item logo" >GameHive</h1>
         <button className="nav-item"
-          onClick={() => {setDisplayMyList(!displayMyList)
+          onClick={() => {
+            setDisplayMyList(!displayMyList)
             setDisplayWishlist(false)
             setSearchQuery('')
           }}
-          style={{background : displayMyList ? '#04820a63': '#4a4a4a63'}}
+          style={{ background: displayMyList ? '#04820a63' : '#4a4a4a63' }}
         >
-          My List
+          <ThumbUp></ThumbUp>
         </button>
         <button className="nav-item"
-          onClick={() => {setDisplayWishlist(!displayWishlist)
+          onClick={() => {
+            setDisplayWishlist(!displayWishlist)
             setDisplayMyList(false)
             setSearchQuery('')
           }}
-          style={{background : displayWishlist ? '#04820a63': '#4a4a4a63'}}
+          style={{ background: displayWishlist ? '#04820a63' : '#4a4a4a63' }}
         >
-          Wishlist
+          <FavoriteBorderIcon></FavoriteBorderIcon>
         </button>
         {<GenreDropdown genres={genres} likedGenres={likedGenres} userName={userName}/>}
         
@@ -109,14 +118,15 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
             onChange={onChange}
             className="search-input"
           />
-          <button type="submit" className="search-button">Search</button>
+          <SearchIcon sx={{ color: 'black', width: '2%', height: '80%', minWidth: '40px', minHeight: '40px' }} onClick={searchStart} />
+
         </form>
-        
-        <button 
-          onClick={handleAuthClick} 
-          className="nav-item auth-button"
+
+        <button
+          onClick={handleAuthClick}
+          className="nav-item"
         >
-          {isLoggedIn ? 'Logout' : 'Login'}
+          {isLoggedIn ? <AccountBoxIcon /> : <QuestionProfile />}
         </button>
 
       </div>
