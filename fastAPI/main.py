@@ -101,6 +101,17 @@ async def fetch_dbGameName(ids: List[int], db: Session=Depends(get_db)):
 
     return lst
 
+#TODO: WAnt to send whole games and not just gamename 
+async def fetch_searchedGameMatches(input: str, db:Session=Depends(get_db)): 
+    lst = []
+    # Use the like operator for the start of the gamename
+    games = db.query(Game.gameID).filter(Game.gamename.like(f'{input}%')).all()
+    lst = [game[0] for game in games]
+    lst = await fetch_dbGame(lst, db)
+    return lst
+
+
+
 # ------------- USER ENDPOINTS ------------ #
 
 @app.get("/")
@@ -400,3 +411,9 @@ POST:   http://localhost:8000/user/Erik/recommendation
     ]
 }
 '''
+
+@app.get("/search/games")
+async def get_searched_games(input:str, numbers: int, db:Session=Depends(get_db)): 
+    lst = await fetch_searchedGameMatches(input, db)
+    lst = lst[:numbers]
+    return  lst 
