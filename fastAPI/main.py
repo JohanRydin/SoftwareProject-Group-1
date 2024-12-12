@@ -105,7 +105,7 @@ async def fetch_dbGameName(ids: List[int], db: Session=Depends(get_db)):
 async def fetch_searchedGameMatches(input: str, db:Session=Depends(get_db)): 
     lst = []
     # Use the like operator for the start of the gamename
-    games = db.query(Game.gameID).filter(Game.gamename.like(f'{input}%')).all()
+    games = db.query(Game.gameID).filter(Game.gamename.ilike(f'{input}%')).all()
     lst = [game[0] for game in games]
     lst = await fetch_dbGame(lst, db)
     return lst
@@ -115,7 +115,7 @@ async def fetch_searchedGameMatches(input: str, db:Session=Depends(get_db)):
 async def fetch_searchedGenreMatches(input: str, db:Session=Depends(get_db)): 
     lst = []
     # Use the like operator for the start of the gamename
-    genre = db.query(Genre.genreID).filter(Genre.genrename.like(f'{input}%')).all()
+    genre = db.query(Genre.genreID).filter(Genre.genrename.ilike(f'{input}%')).all()
     lst = [g[0] for g in genre]
     lst = await fetch_dbgenreNameFetch(lst, db)
     return lst
