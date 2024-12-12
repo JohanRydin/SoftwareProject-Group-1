@@ -1,0 +1,47 @@
+.genredropdown-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .genredropdown-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .genredropdown-menu {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+    z-index: 1000;
+    padding: 10px;
+  }
+  
+  .genredropdown-column {
+    flex: 1;
+    margin: 0 10px;
+  }
+  
+  .genredropdown-item {
+    padding: 5px 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+  }
+  
+  .genredropdown-item:last-child {
+    border-bottom: none;
+  }
+  
+  .genredropdown-item:hover {
+    background-color: #f1f1f1;
+  }
+  
