@@ -99,7 +99,7 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
         >
           Wishlist
         </button>
-        {<GenreDropdown genres={genres} likedGenres={likedGenres}/>}
+        {<GenreDropdown genres={genres} likedGenres={likedGenres} userName={userName}/>}
         
         <form onSubmit={handleSubmit} className="search-form">
           <input

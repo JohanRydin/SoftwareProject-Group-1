@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./GenreDropdown.css";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { postGenrePreference, deleteGenrePreference } from './Connections.jsx'
 
-const GenreDropdown = ({ genres, likedGenres }) => {
+const GenreDropdown = ({ genres, likedGenres, userName }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [toggledItems, setToggledItems] = useState({});
 
@@ -24,6 +25,24 @@ const GenreDropdown = ({ genres, likedGenres }) => {
   }, []);
 
   const handleToggle = (item) => {
+    if (userName != null) {
+      if (toggledItems[item]) {
+        try {
+          deleteGenrePreference(userName, item)
+        }
+        catch (e) {
+          console.log(e);
+        }
+      }
+      else {
+        try {
+          postGenrePreference(userName, item)
+        }
+        catch (e) {
+          console.log(e);
+        }
+      }
+    }
     setToggledItems((prev) => ({
       ...prev,
       [item]: !prev[item],
