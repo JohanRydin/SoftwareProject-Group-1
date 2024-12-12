@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import Button from '@mui/material/Button';
-import { GenreDropdown } from './GenreDropdown.jsx'
+import GenreDropdown from './GenreDropdown.jsx'
 
 const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn}) => {
   const [inputValue, setInputValue] = useState('');
@@ -35,6 +35,15 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
 
   };
 
+  const genres = [
+    "Action", "Adventure", "Comedy", "Drama",
+    "Fantasy", "Horror", "Mystery", "Romance",
+    "Sci-Fi", "Thriller", "Western", "Biography",
+    "Crime", "Documentary", "Animation", "Family",
+    "History", "Music", "Sport", "War",
+  ];
+  const activeGenres = ["Action", "Comedy", "Drama"];
+
   return (
     <nav className="navbar">
       <div className="nav-items">
@@ -57,6 +66,7 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
         >
           Wishlist
         </button>
+        {<GenreDropdown genres={genres} activeGenres={activeGenres}/>}
         
         <form onSubmit={handleSubmit} className="search-form">
           <input

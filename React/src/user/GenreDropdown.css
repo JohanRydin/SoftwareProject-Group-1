@@ -1,47 +1,81 @@
 .genredropdown-container {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .genredropdown-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .genredropdown-menu {
-    display: flex;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-top: 10px;
-    z-index: 1000;
-    padding: 10px;
-  }
-  
-  .genredropdown-column {
-    flex: 1;
-    margin: 0 10px;
-  }
-  
-  .genredropdown-item {
-    padding: 5px 10px;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-  }
-  
-  .genredropdown-item:last-child {
-    border-bottom: none;
-  }
-  
-  .genredropdown-item:hover {
-    background-color: #f1f1f1;
-  }
-  
+  position: relative;
+  display: inline-block;
+}
+
+.genredropdown-button {
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  border: none;
+  background-color: #4a4a4a63;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.genredropdown-button:hover {
+  background-color: #89878734;
+  color: #4a90e2;
+}
+
+.genredropdown-menu {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #000000;
+  border: 1px solid #4a4a4a;
+  border-radius: 6px;
+  margin-top: 10px;
+  z-index: 101;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.genredropdown-column {
+  flex: 1;
+  margin: 0 3px;
+}
+
+.genredropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  margin: 4px 0;
+  border-radius: 6px;
+  background-color: #80808063;
+  border: 2px solid #000000;
+}
+
+.genredropdown-item.toggled-on {
+  background-color: #277a3c;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #2e2e2e;
+}
+
+.genredropdown-item:hover {
+  background-color: #89878734;
+  color: #4a90e2;
+}
+
+.genredropdown-item svg {
+  margin-left: 2px;
+  height: 1em;
+  width: 1em;
+}
+
+button {
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  border: none;
+  background-color: #4a4a4a63;
+  font-weight: bold;
+  cursor: pointer;
+}

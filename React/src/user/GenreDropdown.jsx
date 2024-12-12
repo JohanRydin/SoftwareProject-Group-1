@@ -1,33 +1,58 @@
-import React, { useState } from "react";
-import "./GenreDropdown.css"; // Import CSS for styling
+import React, { useState, useEffect } from "react";
+import "./GenreDropdown.css";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
-export const GenreDropdown = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const GenreDropdown = ({ genres, activeGenres }) => {
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [toggledItems, setToggledItems] = useState({});
 
-  // Array of data for the dropdown
-  const columns = [
-    Array.from({ length: 10 }, (_, i) => `Item ${i + 1}`),
-    Array.from({ length: 10 }, (_, i) => `Item ${i + 11}`),
-    Array.from({ length: 10 }, (_, i) => `Item ${i + 21}`),
-    Array.from({ length: 10 }, (_, i) => `Item ${i + 31}`),
-  ];
-  if (!isOpen)
-  {
-    return null
-  }
+  useEffect(() => {
+    const initialToggled = {};
+    activeGenres.forEach((genre) => {
+      initialToggled[genre] = true;
+    });
+    setToggledItems(initialToggled);
+  }, [activeGenres]);
+
+  const columns = genres.reduce((result, genre, index) => {
+    const columnIndex = index % 4;
+    if (!result[columnIndex]) {
+      result[columnIndex] = [];
+    }
+    result[columnIndex].push(genre);
+    return result;
+  }, []);
+
+  const handleToggle = (item) => {
+    setToggledItems((prev) => ({
+      ...prev,
+      [item]: !prev[item],
+    }));
+  };
 
   return (
-    <div className="dropdown-container">
-      <button onClick={() => setIsOpen(!isOpen)} className="dropdown-button">
-        Toggle Dropdown
+    <div className="genredropdown-container">
+      <button
+        className="genredropdown-button"
+        onClick={() => setIsDropdownVisible(!isDropdownVisible)}
+      >
+        Genres
       </button>
-      {isOpen && (
-        <div className="dropdown-menu">
+
+      {isDropdownVisible && (
+        <div className="genredropdown-menu">
           {columns.map((column, colIndex) => (
-            <div key={colIndex} className="dropdown-column">
-              {column.map((item, itemIndex) => (
-                <div key={itemIndex} className="dropdown-item">
+            <div key={colIndex} className="genredropdown-column">
+              {column.map((item) => (
+                <div
+                  key={item}
+                  className={`genredropdown-item ${
+                    toggledItems[item] ? "toggled-on" : "" // Add extra css if toggled
+                  }`}
+                  onClick={() => handleToggle(item)}
+                >
                   {item}
+                  <svg>{toggledItems[item] && <ThumbUpIcon />}</svg>
                 </div>
               ))}
             </div>
