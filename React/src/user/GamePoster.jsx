@@ -4,6 +4,14 @@ import { getGameImage, postGamePreference, postWishlistGame } from './Connection
 import AddIcon from '@mui/icons-material/Add';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
+
+function truncateText(text, maxLength) {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.slice(0, maxLength - 3) + "...";
+}
+
 function GamePoster({ userName, gameID, image = null, name = "Cyberpunk 2077", rating = 0, description = '', genres = [], gameDict, onCardClick = null }) {
   const [basedimage, setImage] = useState(image);
 
@@ -24,13 +32,18 @@ function GamePoster({ userName, gameID, image = null, name = "Cyberpunk 2077", r
 
   return (
     <div className="game-poster">
-      {basedimage != null && <img
-        onClick={() => { onCardClick({ ...gameDict, image: basedimage }) }}
-        src={basedimage}
-        alt={name}
-        className="poster-image" />}
+      {basedimage && (
+        <img
+          onClick={() => {
+            onCardClick({ ...gameDict, image: basedimage });
+          }}
+          src={basedimage}
+          alt={name}
+          className="poster-image"
+        />
+      )}
       <div className="game-info">
-        <h3>{name}</h3>
+      <h3>{truncateText(name, 25)}</h3>
         <div className="buttons">
           <button data-hover-text="Add to My List" onClick={postGamePref}><ThumbUpIcon /></button>
           <button data-hover-text="Add to Wishlist" onClick={postToWishlist}><AddIcon /></button>
@@ -39,5 +52,6 @@ function GamePoster({ userName, gameID, image = null, name = "Cyberpunk 2077", r
     </div>
   );
 }
+
 
 export default GamePoster;
