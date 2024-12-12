@@ -1,15 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, createContext} from 'react';
 import './Home.css';
 import GameList from './GameList'
 import { getGamePreferences, getRecommendations, getWishList, getGenrePreferences } from './Connections.jsx'
 import Modal from './Modal.jsx'
 import { SelectRows } from './RowSelector.jsx'
 
-function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
+const GameContext = createContext();
+
+const GameProvider = ({ children }) => {
+  const [myList, setMyList] = useState([]);
+  const [wishList, setWishlist] = useState([]);
+
+  return (
+    <GameContext.Provider value={{ myList, setMyList, wishList, setWishlist }}>
+      {children}
+    </GameContext.Provider>
+  );
+};
+
+// Hook to Access Context
+export const useGameContext = () => useContext(GameContext);
+
+
+const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) => {
+  const { myList, setMyList, wishList, setWishlist } = useGameContext();
   const [games, setGames] = useState([]);
   const [titles, setTitles] = useState([]);
-  const [myList, setMyList] = useState([]);
-  const [wishList, setwishList] = useState([]);
+  //const [myList, setMyList] = useState([]);
+  //const [wishList, setwishList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,7 +67,7 @@ function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
 
           // Get wishlist for the user
           const _wishlist = await getWishList(_userName).then(data => {
-            setwishList(data)
+            setWishlist(data)
             return data;
           })
 
@@ -60,11 +78,6 @@ function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
             setTitles(rows[1]);
             setGames(games);
           })
-          
-        getGamePreferences(_userName).then(data => {
-          const _myList = data;
-          setMyList(_myList);
-        })
 
         setLoading(false);
       } catch (err) {
@@ -100,9 +113,9 @@ function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
 
       {games != [] && <div className="games-row">
 
-        {searchQuery != '' && (<GameList userName={userName} games={games[0]} title={searchQuery} onCardClick={handleCardClick}/>)}
-        {userName != '' && displayMyList && (<GameList userName={userName} games={myList} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
-        {userName != '' && displayWishlist && (<GameList userName={userName} games={wishList} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
+        {searchQuery != '' && (<GameList userName={userName} games={games[0]} title={searchQuery} onCardClick={handleCardClick} />)}
+        {userName != null && displayMyList && (<GameList userName={userName} games={myList} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
+        {userName != null && displayWishlist && (<GameList userName={userName} games={wishList} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
         {games.map((game, index) => (
           <GameList
             key={index}
@@ -116,5 +129,19 @@ function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
     </div>
   );
 }
+
+function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
+  return (
+    <GameProvider>
+      <HomeContent 
+        searchQuery={searchQuery} 
+        displayMyList={displayMyList} 
+        displayWishlist={displayWishlist} 
+        userName={userName} 
+      />
+    </GameProvider>
+  );
+};
+
 
 export default Home;
