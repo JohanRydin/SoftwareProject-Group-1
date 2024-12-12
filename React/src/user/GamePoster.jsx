@@ -1,17 +1,39 @@
 import React, { useRef, useState, useEffect } from "react";
 import './GamePoster.css';
-import { getGameImage, postGamePreference, postWishlistGame } from './Connections.jsx';
+import { getGameImage, postGamePreference, postWishlistGame, deleteGamePreference, deleteWishlistGame } from './Connections.jsx';
 import AddIcon from '@mui/icons-material/Add';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { useGameContext } from './Home';  // Import the context
 
-function GamePoster({ userName, gameID, image = null, name = "Cyberpunk 2077", rating = 0, description = '', genres = [], gameDict, onCardClick = null }) {
+
+
+function GamePoster({ userName, gameID, image = null, name = "Cyberpunk 2077", rating = 0, description = '', genres = [], gameDict, onCardClick = null}) {
+  const { myList, setMyList, wishList, setWishlist } = useGameContext();
   const [basedimage, setImage] = useState(image);
 
+  const inMyList = myList.map((game) => game["id"]).includes(gameID);
+  const inWishlist = wishList.map((game) => game["id"]).includes(gameID);
+  console.log(gameDict)
+
   const postGamePref = () => {
-    postGamePreference(userName, gameID);
+    if (inMyList) {
+      deleteGamePreference(userName, gameID);
+      setMyList(myList.filter(item => item.id !== gameID))
+    }
+    else{
+      postGamePreference(userName, gameID);
+      setMyList([...myList, gameDict]);
+    }
   };
   const postToWishlist = () => {
-    postWishlistGame(userName, gameID);
+    if (inWishlist) {
+      deleteWishlistGame(userName, gameID);
+      setWishlist(wishList.filter(item => item.id !== gameID))
+    }
+    else{
+      postWishlistGame(userName, gameID);
+      setWishlist([...wishList, gameDict]);
+    }
   };
 
   useEffect(() => {
@@ -32,8 +54,8 @@ function GamePoster({ userName, gameID, image = null, name = "Cyberpunk 2077", r
       <div className="game-info">
         <h3>{name}</h3>
         <div className="buttons">
-          <button data-hover-text="Add to My List" onClick={postGamePref}><ThumbUpIcon /></button>
-          <button data-hover-text="Add to Wishlist" onClick={postToWishlist}><AddIcon /></button>
+          <button data-hover-text="Add to My List" onClick={postGamePref} style={{ backgroundColor: inMyList ? 'green' : 'gray' }}><ThumbUpIcon /></button>
+          <button data-hover-text="Add to Wishlist" onClick={postToWishlist} style={{ backgroundColor: inWishlist ? 'green' : 'gray' }}><AddIcon /></button>
         </div>
       </div>
     </div>
