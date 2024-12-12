@@ -57,11 +57,11 @@ async def fetch_dbUsergamePref(userId: int, db: Session=Depends(get_db)):
     game_ids = [gameID for gameID, in db_gamePref]
     return game_ids
 
-async def fetch_dbUsergenrePref(userId: int, db: Session=Depends(get_db)): 
-    db_genrePref = db.query(GenrePref.genreID).filter(GenrePref.userID == userId).all()
-    genre_ids = [genreID for genreID, in db_genrePref]
-    print(genre_ids)
-    return genre_ids
+async def fetch_dbUsergenrePref(userId: int, db: Session = Depends(get_db)):
+    db_genrePref = db.query(Genre.genrename).join(GenrePref, Genre.genreID == GenrePref.genreID).filter(GenrePref.userID == userId).all()
+    genrenames = [genre[0] for genre in db_genrePref]
+    print(genrenames)
+    return genrenames
 
 async def fetch_dbgenreNameFetch(genreId: List[int], db: Session = Depends(get_db)):
     genrelist = []
@@ -235,45 +235,64 @@ async def get_genrepref(username: str, db:Session = Depends(get_db)):
 
 
 @app.post("/user/{username}/genrepref")
-async def post_genrepref(username: str, genreItem: GenrePrefItem, db:Session = Depends(get_db)):
+async def post_genrepref(username: str, genreItem: GenrePrefItem, db: Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
 
     try:
-        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreItem.genreID).first()
-        if existing_entry:
-            raise HTTPException(status_code=400, detail="Game is already in the genrePref")
+        # Fetch genreID using genrename
+        genre = db.query(Genre).filter(Genre.genrename == genreItem.genrename).first()
+        if not genre:
+            raise HTTPException(status_code=404, detail="Genre name not found")
 
-        new_entry = GenrePref(userID=userId, genreID=genreItem.genreID)
-        db.add(new_entry)  
-        db.commit() 
+        genreID = genre.genreID
+
+        # Check if the entry already exists
+        existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreID).first()
+        if existing_entry:
+            raise HTTPException(status_code=400, detail="Genre is already in the genrePref")
+
+        # Add the new entry
+        new_entry = GenrePref(userID=userId, genreID=genreID)
+        db.add(new_entry)
+        db.commit()
         db.refresh(new_entry)
 
-        return {"message": "Genre added", "Entry": {"userID": userId, "genreID":genreItem.genreID}}
+        return {"message": "Genre added", "Entry": {"userID": userId, "genrename": genreItem.genrename}}
 
     except Exception as e:
-        db.rollback()  # Rollback in case of an error
+        db.rollback()
         raise HTTPException(status_code=500, detail=f"An error occurred while adding to the genrePref: {e}")
 
 
-@app.delete("/user/{username}/genrepref/{genreID}")
-async def remove_genrepref(username: str,genreID:int, db:Session = Depends(get_db)):
+
+@app.delete("/user/{username}/genrepref/{genrename}")
+async def remove_genrepref(username: str, genrename: str, db: Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
-    userId = userId.userID  
+    userId = userId.userID
 
     try:
+        # Fetch genreID using genrename
+        genre = db.query(Genre).filter(Genre.genrename == genrename).first()
+        if not genre:
+            raise HTTPException(status_code=404, detail="Genre name not found")
+
+        genreID = genre.genreID
+
+        # Check if the entry exists
         existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreID).first()
         if not existing_entry:
             raise HTTPException(status_code=400, detail="Genre is not in the genrePref")
 
-        db.delete(existing_entry) 
-        db.commit() 
+        # Delete the entry
+        db.delete(existing_entry)
+        db.commit()
 
-        return {"message": "Game removed from GenrePref", "removed": {"userID": userId, "genreID": genreID}}
+        return {"message": "Genre removed from GenrePref", "removed": {"userID": userId, "genrename": genrename}}
 
     except Exception as e:
-        db.rollback()  # Rollback in case of an error
-        raise HTTPException(status_code=500, detail=f"An error occurred while removing the game from the genrePref: {e}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"An error occurred while removing the genre from the genrePref: {e}")
     
 
 
