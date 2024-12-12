@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import Button from '@mui/material/Button';
-
-const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn}) => {
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import SearchIcon from "@mui/icons-material/Search";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import GradeIcon from '@mui/icons-material/Grade';
+const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn }) => {
   const [inputValue, setInputValue] = useState('');
 
   //TODO: handleSubmit and handleAutClick is from the odin proj, should be changed.
@@ -16,19 +19,17 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
   };
 
   const handleAuthClick = () => {
-    if (isLoggedIn)
-    {
+    if (isLoggedIn) {
       setIsLoggedIn(false)
       setUser(null)
     }
-    else
-    {
+    else {
       setLoginModalOpen(!loginModalOpen)
     }
   };
   const onChange = (e) => {
     setInputValue(e.target.value)
-    if(e.target.value == ''){
+    if (e.target.value == '') {
       setSearchQuery('')
     }
 
@@ -39,24 +40,26 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
       <div className="nav-items">
         <h1 className="nav-item logo" >GameHive</h1>
         <button className="nav-item"
-          onClick={() => {setDisplayMyList(!displayMyList)
+          onClick={() => {
+            setDisplayMyList(!displayMyList)
             setDisplayWishlist(false)
             setSearchQuery('')
           }}
-          style={{background : displayMyList ? '#04820a63': '#4a4a4a63'}}
+          style={{ background: displayMyList ? '#04820a63' : '#4a4a4a63' }}
         >
-          My List
+          <GradeIcon></GradeIcon>
         </button>
         <button className="nav-item"
-          onClick={() => {setDisplayWishlist(!displayWishlist)
+          onClick={() => {
+            setDisplayWishlist(!displayWishlist)
             setDisplayMyList(false)
             setSearchQuery('')
           }}
-          style={{background : displayWishlist ? '#04820a63': '#4a4a4a63'}}
+          style={{ background: displayWishlist ? '#04820a63' : '#4a4a4a63' }}
         >
-          Wishlist
+          <FavoriteBorderIcon></FavoriteBorderIcon>
         </button>
-        
+
         <form onSubmit={handleSubmit} className="search-form">
           <input
             type="text"
@@ -65,14 +68,16 @@ const Navbar = ({setSearchQuery, displayMyList, setDisplayMyList, displayWishlis
             onChange={onChange}
             className="search-input"
           />
-          <button type="submit" className="search-button">Search</button>
+          {/*<button type="submit" className="search-button">Search</button>*/}
         </form>
-        
-        <button 
-          onClick={handleAuthClick} 
+        <SearchIcon sx={{ color: 'white' }} />
+
+        <button
+          onClick={handleAuthClick}
           className="nav-item auth-button"
         >
-          {isLoggedIn ? 'Logout' : 'Login'}
+          {/*isLoggedIn ? 'Logout' : 'Login'*/}
+          <AccountBoxIcon></AccountBoxIcon>
         </button>
 
       </div>
