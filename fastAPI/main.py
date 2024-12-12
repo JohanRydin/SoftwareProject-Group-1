@@ -58,7 +58,7 @@ async def fetch_dbUsergamePref(userId: int, db: Session=Depends(get_db)):
     return game_ids
 
 async def fetch_dbUsergenrePref(userId: int, db: Session = Depends(get_db)):
-    db_genrePref = db.query(Genre.genrename).join(GenrePref, Genre.genreID == GenrePref.genreID).filter(GenrePref.userID == userId).all()
+    db_genrePref = db.query(Genre.genreID).join(GenrePref, Genre.genreID == GenrePref.genreID).filter(GenrePref.userID == userId).all()
     genrenames = [genre[0] for genre in db_genrePref]
     print(genrenames)
     return genrenames
