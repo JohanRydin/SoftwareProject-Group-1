@@ -169,14 +169,7 @@ export const getSearch = (search) => {
   return fetchData(`/search`, data);
 }
 
-export const getGenres = (input, numbers) => {  // TODO: Fix when endpoint implemented
-  /*return [
-    "Action", "Adventure", "Comedy", "Drama",
-    "Fantasy", "Horror", "Mystery", "Romance",
-    "Sci-Fi", "Thriller", "Western", "Biography",
-    "Crime", "Documentary", "Animation", "Family",
-    "History", "Music", "Sport", "War",
-  ];*/
+export const getGenres = (input, numbers) => {
   return fetchData(`/search/genres?input${input}=&numbers=${numbers}`);
 }
 
