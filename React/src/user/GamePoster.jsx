@@ -21,7 +21,7 @@ function GamePoster({ userName, gameID, image = null, name = "Cyberpunk 2077", r
 
   const inMyList = myList.map((game) => game["id"]).includes(gameID);
   const inWishlist = wishList.map((game) => game["id"]).includes(gameID);
-  console.log(gameDict)
+  //console.log(gameDict)
 
   const postGamePref = () => {
     if (inMyList) {

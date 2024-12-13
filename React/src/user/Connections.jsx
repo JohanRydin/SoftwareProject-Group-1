@@ -132,7 +132,7 @@ export const postGamePreference = (userName, gameID) => {
 }
 
 export const postGenrePreference = (userName, genre) => {
-  var data =  {genre: genre}
+  var data =  {genrename: genre}
   return postData(`/user/${userName}/genrepref`, data)
 }
 
@@ -148,8 +148,7 @@ export const deleteGamePreference = (userName, gameID) => {
 }
 
 export const deleteGenrePreference = (userName, genre) => {
-  var data =  {genre: genre}
-  return deleteData(`/user/${userName}/genrepref`, data)
+  return deleteData(`/user/${userName}/genrepref/${genre}`)
 }
 
 export const deleteWishlistGame = (userName, gameID) => {
@@ -168,6 +167,10 @@ export const getRecommendations = (userName, rows) => {
 export const getSearch = (search) => {
   var data = {search: search}
   return fetchData(`/search`, data);
+}
+
+export const getGenres = (input, numbers) => {
+  return fetchData(`/search/genres?input${input}=&numbers=${numbers}`);
 }
 
 
@@ -192,7 +195,7 @@ export const getGameImage = (gameName) => {
             return data.background_image || defaultImage; // Use default image if background_image is missing
           })
           .catch((error) => {
-            console.error('Error:', error);
+            //console.error('Error:', error);
             return defaultImage; // Use default image in case of an error
           });
 }
