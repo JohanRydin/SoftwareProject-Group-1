@@ -123,7 +123,7 @@ class Recommender:
             
             # Handle each request separately depending on their command
             if (command == 'similar_to_games'):
-                if (request_data == 'all'): # Compare to all the games the user likes
+                if (request_data == 'all' and len(game_ids)): # Compare to all the games the user likes
                     similar = self.find_similar_games(game_ids, self.matrix)
                 else:   # Compare to a custom set of games
                     data_ids = list()
