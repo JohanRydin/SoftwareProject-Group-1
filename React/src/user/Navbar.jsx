@@ -45,10 +45,8 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
     const fetchGenres = async () => {
       try {
         //setGenres(getGenres)// TODO: Fix when endpoint implemented
-        getGenres().then(data => {
-          const _genres = data.response.genres;
-          console.log(data)
-          setGenres(_genres);
+        getGenres('', 40).then(data => {
+          setGenres(data);
         })
       }
       catch (e) {
@@ -65,7 +63,6 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
         try {
           getGenrePreferences(userName).then(data => {
             setLikedGenres(data);
-            console.log(data)
           })
         }
         catch (e) {
@@ -110,7 +107,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
         >
           <FavoriteBorderIcon></FavoriteBorderIcon>
         </button>
-        {<GenreDropdown genres={genres} likedGenres={likedGenres} userName={userName}/>}
+        {userName!=null && <GenreDropdown genres={genres} likedGenres={likedGenres} userName={userName}/>}
         
         <form onSubmit={handleSubmit} className="search-form">
           <input
