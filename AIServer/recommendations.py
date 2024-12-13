@@ -44,13 +44,22 @@ class Recommender:
     #game_ids - chosen games
     #matrix - similarity matrix
     def find_similar_games(self, game_ids, matrix):
+        if (game_ids == None or len(game_ids) < 1):
+            return [1] * len(matrix[0])
         sim_vectors = list()
         for n in game_ids:
             sim_vectors.append(matrix[n])
         sim = combine_vectors(sim_vectors)
-        for n in game_ids:
-            sim[n] = 0
         return sim
+    
+    # Removes the games that the user likes from the recommendations by giving them a negative weight
+    # vector - the vector of game weights
+    # game_ids - the ids of the games the user likes
+    # returns the same vector it takes in
+    def remove_liked_games(self, vector, game_ids):
+        for n in game_ids:
+            vector[n] = -1
+        return vector
     
     # Finds similiar games based on the games chosen and a specific genre
     #game_ids - chosen games
@@ -100,7 +109,7 @@ class Recommender:
     # row_requests - commands and data for different types of recommendations
     # num - the number of recommendations for each command
     # returns a list of lists of recommendations where each recommendation ID
-    # Example: example post that the API ggets: {user: {name, [game_ids], [genres]}, rows: [similar_to : [1, 5, 2], best_reviewed : "Action", similar_to : [5], best_sales : "Adventure"]}
+    # Example: example post that the API gets: {user: {name, [game_ids], [genres]}, rows: [similar_to : [1, 5, 2], best_reviewed : "Action", similar_to : [5], best_sales : "Adventure"]}
     def get_recommendations(self, user, row_requests, num = 10):
         game_id_strings = user['game_ids']
         game_ids = list()
@@ -137,10 +146,10 @@ class Recommender:
             elif (command == 'best_sales'):         # Compare the best sold games with a genre
                 similar = self.find_best(self.rank_df, request_data, len(self.df), 'Sales')
             
+            self.remove_liked_games(similar, game_ids)
+            
             if (similar):
                 indices = find_best_indices(num, similar)
                 games_list.append(indices)
-                #games = self.extract_games(indices, self.df)
-                #games_list.append(games)
 
         return games_list
