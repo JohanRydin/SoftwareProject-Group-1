@@ -6,6 +6,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import QuestionProfile from '@mui/icons-material/MeetingRoom';
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import ThumbUp from '@mui/icons-material/ThumbUp';
 const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn }) => {
   const [inputValue, setInputValue] = useState('');
@@ -62,7 +63,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
           }}
           style={{ background: displayWishlist ? '#04820a63' : '#4a4a4a63' }}
         >
-          <FavoriteBorderIcon></FavoriteBorderIcon>
+          {displayWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}
         </button>
 
         <form onSubmit={handleSubmit} className="search-form">
