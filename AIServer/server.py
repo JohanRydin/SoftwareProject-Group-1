@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
-recommender = Recommender(100)
+recommender = Recommender(game_count=300, print_time=True)
 
 @app.get("/")
 def read_root():

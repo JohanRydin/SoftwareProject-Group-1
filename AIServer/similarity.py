@@ -13,11 +13,20 @@ def tokenize(docs):
 # docs - a list of strings/documents
 # query - a list of strings (should have length 1)
 # returns a value from 0 to 1 specifying the level of similarity between the query and the docs
-def similarity(docs, query):
-    #docs = cleaning(docs)
-    tokens = tokenize(docs)
+def similarity(query, dictionary, tf_idf, sims):
+    
     query_doc = tokenize(query)
 
+    query_doc_bow = dictionary.doc2bow(query_doc[0])
+
+    query_doc_tf_idf = tf_idf[query_doc_bow]
+    return sims[query_doc_tf_idf]
+
+# Initialize the parameters for querying the similarity of a document
+# docs - all documents to account for
+# returns A bunch of shit
+def init_similarity_parameters(docs):
+    tokens = tokenize(docs)
     dictionary = gensim.corpora.Dictionary(tokens)
     #print(dictionary.token2id, '\n')
     corpus = [dictionary.doc2bow(doc) for doc in tokens]
@@ -29,21 +38,17 @@ def similarity(docs, query):
 
     # building the index
     sims = gensim.similarities.Similarity('workdir/',tf_idf[corpus], num_features=len(dictionary))
-
-    #query_doc = tokenize(query)
-    query_doc_bow = dictionary.doc2bow(query_doc[0])
-
-    query_doc_tf_idf = tf_idf[query_doc_bow]
-    return sims[query_doc_tf_idf]
+    return dictionary, tf_idf, sims
 
 # Creates similarity matrix for the given dataset of documents
 # docs - contains a list of descriptions
 # returns the matrix that can be indexed by matrix[queryindex] to get all the similarities for that particular index
 #WARNING: Runtime of approx 6-7 mins with 300 elems
 def sim_matrix(docs):
+    dictionary, tf_idf, sims = init_similarity_parameters(docs)
     sim_matrix = list()
     for n in range(0, len(docs)):
-        sim = similarity(docs, [docs[n]])
+        sim = similarity([docs[n]], dictionary, tf_idf, sims)
         sim[n] = 0
         sim_matrix.append(sim)
     return sim_matrix
