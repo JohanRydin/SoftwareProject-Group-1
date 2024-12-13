@@ -1,6 +1,6 @@
 services:
   db:
-    image: "mysql:latest"
+    image: "arm64v8/mysql:latest" # Use the ARM-compatible MySQL image
     container_name: db
     restart: always
     environment:
@@ -10,11 +10,11 @@ services:
       - "3306:3306"
     volumes:
       - ./db/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql
-      - ./csvs:/var/lib/mysql-files
+      - ./csvs:/var/lib/mysql-files # Mount CSV directory inside the MySQL container
 
   adminer:
     container_name: adminer
-    image: adminer:latest
+    image: adminer:latest # Official image with multi-architecture support
     ports:
       - "4000:8080"
     restart: always
@@ -43,9 +43,9 @@ services:
       dockerfile: Dockerfile
     container_name: aiserver
     ports:
-      - "5000:5000"
+      - "5000:5000" # Expose the app on port 5000
     volumes:
-      - ./AIServer:/code
+      - ./AIServer:/code # Mount the local React directory to the container
     restart: always
 
   react:
@@ -55,7 +55,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./React:/app
-      - /app/node_modules
+      - ./React:/app # Mount the local React directory to the container
+      - /app/node_modules # Ignore node_modules to avoid overwriting during development
     environment:
       CHOKIDAR_USEPOLLING: "true"
