@@ -6,6 +6,12 @@ import { postGenrePreference, deleteGenrePreference } from './Connections.jsx'
 const GenreDropdown = ({ genres, likedGenres, userName }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [toggledItems, setToggledItems] = useState({});
+  const [sortedGenres, setSortedGenres] = useState([]);
+  const [columns, setColumns] = useState([]);
+
+  useEffect(() => {
+    setSortedGenres([...genres]);
+  }, [])
 
   useEffect(() => {
     const initialToggled = {};
@@ -15,14 +21,30 @@ const GenreDropdown = ({ genres, likedGenres, userName }) => {
     setToggledItems(initialToggled);
   }, [likedGenres]);
 
-  const columns = genres.reduce((result, genre, index) => {
-    const columnIndex = index % 4;
-    if (!result[columnIndex]) {
-      result[columnIndex] = [];
+  useEffect(() => {
+    setColumns(sortedGenres.reduce((result, genre, index) => {
+      const columnIndex = index % 4;
+      if (!result[columnIndex]) {
+        result[columnIndex] = [];
+      }
+      result[columnIndex].push(genre);
+      return result;
+    }, []));
+  }, [sortedGenres])
+
+  useEffect(() => {
+    const clickedGenres = Object.keys(toggledItems)
+    var _sortedGenres = [...genres]
+    for (let i = 0; i < clickedGenres.length; i++)
+    {
+      if (toggledItems[clickedGenres[i]])
+      {
+        _sortedGenres = _sortedGenres.filter(item => item !== clickedGenres[i]);
+        _sortedGenres = [clickedGenres[i], ..._sortedGenres];
+      }
     }
-    result[columnIndex].push(genre);
-    return result;
-  }, []);
+    setSortedGenres(_sortedGenres)
+  }, [toggledItems])
 
   const handleToggle = (item) => {
     if (userName != null) {
