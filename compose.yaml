@@ -1,6 +1,6 @@
 services:
   db:
-    image: "mysql:latest"
+    image: "arm64v8/mysql:latest" # Use ARM-compatible MySQL image
     container_name: db
     restart: always
     environment:
@@ -10,9 +10,9 @@ services:
       - "3306:3306"
     volumes:
       - ./db/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql
-      - ./csvs:/var/lib/mysql-files  # Mount CSV directory inside the MySQL container
+      - ./csvs:/var/lib/mysql-files
 
-  adminer:  
+  adminer:
     container_name: adminer
     image: adminer:latest
     ports:
@@ -22,20 +22,20 @@ services:
       - db
 
   fastapi:
-    build:
-      context: ./fastAPI
-      dockerfile: Dockerfile
-    container_name: fastapi
-    ports:
-      - "8000:8000"
-    restart: always
-    depends_on:
-      - db
-    environment:
-      DATABASE_URL: mysql+pymysql://root:root@db:3306/storage
-    volumes:
-      - ./fastAPI:/fastAPI  # Bind the local directory to the container
-      - /fastAPI/__pycache__ # Exclude cache if needed
+  build:
+    context: ./fastAPI
+    dockerfile: Dockerfile
+  container_name: fastapi
+  ports:
+    - "8000:8000"
+  restart: always
+  depends_on:
+    - db
+  environment:
+    DATABASE_URL: mysql+pymysql://root:root@db:3306/storage
+  volumes:
+    - ./fastAPI:/fastAPI
+    - /fastAPI/__pycache__
 
   aiserver:
     build:
@@ -43,19 +43,19 @@ services:
       dockerfile: Dockerfile
     container_name: aiserver
     ports:
-      - "5000:5000"  # Expose the app on port 5000
-    volumes: 
-      - ./AIServer:/code  # Mount the local React directory to the container
+      - "5000:5000"
+    volumes:
+      - ./AIServer:/code
     restart: always
 
-  react: 
-    build: 
+  react:
+    build:
       context: ./React
-      dockerfile: Dockerfile 
-    ports: 
+      dockerfile: Dockerfile
+    ports:
       - "8080:8080"
-    volumes: 
-      - ./React:/app  # Mount the local React directory to the container
-      - /app/node_modules  # Ignore node_modules to avoid overwriting during development
-    environment: 
+    volumes:
+      - ./React:/app
+      - /app/node_modules
+    environment:
       CHOKIDAR_USEPOLLING: "true"
