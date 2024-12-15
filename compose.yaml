@@ -1,17 +1,4 @@
 services:
-  db:
-    platform: linux/arm64
-    image: "mysql:8.0"
-    container_name: db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: storage
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./db/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql
-      - ./csvs:/var/lib/mysql-files # Mount CSV directory inside the MySQL container
 
   fastapi:
     build:
@@ -21,11 +8,8 @@ services:
     ports:
       - "8000:8000"
     restart: always
-    depends_on:
-      - db
     environment:
-      DATABASE_URL: mysql+pymysql://root:root@db:3306/storage
-
+      DATABASE_URL: mysql+pymysql://root:PiYxia1331@192.168.0.102:3306/storage
   react:
     build:
       context: ./React

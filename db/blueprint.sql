@@ -88,7 +88,7 @@ CREATE TABLE genrePref (
 INSERT INTO User (username) VALUES ('Erik'), ('Lisa'), ('Josefine'), ('Johan');
 
 -- Import data into Genre from CSV
-LOAD DATA INFILE '/var/lib/mysql-files/genres.csv'
+LOAD DATA LOCAL INFILE '/home/johanpi/SoftwareProject-Group-1/db/genres.csv'
 INTO TABLE Genre
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
@@ -98,7 +98,7 @@ IGNORE 1 ROWS
 SET genreID = @col1, genrename = @col2;
 
 -- Import data into Game from CSV
-LOAD DATA INFILE '/var/lib/mysql-files/games_description_indexed.csv'
+LOAD DATA LOCAL INFILE '/home/johanpi/SoftwareProject-Group-1/db/games_description_indexed.csv'
 INTO TABLE Game
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"' 
