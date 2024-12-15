@@ -2,5 +2,5 @@ pandas
 fastapi
 uvicorn[standard]
 gensim
-numpy
+numpy==2.0.2
 nltk

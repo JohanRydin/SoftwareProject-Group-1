@@ -1,47 +1,29 @@
-# Use the ARM64 version of the Python 3.9 slim image
-FROM arm64v8/python:3.10
+# Use the official Python image compatible with ARM64
+FROM python:3.9-slim
 
-ENV PYTHONDONTWRITEBYTECODE 1 
-ENV PYTHONBUFFERED 1 
+# Set working directory
+WORKDIR /code
 
-WORKDIR /code 
-
-
-# Install necessary system dependencies for ARM64 architecture
-RUN apt-get update --fix-missing && apt-get install -y \
-    gcc \
-    libffi-dev \
-    libpq-dev \
+# Install necessary build tools and libraries
+RUN apt-get update && apt-get install -y \
     build-essential \
     python3-dev \
     libatlas-base-dev \
+    gfortran \
     libopenblas-dev \
-    liblapack-dev \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean
 
+# Upgrade pip and setuptools
+RUN pip install --upgrade pip setuptools wheel
 
-RUN pip install --no-cache-dir /code/requirements.txt 
+# Preinstall dependencies
+RUN pip install numpy cython
 
+# Copy requirements file and install dependencies
+COPY ./requirements.txt /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt --use-deprecated=legacy-resolver
+# Copy the rest of the application code
+COPY . /code
 
-# Copy the requirements.txt file into the container
-COPY ./requirements.txt /code/
-
-# Install Python packages from requirements.txt
-RUN pip install --no-cache-dir --prefer-binary -r /code/requirements.txt
-
-# Create a directory for your work files
-RUN mkdir /workdir
-
-# Copy the rest of the code into the container
-COPY ./ /code/
-
-# Run initialization script
-RUN python /code/initialize.py
-
-# Expose port for the FastAPI app
-EXPOSE 5000
-
-# Use Uvicorn to run the FastAPI application
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
-
-
+# Set default command
+CMD ["python3", "app.py"]

@@ -3,7 +3,8 @@ import pandas as pd
 import time
 import ast
 import random
-
+import nltk
+nltk.download('punkt')
 class Recommender:
     matrix = None
     df = None
