@@ -400,7 +400,7 @@ async def post_recommendation(
         "genres": genre_names
     }
 
-    api_url = "http://aiserver:5000/recommendations"
+    api_url = "http://192.168.0.102:5000/recommendations"
     response = await client.post(api_url, json=newbody)
 
     response_data = response.json()
