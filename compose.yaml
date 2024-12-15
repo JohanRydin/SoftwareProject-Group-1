@@ -1,7 +1,7 @@
 services:
   db:
     platform: linux/arm64
-    image: "arm64v8/mysql:8.0"
+    image: "mysql:8.0"
     container_name: db
     restart: always
     environment:
@@ -25,21 +25,6 @@ services:
       - db
     environment:
       DATABASE_URL: mysql+pymysql://root:root@db:3306/storage
-    volumes:
-      - ./fastAPI:/fastAPI
-      - /fastAPI/__pycache__
-
-  aiserver:
-    platform: linux/arm64
-    build:
-      context: ./AIServer
-      dockerfile: Dockerfile
-    container_name: aiserver
-    ports:
-      - "5000:5000" # Expose the app on port 5000
-    volumes:
-      - ./AIServer:/code # Mount the local React directory to the container
-    restart: always
 
   react:
     build:
@@ -47,8 +32,3 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - ./React:/app # Mount the local React directory to the container
-      - /app/node_modules # Ignore node_modules to avoid overwriting during development
-    environment:
-      CHOKIDAR_USEPOLLING: "true"
