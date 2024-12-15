@@ -1,6 +1,7 @@
 services:
   db:
-    image: "arm64v8/mysql:latest" # Use the ARM-compatible MySQL image
+    platform: linux/arm64
+    image: "arm64v8/mysql:8.0"
     container_name: db
     restart: always
     environment:
@@ -11,15 +12,6 @@ services:
     volumes:
       - ./db/blueprint.sql:/docker-entrypoint-initdb.d/blueprint.sql
       - ./csvs:/var/lib/mysql-files # Mount CSV directory inside the MySQL container
-
-  adminer:
-    container_name: adminer
-    image: adminer:4.7.9 # Use a specific, known ARM-compatible version of Adminer
-    ports:
-      - "4000:8080"
-    restart: always
-    depends_on:
-      - db
 
   fastapi:
     build:
@@ -38,6 +30,7 @@ services:
       - /fastAPI/__pycache__
 
   aiserver:
+    platform: linux/arm64
     build:
       context: ./AIServer
       dockerfile: Dockerfile
