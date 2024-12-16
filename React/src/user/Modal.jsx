@@ -15,9 +15,6 @@ export const Modal = ({ isOpen, onClose, game }) => {
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>×</button>
         <h2 className="modal-title">{game["gamename"]}</h2>
-        <p className="modal-ranking">
-          Rating: {0} <img src={starIcon} alt="Star Icon" className="star-icon" />
-        </p>
         <hr className="modal-divider" />
         <img src={game.image} alt={game.gamename} className="modal-image" />
         <hr className="modal-divider" />
