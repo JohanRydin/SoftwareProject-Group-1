@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import "./GenreDropdown.css";
 import GenreButton from './GenreButton';
 import { postGenrePreference, deleteGenrePreference } from './Connections.jsx';
+import { useGenreContext } from "./GenreProvider.jsx";
 
-const GenreDropdown = ({ genres, likedGenres, userName }) => {
+const GenreDropdown = ({ userName }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [toggledItems, setToggledItems] = useState({});
   const [sortedGenres, setSortedGenres] = useState([]);
   const [columns, setColumns] = useState([]);
+  const { genres, likedGenres } = useGenreContext();
 
   useEffect(() => {
     setSortedGenres([...genres]);

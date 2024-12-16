@@ -1,22 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LoginModal.css';
 import { getUser } from './Connections.jsx'
+import { useGenreContext, setGenresPrefs } from './GenreProvider.jsx';
 
 export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLoginModalOpen}) => {
   const [inputValue, setInputValue] = useState('');
   const [inputValuePassword, setInputValuePassword] = useState('');
   const [inputError, setInputError] = useState(false);
+  const { setLikedGenres } = useGenreContext();
   
   const handleSubmit = (e) => {
     e.preventDefault();
     
     const name = inputValue
     getUser(name).then(data => {
-      console.log(data);
 
       setIsLoggedIn(true);  // Set user info in system
       setUserID(data['userID'])
       setUser(data['username'])
+      setGenresPrefs(name, setLikedGenres);
 
       setLoginModalOpen(false)  // Close modal
     }).catch(
