@@ -87,3 +87,31 @@
   line-height: 1.2;  
   text-align: justify;  
 }
+.modal-genres {
+  margin-top: 1rem;
+}
+
+.genres-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  max-width: 100%;
+}
+
+.genrebutton-item {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.genrebutton-item.toggled-on {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.genrebutton-item:hover {
+  background-color: #e0e0e0;
+}
