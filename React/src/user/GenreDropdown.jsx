@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./GenreDropdown.css";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import { postGenrePreference, deleteGenrePreference } from './Connections.jsx'
+import GenreButton from './GenreButton';
+import { postGenrePreference, deleteGenrePreference } from './Connections.jsx';
 
 const GenreDropdown = ({ genres, likedGenres, userName }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -11,7 +11,7 @@ const GenreDropdown = ({ genres, likedGenres, userName }) => {
 
   useEffect(() => {
     setSortedGenres([...genres]);
-  }, [])
+  }, []);
 
   useEffect(() => {
     const initialToggled = {};
@@ -22,45 +22,42 @@ const GenreDropdown = ({ genres, likedGenres, userName }) => {
   }, [likedGenres]);
 
   useEffect(() => {
-    setColumns(sortedGenres.reduce((result, genre, index) => {
-      const columnIndex = index % 4;
-      if (!result[columnIndex]) {
-        result[columnIndex] = [];
-      }
-      result[columnIndex].push(genre);
-      return result;
-    }, []));
-  }, [sortedGenres])
+    setColumns(
+      sortedGenres.reduce((result, genre, index) => {
+        const columnIndex = index % 4;
+        if (!result[columnIndex]) {
+          result[columnIndex] = [];
+        }
+        result[columnIndex].push(genre);
+        return result;
+      }, [])
+    );
+  }, [sortedGenres]);
 
   useEffect(() => {
-    const clickedGenres = Object.keys(toggledItems)
-    var _sortedGenres = [...genres]
-    for (let i = 0; i < clickedGenres.length; i++)
-    {
-      if (toggledItems[clickedGenres[i]])
-      {
-        _sortedGenres = _sortedGenres.filter(item => item !== clickedGenres[i]);
+    const clickedGenres = Object.keys(toggledItems);
+    let _sortedGenres = [...genres];
+    for (let i = 0; i < clickedGenres.length; i++) {
+      if (toggledItems[clickedGenres[i]]) {
+        _sortedGenres = _sortedGenres.filter((item) => item !== clickedGenres[i]);
         _sortedGenres = [clickedGenres[i], ..._sortedGenres];
       }
     }
-    setSortedGenres(_sortedGenres)
-  }, [toggledItems])
+    setSortedGenres(_sortedGenres);
+  }, [toggledItems]);
 
   const handleToggle = (item) => {
     if (userName != null) {
       if (toggledItems[item]) {
         try {
-          deleteGenrePreference(userName, item)
-        }
-        catch (e) {
+          deleteGenrePreference(userName, item);
+        } catch (e) {
           console.log(e);
         }
-      }
-      else {
+      } else {
         try {
-          postGenrePreference(userName, item)
-        }
-        catch (e) {
+          postGenrePreference(userName, item);
+        } catch (e) {
           console.log(e);
         }
       }
@@ -85,16 +82,12 @@ const GenreDropdown = ({ genres, likedGenres, userName }) => {
           {columns.map((column, colIndex) => (
             <div key={colIndex} className="genredropdown-column">
               {column.map((item) => (
-                <div
+                <GenreButton
                   key={item}
-                  className={`genredropdown-item ${
-                    toggledItems[item] ? "toggled-on" : "" // Add extra css if toggled
-                  }`}
-                  onClick={() => handleToggle(item)}
-                >
-                  {item}
-                  <svg>{toggledItems[item] && <ThumbUpIcon />}</svg>
-                </div>
+                  genre={item}
+                  isToggled={toggledItems[item]}
+                  onToggle={handleToggle}
+                />
               ))}
             </div>
           ))}
