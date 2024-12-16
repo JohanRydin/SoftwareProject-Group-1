@@ -400,7 +400,7 @@ async def post_recommendation(
         "genres": genre_names
     }
 
-    api_url = "http://192.168.0.102:5000/recommendations"
+    api_url = "http://92.34.158.223:8080/ai/recommendations"
     response = await client.post(api_url, json=newbody)
 
     response_data = response.json()

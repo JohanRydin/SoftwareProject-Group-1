@@ -6,6 +6,7 @@ app = FastAPI()
 
 origins = [
     "http://localhost:8000"
+    "http://192.168.0.102",  # Add your backend IP to allow direct requests too
 ]
 app.add_middleware(
     CORSMiddleware,

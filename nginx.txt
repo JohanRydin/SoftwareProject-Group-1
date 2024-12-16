@@ -1,0 +1,71 @@
+server {
+    listen 80;
+    server_name 92.34.158.223;  # Replace with your public IP if needed
+
+    # React App (on port 8080)
+    location / {
+        proxy_pass http://localhost:8080;  # React app on port 8080
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # WebSocket support for React (Vite HMR)
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+    }
+
+    # FastAPI App (on port 8000) for APIs
+    location /api/ {
+    	rewrite ^/api(/.*)$ $1 break;  # Remove /api prefix before passing to FastAPI
+    	proxy_pass http://localhost:8000;  # FastAPI app
+    	proxy_set_header Host $host;
+    	proxy_set_header X-Real-IP $remote_addr;
+    	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	
+        # WebSocket support for FastAPI (if using WebSockets)
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+    }
+
+    # AI Server (on port 5000)
+    location /ai/ {
+        rewrite ^/ai(/.*)$ $1 break;
+        proxy_pass http://localhost:5000;  # AI server on port 5000
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+
+# SSL Configuration (Optional, if using HTTPS)
+# Uncomment and configure if you want to enable SSL for your domain
+# server {
+#     listen 443 ssl;
+#     server_name yourdomain.com;
+#
+#     ssl_certificate /etc/nginx/ssl/yourdomain.com.crt;
+#     ssl_certificate_key /etc/nginx/ssl/yourdomain.com.key;
+#
+#     # Additional SSL settings for better security (optional)
+#     ssl_protocols TLSv1.2 TLSv1.3;
+#     ssl_ciphers 'HIGH:!aNULL:!MD5';
+#     ssl_prefer_server_ciphers on;
+#
+#     # Reverse proxy for React (Port 8080)
+#     location / {
+#         proxy_pass http://127.0.0.1:8080;
+#         proxy_set_header Host $host;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#     }
+#
+#     # Reverse proxy for FastAPI (Port 8000)
+#     location /api/ {
+#         proxy_pass http://127.0.0.1:8000;
+#         proxy_set_header Host $host;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#     }
+# }
