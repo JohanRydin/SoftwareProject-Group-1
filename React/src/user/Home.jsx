@@ -109,6 +109,7 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         game={selectedGame}
+        userName={userName}
       />
 
       {games != [] && <div className="games-row">

@@ -2,13 +2,18 @@ import React from 'react';
 import './Modal.css';
 import starIcon from './star-icon.svg';
 import GenreButton from './GenreButton';
+import { useGenreContext, handleToggleGenre } from "./GenreProvider.jsx";
 
-
-export const Modal = ({ isOpen, onClose, game }) => {
+export const Modal = ({ isOpen, onClose, game, userName }) => {
   if (!isOpen) return null;
 
   // game.genres is a string looking like "['action', 'rpg'...]". Can be parsed as list but we need to replace ' with " first
   const genres = JSON.parse(game.genres.replace(/'/g, '"'));
+  const { toggledItems, setToggledItems } = useGenreContext();
+
+  const handleToggle = (item) => {
+    handleToggleGenre(item, userName, toggledItems, setToggledItems)
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -25,8 +30,8 @@ export const Modal = ({ isOpen, onClose, game }) => {
               <GenreButton
                 key={genre}
                 genre={genre}
-                isToggled={false}
-                onToggle={() => {}}
+                isToggled={toggledItems[genre]}
+                onToggle={handleToggle}
               />
             ))}
           </div>
