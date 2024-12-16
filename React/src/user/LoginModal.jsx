@@ -33,8 +33,8 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
   }
 
     return (
-      <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-content" onClick={e => e.stopPropagation()}>
+      <div className="login-modal-overlay" onClick={onClose}>
+        <div className="login-modal-content" onClick={e => e.stopPropagation()}>
           <form onSubmit={handleSubmit} className="login-form">
           <input
             type="text"
