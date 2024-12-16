@@ -6,6 +6,7 @@ import MyList from './user/MyList';
 import Wishlist from './user/Wishlist';
 import './App.css';
 import LoginModal from './user/LoginModal.jsx'
+import { GenreProvider } from "./user/GenreProvider.jsx";
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,26 +19,28 @@ function App() {
 
 
   return (
-    <BrowserRouter>
-    {loginModalOpen &&
-    <LoginModal 
-      onClose={() => setLoginModalOpen(false)}
-      setIsLoggedIn={setIsLoggedIn}
-      setUser={setUser}
-      setUserID={setUserID}
-      setLoginModalOpen={setLoginModalOpen}
-    />}
+    <GenreProvider>
+      <BrowserRouter>
+      {loginModalOpen &&
+      <LoginModal 
+        onClose={() => setLoginModalOpen(false)}
+        setIsLoggedIn={setIsLoggedIn}
+        setUser={setUser}
+        setUserID={setUserID}
+        setLoginModalOpen={setLoginModalOpen}
+      />}
 
-      <div className="App">
-        <Navbar setSearchQuery={setSearchQuery} displayMyList={displayMyList} setDisplayMyList={setDisplayMyList} displayWishlist={displayWishlist} setDisplayWishlist={setDisplayWishlist}
-         userName={userName} setUser={setUser} loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-        <Routes>
-          <Route path="/" element={<Home searchQuery={searchQuery} displayMyList={displayMyList} displayWishlist={displayWishlist} userName={userName} />} />
-          <Route path="/mylist" element={<MyList />} />
-          <Route path="/wishlist" element={<Wishlist />} />
-        </Routes>
-      </div>
-    </BrowserRouter>
+        <div className="App">
+          <Navbar setSearchQuery={setSearchQuery} displayMyList={displayMyList} setDisplayMyList={setDisplayMyList} displayWishlist={displayWishlist} setDisplayWishlist={setDisplayWishlist}
+          userName={userName} setUser={setUser} loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+          <Routes>
+            <Route path="/" element={<Home searchQuery={searchQuery} displayMyList={displayMyList} displayWishlist={displayWishlist} userName={userName} />} />
+            <Route path="/mylist" element={<MyList />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </GenreProvider>
   );
 }
 

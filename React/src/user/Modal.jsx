@@ -1,24 +1,41 @@
 import React from 'react';
 import './Modal.css';
 import starIcon from './star-icon.svg';
+import GenreButton from './GenreButton';
+import { useGenreContext, handleToggleGenre } from "./GenreProvider.jsx";
 
-
-export const Modal = ({ isOpen, onClose, game }) => {
+export const Modal = ({ isOpen, onClose, game, userName }) => {
   if (!isOpen) return null;
+
+  // game.genres is a string looking like "['action', 'rpg'...]". Can be parsed as list but we need to replace ' with " first
+  const genres = JSON.parse(game.genres.replace(/'/g, '"'));
+  const { toggledItems, setToggledItems } = useGenreContext();
+
+  const handleToggle = (item) => {
+    handleToggleGenre(item, userName, toggledItems, setToggledItems)
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>×</button>
         <h2 className="modal-title">{game["gamename"]}</h2>
-        <p className="modal-ranking">
-          Rating: {0} <img src={starIcon} alt="Star Icon" className="star-icon" />
-        </p>
         <hr className="modal-divider" />
         <img src={game.image} alt={game.gamename} className="modal-image" />
         <hr className="modal-divider" />
         <p className="modal-description">{game["description"]}</p>
-        <p className="modal-genres">Genres: {game["genres"]}</p>
+        <div className="modal-genres">
+          <div className="genres-list">
+            {genres.map((genre) => (
+              <GenreButton
+                key={genre}
+                genre={genre}
+                isToggled={toggledItems[genre]}
+                onToggle={handleToggle}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
