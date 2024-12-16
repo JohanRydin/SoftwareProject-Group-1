@@ -10,18 +10,34 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  overflow: hidden; /* Prevent overlay itself from scrolling */
 }
 
 .modal-content {
   background-color: #282c34;
   padding: 20px;
   border-radius: 8px;
-  max-width: 900px !important; 
   width: 90% !important; 
+  max-width: 900px !important; 
+  max-height: 90%;
+  overflow-y: auto; /* Enable vertical scrolling when content overflows */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
 }
 
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 
 .modal-image {
   width: 100%;
@@ -73,11 +89,7 @@
 }
 
 .modal-genres {
-  font-size: 16px;
-  margin-bottom: 10px;
-  line-height: 1.2;  
-
-  text-align: center;
+  margin-bottom: 100px;
 }
 
 .modal-description {
@@ -86,31 +98,10 @@
   line-height: 1.2;  
   text-align: justify;  
 }
-.modal-genres {
-  margin-top: 1rem;
-}
 
 .genres-list {
   display: flex;
   flex-wrap: wrap;
   gap: 3px;
   max-width: 100%;
-}
-
-.genrebutton-item {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #f9f9f9;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.genrebutton-item.toggled-on {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.genrebutton-item:hover {
-  background-color: #e0e0e0;
 }
