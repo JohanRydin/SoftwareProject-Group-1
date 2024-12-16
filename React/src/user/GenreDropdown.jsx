@@ -55,11 +55,11 @@ const GenreDropdown = ({ userName }) => {
         <div className="genredropdown-menu">
           {columns.map((column, colIndex) => (
             <div key={colIndex} className="genredropdown-column">
-              {column.map((item) => (
+              {column.map((genre) => (
                 <GenreButton
-                  key={item}
-                  genre={item}
-                  isToggled={toggledItems[item]}
+                  key={genre}
+                  genre={genre}
+                  isToggled={toggledItems[genre]}
                   onToggle={handleToggle}
                 />
               ))}

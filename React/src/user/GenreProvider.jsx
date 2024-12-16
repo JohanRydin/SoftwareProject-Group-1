@@ -55,17 +55,17 @@ export const setGenresPrefs = async (userName, setLikedGenres) => {
   }
 };
 
-export const handleToggleGenre = (item, userName, toggledItems, setToggledItems) => {
+export const handleToggleGenre = (genre, userName, toggledItems, setToggledItems) => {
     if (userName != null) {
-      if (toggledItems[item]) {
+      if (toggledItems[genre]) {
         try {
-          deleteGenrePreference(userName, item);
+          deleteGenrePreference(userName, genre);
         } catch (e) {
           console.log(e);
         }
       } else {
         try {
-          postGenrePreference(userName, item);
+          postGenrePreference(userName, genre);
         } catch (e) {
           console.log(e);
         }
@@ -73,6 +73,6 @@ export const handleToggleGenre = (item, userName, toggledItems, setToggledItems)
     }
     setToggledItems((prev) => ({
       ...prev,
-      [item]: !prev[item],
+      [genre]: !prev[genre],
     }));
   };
