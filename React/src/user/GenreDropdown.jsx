@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./GenreDropdown.css";
 import GenreButton from './GenreButton';
-import { postGenrePreference, deleteGenrePreference } from './Connections.jsx';
-import { useGenreContext } from "./GenreProvider.jsx";
+import { useGenreContext, handleToggleGenre } from "./GenreProvider.jsx";
 
 const GenreDropdown = ({ userName }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [toggledItems, setToggledItems] = useState({});
   const [sortedGenres, setSortedGenres] = useState([]);
   const [columns, setColumns] = useState([]);
-  const { genres, likedGenres } = useGenreContext();
+  const { genres, toggledItems, setToggledItems } = useGenreContext();
 
   useEffect(() => {
     setSortedGenres([...genres]);
   }, []);
-
-  useEffect(() => {
-    const initialToggled = {};
-    likedGenres.forEach((genre) => {
-      initialToggled[genre] = true;
-    });
-    setToggledItems(initialToggled);
-  }, [likedGenres]);
 
   useEffect(() => {
     setColumns(
@@ -49,25 +39,7 @@ const GenreDropdown = ({ userName }) => {
   }, [toggledItems]);
 
   const handleToggle = (item) => {
-    if (userName != null) {
-      if (toggledItems[item]) {
-        try {
-          deleteGenrePreference(userName, item);
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        try {
-          postGenrePreference(userName, item);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    }
-    setToggledItems((prev) => ({
-      ...prev,
-      [item]: !prev[item],
-    }));
+    handleToggleGenre(item, userName, toggledItems, setToggledItems)
   };
 
   return (

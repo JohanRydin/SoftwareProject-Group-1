@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext, createContext} from 'react';
-import { getGenres, getGenrePreferences } from './Connections.jsx'
+import { getGenres, getGenrePreferences, postGenrePreference, deleteGenrePreference } from './Connections.jsx'
 
 const GenreContext = createContext();
 
 export const GenreProvider = ({ children }) => {
   const [genres, setGenres] = useState([]);
   const [likedGenres, setLikedGenres] = useState([]);
+    const [toggledItems, setToggledItems] = useState({});
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -21,8 +22,16 @@ export const GenreProvider = ({ children }) => {
     fetchGenres();
     }, []);
 
+    useEffect(() => {
+      const initialToggled = {};
+      likedGenres.forEach((genre) => {
+        initialToggled[genre] = true;
+      });
+      setToggledItems(initialToggled);
+    }, [likedGenres]);
+
   return (
-    <GenreContext.Provider value={{ genres, setGenres, likedGenres, setLikedGenres }}>
+    <GenreContext.Provider value={{ genres, setGenres, likedGenres, setLikedGenres, toggledItems, setToggledItems }}>
       {children}
     </GenreContext.Provider>
   );
@@ -45,3 +54,25 @@ export const setGenresPrefs = async (userName, setLikedGenres) => {
     setLikedGenres([]);
   }
 };
+
+export const handleToggleGenre = (item, userName, toggledItems, setToggledItems) => {
+    if (userName != null) {
+      if (toggledItems[item]) {
+        try {
+          deleteGenrePreference(userName, item);
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        try {
+          postGenrePreference(userName, item);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    }
+    setToggledItems((prev) => ({
+      ...prev,
+      [item]: !prev[item],
+    }));
+  };
