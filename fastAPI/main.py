@@ -64,12 +64,20 @@ async def fetch_dbUsergenrePref(userId: int, db: Session = Depends(get_db)):
     return genrenames
 
 async def fetch_dbgenreNameFetch(genreId: List[int], db: Session = Depends(get_db)):
-    genrelist = []
-    for id in genreId:
-        # Flatten the result to get a list of genre names
-        genres = [genre[0] for genre in db.query(Genre.genrename).filter(Genre.genreID == id).all()]
-        genrelist.extend(genres)  # Add genres to the main list
+    # Query all genres where genreID is in the provided list and sort by genreID
+    result = (
+        db.query(Genre.genreID, Genre.genrename)
+        .filter(Genre.genreID.in_(genreId))
+        .order_by(Genre.genreID)  # Sort by genreID
+        .all()
+    )
+
+    # Extract genres in the same order as returned by the query
+    genrelist = [genre.genrename for genre in result]
+
+    print(genrelist)
     return genrelist
+
 
 async def fetch_dbGame(ids: List[int], db: Session=Depends(get_db)):
     game_details_list = []
