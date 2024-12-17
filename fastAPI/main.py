@@ -46,6 +46,17 @@ async def fetch_dbUser(username: str, db: Session=Depends(get_db)):
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
+
+async def create_dbUser(username: str, db: Session=Depends(get_db)):
+    db_user = db.query(User).filter(User.username == username).first()
+    if db_user:
+        raise HTTPException(status_code=400, detail="Username taken")
+    new_user = User(username=username)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user) 
+    return await fetch_dbUser(username, db) 
+    
     
 async def fetch_dbUserWishlist(userId: int, db: Session=Depends(get_db)): 
     db_wishlist = db.query(Wishlist.gameID).filter(Wishlist.userID == userId).all()
@@ -145,7 +156,10 @@ async def get_users(db: Session = Depends(get_db)):
 async def get_user(username: str, db: Session = Depends(get_db)):
     return await fetch_dbUser(username, db)
 
-
+@app.post("/user/{username}")
+async def create_user(username: str, db: Session = Depends(get_db)):
+    attempt = await create_dbUser(username, db)
+    return attempt
 # ----- Wishlist endpoints ----- # 
 
 @app.get("/user/{username}/wishlist")
