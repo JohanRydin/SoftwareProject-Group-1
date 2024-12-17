@@ -1,13 +1,10 @@
 import pytest
 from fastapi.testclient import TestClient
-from fastapi import FastAPI
 from pydantic import BaseModel
 from main import app, get_db, get_http_client
 from sqlmodel import Session, SQLModel, create_engine, Field, Relationship
 from typing import Optional, List
-from unittest.mock import AsyncMock 
 import httpx 
-import requests
 import os
 
 
