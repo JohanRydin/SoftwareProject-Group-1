@@ -57,26 +57,24 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <form className="login-form">
-          <input
-            type="text"
-            placeholder="Username..."
-            value={inputValue}
-            onChange={onChangeUsername}
-            className="login-input login-margin"
-          />
-          {/*<input
+        <input
+          type="text"
+          placeholder="Username..."
+          value={inputValue}
+          onChange={onChangeUsername}
+          className="login-input login-margin"
+        />
+        {/*<input
             type="text"
             placeholder="Password..."
             value={'*'.repeat(inputValuePassword.length)}
             onChange={onChangePassword}
             className="login-input login-margin"
           />*/}
-          {inputError && <p className="login-error login-margin">Login failed, try again.</p>}
-          <button type="submit" className="login-button login-margin" onClick={handleLogin}>Login</button>
-          <button className="login-button" onClick={handleRegister}>Register</button>
-          {registerError && <p className="login-error login-margin">Username already taken.</p>}
-        </form>
+        {inputError && <p className="login-error login-margin">Login failed, try again.</p>}
+        <button type="submit" className="login-button login-margin" onClick={handleLogin}>Login</button>
+        <button className="login-button" onClick={handleRegister}>Register</button>
+        {registerError && <p className="login-error login-margin">Username already taken.</p>}
       </div>
     </div>
   );
