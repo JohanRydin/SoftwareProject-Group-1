@@ -12,7 +12,7 @@ const fetchData = async (path, params = {}) => {
   try {
     const queryString = new URLSearchParams(params).toString();
     const url = `${BASE_URL}${path}${queryString ? `?${queryString}` : ''}`;
-    const response = await fetch(url, {mode:'cors'});
+    const response = await fetch(url, { mode: 'cors' });
 
     if (!response.ok) {
       throw new Error(`Error fetching data from ${path}: ${response.statusText}`);
@@ -39,7 +39,7 @@ const postData = async (path, data, headers = { 'Content-Type': 'application/jso
       method: 'POST',
       headers,
       body: JSON.stringify(data),
-      mode:'cors',
+      mode: 'cors',
     });
 
     if (!response.ok) {
@@ -67,7 +67,7 @@ const putData = async (path, data, headers = { 'Content-Type': 'application/json
       method: 'PUT',
       headers,
       body: JSON.stringify(data),
-      mode:'cors',
+      mode: 'cors',
     });
 
     if (!response.ok) {
@@ -89,7 +89,7 @@ const putData = async (path, data, headers = { 'Content-Type': 'application/json
  */
 const deleteData = async (path) => {
   try {
-    const response = await fetch(`${BASE_URL}${path}`, { method: 'DELETE' , mode: 'cors'});
+    const response = await fetch(`${BASE_URL}${path}`, { method: 'DELETE', mode: 'cors' });
 
     if (!response.ok) {
       throw new Error(`Error deleting data at ${path}: ${response.statusText}`);
@@ -104,12 +104,15 @@ const deleteData = async (path) => {
 };
 
 export const getUser = (userName) => {
-    return fetchData(`/user/${userName}`);
+  return fetchData(`/user/${userName}`);
 }
 
+export const newUser = (userName) => {
+  return postData(`/user/${userName}`)
+}
 export const postUser = (username) => {
-    var data = {username: username}
-    return postData(`/users/`, data);
+  var data = { username: username }
+  return postData(`/users/`, data);
 }
 
 
@@ -127,23 +130,23 @@ export const getWishList = (userName) => {
 
 
 export const postGamePreference = (userName, gameID) => {
-    var data = {gameID: gameID}
-    return postData(`/user/${userName}/gamepref`, data)
+  var data = { gameID: gameID }
+  return postData(`/user/${userName}/gamepref`, data)
 }
 
 export const postGenrePreference = (userName, genre) => {
-  var data =  {genrename: genre}
+  var data = { genrename: genre }
   return postData(`/user/${userName}/genrepref`, data)
 }
 
 export const postWishlistGame = (userName, gameID) => {
-  var data =  {gameID: gameID}
+  var data = { gameID: gameID }
   return postData(`/user/${userName}/wishlist`, data)
 }
 
 
 export const deleteGamePreference = (userName, gameID) => {
-  var data =  {gameID: gameID}
+  var data = { gameID: gameID }
   return deleteData(`/user/${userName}/gamepref/`, data)
 }
 
@@ -152,7 +155,7 @@ export const deleteGenrePreference = (userName, genre) => {
 }
 
 export const deleteWishlistGame = (userName, gameID) => {
-  var data =  {gameID: gameID}
+  var data = { gameID: gameID }
   return deleteData(`/user/${userName}/wishlist`, data)
 }
 
@@ -160,12 +163,12 @@ export const deleteWishlistGame = (userName, gameID) => {
 // username example: Erik
 // rows example:   [{"similar_to" : [1, 5, 2]}, {"best_reviewed" : "Action"}, {"similar_to" : "all"}, {"best_sales" : "Adventure"}]
 export const getRecommendations = (userName, rows) => {
-  var data = {rows: rows}
+  var data = { rows: rows }
   return postData(`/user/${userName}/recommendation`, data)
 }
 
 export const getSearch = (search) => {
-  var data = {search: search}
+  var data = { search: search }
   return fetchData(`/search`, data);
 }
 
@@ -189,13 +192,13 @@ function stringToSlug(str) {
 export const getGameImage = (gameName) => {
   const slug = stringToSlug(gameName)
   const defaultImage = 'https://img.freepik.com/premium-photo/vedio-games-illustration_1252102-47756.jpg?w=1480'; // Replace with your default image URL
-  return fetch(`https://rawg.io/api/games/${slug}?key=${API_KEY}`, {mode: 'cors'})
-          .then(res => res.json())
-          .then((data) => {
-            return data.background_image || defaultImage; // Use default image if background_image is missing
-          })
-          .catch((error) => {
-            //console.error('Error:', error);
-            return defaultImage; // Use default image in case of an error
-          });
+  return fetch(`https://rawg.io/api/games/${slug}?key=${API_KEY}`, { mode: 'cors' })
+    .then(res => res.json())
+    .then((data) => {
+      return data.background_image || defaultImage; // Use default image if background_image is missing
+    })
+    .catch((error) => {
+      //console.error('Error:', error);
+      return defaultImage; // Use default image in case of an error
+    });
 }
