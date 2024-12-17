@@ -48,7 +48,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
     <nav className="navbar">
       <div className="nav-items">
         <h1 className="nav-item logo" >GameHive</h1>
-        <button className="nav-item"
+        {userName!=null && <button className="nav-item"
           onClick={() => {
             setDisplayMyList(!displayMyList)
             setDisplayWishlist(false)
@@ -57,8 +57,8 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
           style={{ background: displayMyList ? '#04820a63' : '#4a4a4a63' }}
         >
           <ThumbUp></ThumbUp>
-        </button>
-        <button className="nav-item"
+        </button>}
+        {userName!=null && <button className="nav-item"
           onClick={() => {
             setDisplayWishlist(!displayWishlist)
             setDisplayMyList(false)
@@ -67,8 +67,8 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
           style={{ background: displayWishlist ? '#04820a63' : '#4a4a4a63' }}
         >
           {displayWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}
-        </button>
-        {userName!=null && <GenreDropdown userName={userName}/>}
+        </button>}
+        {userName!=null && <GenreDropdown  userName={userName}/>}
         
         <form onSubmit={handleSubmit} className="search-form">
           <input
