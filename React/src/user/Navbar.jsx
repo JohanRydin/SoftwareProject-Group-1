@@ -59,8 +59,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
   }, []);
   useEffect(() => {
     const fetchGenresPrefs = async () => {
-      if (userName != null)
-      {
+      if (userName != null) {
         try {
           getGenrePreferences(userName).then(data => {
             setLikedGenres(data);
@@ -71,15 +70,14 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
           setLikedGenres([]);
         }
       }
-      else
-      {
+      else {
         setLikedGenres([]);
       }
     };
 
     fetchGenresPrefs();
   }, [userName]);
-  
+
   const searchStart = () => {
     alert("Search functinality here (if user presses button instead of pressing Enter")
   }
@@ -88,28 +86,25 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
     <nav className="navbar">
       <div className="nav-items">
         <h1 className="nav-item logo" >GameHive</h1>
-        <button className="nav-item"
+        <button className={`nav-item ${displayMyList ? 'nav-item-mylist-active' : 'nav-item-mylist'}`}
           onClick={() => {
-            setDisplayMyList(!displayMyList)
+            setDisplayMyList(true)
             setDisplayWishlist(false)
             setSearchQuery('')
           }}
-          style={{ background: displayMyList ? '#04820a63' : '#4a4a4a63' }}
         >
           <ThumbUp></ThumbUp>
         </button>
-        <button className="nav-item"
+        <button className={`nav-item ${displayWishlist ? 'nav-item-wishlist-active' : 'nav-item-wishlist'}`}
           onClick={() => {
             setDisplayWishlist(!displayWishlist)
             setDisplayMyList(false)
             setSearchQuery('')
           }}
-          style={{ background: displayWishlist ? '#04820a63' : '#4a4a4a63' }}
         >
-          {displayWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}
+          {displayWishlist ? <FavoriteIcon /> : <FavoriteBorderIcon />}
         </button>
-        {userName!=null && <GenreDropdown genres={genres} likedGenres={likedGenres} userName={userName}/>}
-        
+        {userName != null && <GenreDropdown className="nav-item logo" genres={genres} likedGenres={likedGenres} userName={userName} />}
         <form onSubmit={handleSubmit} className="search-form">
           <input
             type="text"
@@ -118,8 +113,9 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
             onChange={onChange}
             className="search-input"
           />
-          <SearchIcon sx={{ color: 'black', width: '2%', height: '80%', minWidth: '40px', minHeight: '40px' }} onClick={searchStart} />
-
+          <button type="submit" className="search-button">
+            <SearchIcon className="search-icon" onClick={searchStart} />
+          </button>
         </form>
 
         <button

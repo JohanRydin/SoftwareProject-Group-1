@@ -1,6 +1,8 @@
 .genredropdown-container {
   position: relative;
   display: inline-block;
+  height: 40px; 
+  margin: 10px;
 }
 
 .genredropdown-button {
@@ -8,27 +10,33 @@
   text-decoration: none;
   padding: 8px 16px;
   border: none;
-  background-color: #4a4a4a63;
+  background-color:#393939;
   font-weight: bold;
   cursor: pointer;
   border-radius: 6px;
+  height: 100%;  
+  display: flex;
+  align-items: center;  
+  font-size: 1.2rem;
 }
 
 .genredropdown-button:hover {
-  background-color: #89878734;
-  color: #4a90e2;
+  background-color: #666059;
+  color: #f7f7f7;
 }
 
 .genredropdown-menu {
   display: flex;
   flex-direction: row;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #000000;
+  position: fixed; 
+  top: 60px;  
+  left: 0;  
+  width: 100vw;  
+  max-width: 100%;  
+  box-sizing: border-box;  
+  background-color: #272727	;
   border: 1px solid #4a4a4a;
   border-radius: 6px;
-  margin-top: 10px;
   z-index: 101;
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -48,7 +56,7 @@
   padding: 8px 16px;
   margin: 4px 0;
   border-radius: 6px;
-  background-color: #80808063;
+  background-color: #393939;
   border: 2px solid #000000;
 }
 
@@ -56,12 +64,11 @@
   background-color: #277a3c;
   color: white;
   font-weight: bold;
-  border: 2px solid #2e2e2e;
 }
 
 .genredropdown-item:hover {
-  background-color: #89878734;
-  color: #4a90e2;
+  background:#666059;
+
 }
 
 .genredropdown-item svg {

@@ -68,9 +68,9 @@
     opacity: 0.9;  
   }
   .game-info button{
-    display: flex;                /* Make the button a flex container */
-    justify-content: center;      /* Center content horizontally */
-    align-items: center;          /* Center content vertically */
+    display: flex;                
+    justify-content: center;      
+    align-items: center;          
     height: 1.9rem;
     width: 1.9rem;
     color: rgb(0, 0, 0);
@@ -86,9 +86,9 @@
   }
 
   .game-info button:hover::after {
-    content: attr(data-hover-text); /* Use data attribute for dynamic content */
+    content: attr(data-hover-text); 
     position: absolute;
-    top: -30px;    /* Adjust positioning above the button */
+    top: -30px;     
     left: 50%;
     transform: translateX(-50%);
     background-color: rgba(0, 0, 0, 0.7);
