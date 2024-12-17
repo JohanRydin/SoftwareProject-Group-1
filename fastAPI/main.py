@@ -63,70 +63,47 @@ async def fetch_dbUsergenrePref(userId: int, db: Session = Depends(get_db)):
     return genrenames
 
 async def fetch_dbgenreNameFetch(genreId: List[int], db: Session = Depends(get_db)):
-    # Query all genres where genreID is in the provided list and sort by genreID
     result = (
         db.query(Genre.genreID, Genre.genrename)
         .filter(Genre.genreID.in_(genreId))
-        .order_by(Genre.genreID)  # Sort by genreID
+        .order_by(Genre.genreID)  
         .all()
     )
-
-    # Extract genres in the same order as returned by the query
     genrelist = [genre.genrename for genre in result]
-
     return genrelist
 
 
-async def fetch_dbGame(ids: List[int], db: Session=Depends(get_db)):
-    game_details_list = []
-    
-    for id in ids:
-        # Query the database for all relevant details of the current game ID
-        game = db.query(Game).filter(Game.gameID == id).first()
 
-        # Ensure the game exists before proceeding
-        if game:
-            game_details = {
-                "id": id,
-                "gamename": game.gamename,
-                "description": game.shortdescription,
-                "genres": game.Genres
-            }
-            game_details_list.append(game_details)
-
-    return game_details_list
+async def fetch_dbGame(ids: List[int], db: Session = Depends(get_db)):
+    games = db.query(Game).filter(Game.gameID.in_(ids)).all()
+    game_list = [
+        {
+            "id": game.gameID,
+            "gamename": game.gamename,
+            "description": game.shortdescription,
+            "genres": game.Genres,
+        }
+        for game in games
+    ]
+    return game_list
 
 async def fetch_dbGameName(ids: List[int], db: Session=Depends(get_db)):
-    lst = []
-    
-    for id in ids:
-        game = db.query(Game).filter(Game.gameID == id).first()
+    games = db.query(Game).filter(Game.gameID.in_(ids)).all()
+    return games
 
-        if game:
-            lst.append(game.gamename)
-
-    return lst
-
-#TODO: WAnt to send whole games and not just gamename 
 async def fetch_searchedGameMatches(input: str, db:Session=Depends(get_db)): 
     lst = []
-    # Use the like operator for the start of the gamename
     games = db.query(Game.gameID).filter(Game.gamename.ilike(f'{input}%')).all()
     lst = [game[0] for game in games]
     lst = await fetch_dbGame(lst, db)
     return lst
 
-
-#TODO: WAnt to send whole games and not just gamename 
 async def fetch_searchedGenreMatches(input: str, db:Session=Depends(get_db)): 
     lst = []
-    # Use the like operator for the start of the gamename
     genre = db.query(Genre.genreID).filter(Genre.genrename.ilike(f'{input}%')).all()
     lst = [g[0] for g in genre]
     lst = await fetch_dbgenreNameFetch(lst, db)
     return lst
-
-
 
 # ------------- USER ENDPOINTS ------------ #
 
@@ -181,7 +158,7 @@ async def post_wishlist(username: str, wishlist_item: WishlistItem, db: Session 
         return {"message": "Game added to wishlist", "wishlist_entry": {"userID": userId, "gameID": wishlist_item.gameID}}
 
     except Exception as e:
-        db.rollback()  # Rollback in case of an error
+        db.rollback()   
         raise HTTPException(status_code=500, detail=f"An error occurred while adding to the wishlist: {e}")
 
 
@@ -201,7 +178,7 @@ async def remove_game_from_wishlist(username: str, item: int, db: Session = Depe
         return {"message": "Game removed from wishlist", "wishlist_entry": {"userID": userId, "gameID": item}}
 
     except Exception as e:
-        db.rollback()  # Rollback in case of an error
+        db.rollback()   
         raise HTTPException(status_code=500, detail=f"An error occurred while removing the game from the wishlist: {e}")
     
 # WARNING: Deletes entire wishlist
@@ -245,19 +222,16 @@ async def post_genrepref(username: str, genreItem: GenrePrefItem, db: Session = 
     userId = userId.userID
 
     try:
-        # Fetch genreID using genrename
         genre = db.query(Genre).filter(Genre.genrename == genreItem.genrename).first()
         if not genre:
             raise HTTPException(status_code=404, detail="Genre name not found")
 
         genreID = genre.genreID
 
-        # Check if the entry already exists
         existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreID).first()
         if existing_entry:
             raise HTTPException(status_code=400, detail="Genre is already in the genrePref")
 
-        # Add the new entry
         new_entry = GenrePref(userID=userId, genreID=genreID)
         db.add(new_entry)
         db.commit()
@@ -277,19 +251,16 @@ async def remove_genrepref(username: str, genrename: str, db: Session = Depends(
     userId = userId.userID
 
     try:
-        # Fetch genreID using genrename
         genre = db.query(Genre).filter(Genre.genrename == genrename).first()
         if not genre:
             raise HTTPException(status_code=404, detail="Genre name not found")
 
         genreID = genre.genreID
 
-        # Check if the entry exists
         existing_entry = db.query(GenrePref).filter(GenrePref.userID == userId, GenrePref.genreID == genreID).first()
         if not existing_entry:
             raise HTTPException(status_code=400, detail="Genre is not in the genrePref")
 
-        # Delete the entry
         db.delete(existing_entry)
         db.commit()
 
@@ -351,7 +322,7 @@ async def post_gamepref(username: str, gameItem: GamePrefItem, db:Session = Depe
         return {"message": "Game added", "Entry": {"userID": userId, "gameID":gameItem.gameID}}
 
     except Exception as e:
-        db.rollback()  # Rollback in case of an error
+        db.rollback()   
         raise HTTPException(status_code=500, detail=f"An error occurred while adding to the gamePref: {e}")
 
 
@@ -371,7 +342,7 @@ async def remove_gamepref(username: str, gameID: int, db:Session = Depends(get_d
         return {"message": "Game removed from gamePref", "gamePref": {"userID": userId, "gamePref": gameID}}
 
     except Exception as e:
-        db.rollback()  # Rollback in case of an error
+        db.rollback()   
         raise HTTPException(status_code=500, detail=f"An error occurred while removing the game from the gamePref: {e}")
     
 
@@ -400,6 +371,7 @@ async def delete_all_gamepref(username: str, db:Session = Depends(get_db)):
 
 
 # ---- RECOMMENDATION endpoints ------ # 
+
 async def get_http_client():
     async with httpx.AsyncClient() as client:
         yield client
