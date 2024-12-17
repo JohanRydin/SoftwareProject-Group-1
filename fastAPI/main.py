@@ -1,17 +1,11 @@
 from typing import List
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
 from database import SessionLocal, Base
 from models import User, Wishlist, GamePref, GenrePref, Genre, Game
 from schemas import UserCreate, UserResponse, WishlistItem, RecommendationBody, GamePrefItem, GenrePrefItem
-import os
-import requests
 import httpx
-from sqlalchemy.ext.declarative import declarative_base
 
 '''
 DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:root@db:3306/storage")
