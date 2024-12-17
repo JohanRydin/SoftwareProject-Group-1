@@ -164,13 +164,12 @@ export const getRecommendations = (userName, rows) => {
   return postData(`/user/${userName}/recommendation`, data)
 }
 
-export const getSearch = (search) => {
-  var data = {search: search}
-  return fetchData(`/search`, data);
+export const getSearch = (input, numbers) => {
+  return fetchData(`/search/games?input=${input}&numbers=${numbers}`);
 }
 
 export const getGenres = (input, numbers) => {
-  return fetchData(`/search/genres?input${input}=&numbers=${numbers}`);
+  return fetchData(`/search/genres?input=${input}&numbers=${numbers}`);
 }
 
 
