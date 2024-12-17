@@ -60,7 +60,6 @@ async def fetch_dbUsergamePref(userId: int, db: Session=Depends(get_db)):
 async def fetch_dbUsergenrePref(userId: int, db: Session = Depends(get_db)):
     db_genrePref = db.query(Genre.genreID).join(GenrePref, Genre.genreID == GenrePref.genreID).filter(GenrePref.userID == userId).all()
     genrenames = [genre[0] for genre in db_genrePref]
-    print(genrenames)
     return genrenames
 
 async def fetch_dbgenreNameFetch(genreId: List[int], db: Session = Depends(get_db)):
@@ -75,7 +74,6 @@ async def fetch_dbgenreNameFetch(genreId: List[int], db: Session = Depends(get_d
     # Extract genres in the same order as returned by the query
     genrelist = [genre.genrename for genre in result]
 
-    print(genrelist)
     return genrelist
 
 
@@ -162,7 +160,6 @@ async def get_wishlist(username: str, db:Session = Depends(get_db)):
     userId = userId.userID
     gameIDs = await fetch_dbUserWishlist(userId, db)
     gameObjectList = await fetch_dbGame(gameIDs, db)
-    print(gameObjectList)
     return gameObjectList
 
 
