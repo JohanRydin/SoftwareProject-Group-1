@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, createContext} from 'react';
 import './Home.css';
 import GameList from './GameList'
-import { getGamePreferences, getRecommendations, getWishList, getGenrePreferences } from './Connections.jsx'
+import { getGamePreferences, getRecommendations, getWishList, getGenrePreferences, getSearch } from './Connections.jsx'
 import Modal from './Modal.jsx'
 import { SelectRows } from './RowSelector.jsx'
 
@@ -25,6 +25,7 @@ export const useGameContext = () => useContext(GameContext);
 const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) => {
   const { myList, setMyList, wishList, setWishlist } = useGameContext();
   const [games, setGames] = useState([]);
+  const [searchedGames, setSearchedGames] = useState([]);
   const [titles, setTitles] = useState([]);
   //const [myList, setMyList] = useState([]);
   //const [wishList, setwishList] = useState([]);
@@ -35,7 +36,6 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) 
   
 
   useEffect(() => {
-
       const fetchGames = async () => {
         var _userName = userName
         try {
@@ -43,6 +43,7 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) 
           {
             _userName = "Erik"
             const commands = [{"similar_to_games" : [9]}, {"best_reviewed" : "Action"}, {"best_sales" : "Adventure"}]
+            setTitles(["Similar to nånting", "Best reviewed action games", "Most popular adventure games"])
             getRecommendations(_userName, commands).then(data => {
               const games = data.response.games;
               setGames(games);
@@ -90,6 +91,18 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) 
     fetchGames();
   }, [userName]);
 
+  useEffect(()=> {
+    const searchFunction = async () => {
+      if (searchQuery != '') {
+        const search = await getSearch(searchQuery, 10).then(data => {
+          setSearchedGames(data)
+          return data;
+        })
+      }
+    };
+    searchFunction();
+  }, [searchQuery])
+
   const handleCardClick = (game) => {
     setSelectedGame(game);
     setIsModalOpen(true);
@@ -111,10 +124,11 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) 
         game={selectedGame}
         userName={userName}
       />
+      {searchQuery != '' ?
+      (<GameList userName={userName} games={searchedGames} title={"Search results for: " + searchQuery} onCardClick={handleCardClick} />)
+      :
+      (games.length > 0 && <div className="games-row">
 
-      {games != [] && <div className="games-row">
-
-        {searchQuery != '' && (<GameList userName={userName} games={games[0]} title={searchQuery} onCardClick={handleCardClick} />)}
         {userName != null && displayMyList && (<GameList userName={userName} games={myList} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
         {userName != null && displayWishlist && (<GameList userName={userName} games={wishList} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
         {games.map((game, index) => (
@@ -126,10 +140,11 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) 
             onCardClick={handleCardClick}
           />
         ))}
-      </div>}
+      </div>)}
     </div>
   );
 }
+
 
 function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
   return (
