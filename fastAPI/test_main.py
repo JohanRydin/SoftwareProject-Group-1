@@ -302,7 +302,7 @@ def test_post_genrepref(override_get_db, test_session):
     
     # Adding a new genre preference
     entry = {
-        "genreID": 3  # Assuming genreID 2 corresponds to "Adventure"
+        "genrename": "Puzzle"  # Assuming genreID 2 corresponds to "Adventure"
     }
     
     response = client.post("/user/first_user/genrepref", json=entry)
@@ -313,7 +313,7 @@ def test_post_genrepref(override_get_db, test_session):
     assert "message" in data
     assert data["message"] == "Genre added"
     assert "Entry" in data
-    assert data["Entry"] == {'genreID': 3, 'userID': 1}
+    assert data["Entry"] == {'genrename': "Puzzle", 'userID': 1}
     
     # Verify the database entry
     new_entry = test_session.query(GenrePref).filter_by(userID=1, genreID=2).first()
@@ -325,18 +325,18 @@ def test_remove_genrepref(override_get_db, test_session):
     populate_database(test_session)
   
     # Remove a specific genre preference (e.g., Adventure with genreID=2)
-    response = client.delete("/user/first_user/genrepref/2")
+    response = client.delete("/user/first_user/genrepref/Action")
     
     assert response.status_code == 200  # Verify the request was successful
     
     data = response.json()
     assert "message" in data
-    assert data["message"] == "Game removed from GenrePref"
+    assert data["message"] == "Genre removed from GenrePref"
     assert "removed" in data
-    assert data["removed"] == {"userID": 1, "genreID": 2}
+    assert data["removed"] == {"userID": 1, "genrename": "Action"}
     
     # Verify the database entry was removed
-    removed_entry = test_session.query(GenrePref).filter_by(userID=1, genreID=2).first()
+    removed_entry = test_session.query(GenrePref).filter_by(userID=1, genreID=1).first()
     assert removed_entry is None
 
 def test_delete_all_genrepref(override_get_db, test_session): 
