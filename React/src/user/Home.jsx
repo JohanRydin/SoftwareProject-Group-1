@@ -42,8 +42,8 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) 
           if (userName == null) // TODO: If no user is logged in, set default value. Decide something better later
           {
             _userName = "Erik"
-            const commands = [{"similar_to_games" : [9]}, {"best_reviewed" : "Action"}, {"best_sales" : "Adventure"}]
-            setTitles(["Similar to nånting", "Best reviewed action games", "Most popular adventure games"])
+            const commands = [{"best_sales" : "Action"}, {"best_sales" : "Adventure"}, {"best_reviewed" : "Sports & Racing"}, {"best_sales" : "Strategy"}, {"best_sales" : "Simulation"}]
+            setTitles(["Top Sellers", "Hot Right Now", "Sports & Racing Games", "Strategy Titles", "Simulate Reality"])
             getRecommendations(_userName, commands).then(data => {
               const games = data.response.games;
               setGames(games);

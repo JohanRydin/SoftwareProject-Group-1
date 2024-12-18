@@ -20,6 +20,11 @@ export function SelectRows(gamePrefs, genrePrefs, wishList)
 
     if (gamePrefs.length > 0)
     {
+        commands = [...commands, {"similar_to_games" : "all"}]
+        titles = [...titles, "Similar To What You Play"]
+    }
+    if (gamePrefs.length > 0)
+    {
         const index = Math.floor(Math.random() * gamePrefs.length);
         const gameID = gamePrefs[index]['id']
         commands = [...commands, {"similar_to_games" : [gameID]}]
