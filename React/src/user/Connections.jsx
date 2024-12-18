@@ -146,8 +146,7 @@ export const postWishlistGame = (userName, gameID) => {
 
 
 export const deleteGamePreference = (userName, gameID) => {
-  var data = { gameID: gameID }
-  return deleteData(`/user/${userName}/gamepref/`, data)
+  return deleteData(`/user/${userName}/gamepref/${gameID}`)
 }
 
 export const deleteGenrePreference = (userName, genre) => {
