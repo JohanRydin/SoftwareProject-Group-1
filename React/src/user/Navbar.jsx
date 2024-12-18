@@ -39,7 +39,6 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
     }
 
   };
-  
   const searchStart = () => {
     alert("Search functinality here (if user presses button instead of pressing Enter")
   }
@@ -48,23 +47,21 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
     <nav className="navbar">
       <div className="nav-items">
         <h1 className="nav-item logo" >GameHive</h1>
-        {userName!=null && <button className="nav-item"
+        <button className={`nav-item ${displayMyList ? 'nav-item-mylist-active' : 'nav-item-mylist'}`}
           onClick={() => {
-            setDisplayMyList(!displayMyList)
+            setDisplayMyList(true)
             setDisplayWishlist(false)
             setSearchQuery('')
           }}
-          style={{ background: displayMyList ? '#04820a63' : '#4a4a4a63' }}
         >
           <ThumbUp></ThumbUp>
-        </button>}
-        {userName!=null && <button className="nav-item"
+        </button>
+        <button className={`nav-item ${displayWishlist ? 'nav-item-wishlist-active' : 'nav-item-wishlist'}`}
           onClick={() => {
             setDisplayWishlist(!displayWishlist)
             setDisplayMyList(false)
             setSearchQuery('')
           }}
-          style={{ background: displayWishlist ? '#04820a63' : '#4a4a4a63' }}
         >
           {displayWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}
         </button>}
@@ -78,8 +75,9 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
             onChange={onChange}
             className="search-input"
           />
-          <SearchIcon sx={{ color: 'black', width: '2%', height: '80%', minWidth: '40px', minHeight: '40px' }} onClick={searchStart} />
-
+          <button type="submit" className="search-button">
+            <SearchIcon className="search-icon" onClick={searchStart} />
+          </button>
         </form>
 
         <button
