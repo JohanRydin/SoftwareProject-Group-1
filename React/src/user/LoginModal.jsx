@@ -64,13 +64,13 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
           onChange={onChangeUsername}
           className="login-input login-margin"
         />
-        {/*<input
+        <input
             type="text"
             placeholder="Password..."
             value={'*'.repeat(inputValuePassword.length)}
             onChange={onChangePassword}
             className="login-input login-margin"
-          />*/}
+          />
         {inputError && <p className="login-error login-margin">Login failed, try again.</p>}
         <button type="submit" className="login-button login-margin" onClick={handleLogin}>Login</button>
         <button className="login-button" onClick={handleRegister}>Register</button>
