@@ -72,8 +72,10 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
             className="login-input login-margin"
           />
         {inputError && <p className="login-error login-margin">Login failed, try again.</p>}
-        <button type="submit" className="login-button login-margin" onClick={handleLogin}>Login</button>
-        <button className="login-button" onClick={handleRegister}>Register</button>
+        <div className='buttonsDiv'>
+          <button type="submit" className="login-button login-margin" onClick={handleLogin}>Login</button>
+          <button className="login-button" onClick={handleRegister}>Register</button>
+        </div>
         {registerError && <p className="login-error login-margin">Username already taken.</p>}
       </div>
     </div>
