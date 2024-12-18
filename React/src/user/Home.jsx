@@ -121,7 +121,7 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) 
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        game={selectedGame}
+        gameDict={selectedGame}
         userName={userName}
       />
       {searchQuery != '' ?

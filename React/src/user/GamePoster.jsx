@@ -3,8 +3,8 @@ import './GamePoster.css';
 import { getGameImage, postGamePreference, postWishlistGame, deleteGamePreference, deleteWishlistGame } from './Connections.jsx';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import { useGameContext } from './Home';  // Import the context
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { useGameContext } from './Home';  // Import the context
 
 
 
@@ -24,24 +24,30 @@ function GamePoster({ userName, gameID, image = null, name = "Cyberpunk 2077", r
   //console.log(gameDict)
 
   const postGamePref = () => {
-    if (inMyList) {
-      deleteGamePreference(userName, gameID);
-      setMyList(myList.filter(item => item.id !== gameID))
-    }
-    else{
-      postGamePreference(userName, gameID);
-      setMyList([...myList, gameDict]);
+    if (userName != null)
+      {
+      if (inMyList) {
+        deleteGamePreference(userName, gameID);
+        setMyList(myList.filter(item => item.id !== gameID))
+      }
+      else{
+        postGamePreference(userName, gameID);
+        setMyList([...myList, gameDict]);
+      }
     }
   };
   const postToWishlist = () => {
-    if (inWishlist) {
-      deleteWishlistGame(userName, gameID);
-      setWishlist(wishList.filter(item => item.id !== gameID))
-    }
-    else{
-      postWishlistGame(userName, gameID);
-      setWishlist([...wishList, gameDict]);
-    }
+    if (userName != null)
+      {
+      if (inWishlist) {
+        deleteWishlistGame(userName, gameID);
+        setWishlist(wishList.filter(item => item.id !== gameID))
+      }
+      else{
+        postWishlistGame(userName, gameID);
+        setWishlist([...wishList, gameDict]);
+      }
+      }
   };
 
   useEffect(() => {
