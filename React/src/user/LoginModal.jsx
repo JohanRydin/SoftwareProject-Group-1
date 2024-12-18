@@ -66,16 +66,16 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
           onChange={onChangeUsername}
           className="login-input login-margin"
         />
-        <input
+        {false && <input
             type="text"
             placeholder="Password..."
             value={'*'.repeat(inputValuePassword.length)}
             onChange={onChangePassword}
             className="login-input login-margin"
-          />
+          />}
         {inputError && <p className="login-error login-margin">Login failed, try again.</p>}
         <div className='buttonsDiv'>
-          <button type="submit" className="login-button login-margin" onClick={handleLogin}>Login</button>
+          <button type="submit" className="login-button" onClick={handleLogin}>Login</button>
           <button className="login-button" onClick={handleRegister}>Register</button>
         </div>
         {registerError && <p className="login-error login-margin">Username already taken.</p>}
