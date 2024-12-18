@@ -13,8 +13,6 @@ import ThumbUp from '@mui/icons-material/ThumbUp';
 
 const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, userName, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn }) => {
   const [inputValue, setInputValue] = useState('');
-  const [genres, setGenres] = useState([]);
-  const [likedGenres, setLikedGenres] = useState([]);
 
   //TODO: handleSubmit and handleAutClick is from the odin proj, should be changed.
   const handleSubmit = (e) => {
@@ -41,43 +39,6 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
     }
 
   };
-
-  useEffect(() => {
-    const fetchGenres = async () => {
-      try {
-        //setGenres(getGenres)// TODO: Fix when endpoint implemented
-        getGenres('', 40).then(data => {
-          setGenres(data);
-        })
-      }
-      catch (e) {
-        console.log(e)
-      }
-    };
-
-    fetchGenres();
-  }, []);
-  useEffect(() => {
-    const fetchGenresPrefs = async () => {
-      if (userName != null) {
-        try {
-          getGenrePreferences(userName).then(data => {
-            setLikedGenres(data);
-          })
-        }
-        catch (e) {
-          console.log(e);
-          setLikedGenres([]);
-        }
-      }
-      else {
-        setLikedGenres([]);
-      }
-    };
-
-    fetchGenresPrefs();
-  }, [userName]);
-
   const searchStart = () => {
     alert("Search functinality here (if user presses button instead of pressing Enter")
   }
@@ -102,9 +63,10 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
             setSearchQuery('')
           }}
         >
-          {displayWishlist ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-        </button>
-        {userName != null && <GenreDropdown className="nav-item logo" genres={genres} likedGenres={likedGenres} userName={userName} />}
+          {displayWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}
+        </button>}
+        {userName!=null && <GenreDropdown  userName={userName}/>}
+        
         <form onSubmit={handleSubmit} className="search-form">
           <input
             type="text"

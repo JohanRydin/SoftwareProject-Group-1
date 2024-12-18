@@ -46,6 +46,17 @@ async def fetch_dbUser(username: str, db: Session=Depends(get_db)):
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
+
+async def create_dbUser(username: str, db: Session=Depends(get_db)):
+    db_user = db.query(User).filter(User.username == username).first()
+    if db_user:
+        raise HTTPException(status_code=400, detail="Username taken")
+    new_user = User(username=username)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user) 
+    return await fetch_dbUser(username, db) 
+    
     
 async def fetch_dbUserWishlist(userId: int, db: Session=Depends(get_db)): 
     db_wishlist = db.query(Wishlist.gameID).filter(Wishlist.userID == userId).all()
@@ -60,16 +71,22 @@ async def fetch_dbUsergamePref(userId: int, db: Session=Depends(get_db)):
 async def fetch_dbUsergenrePref(userId: int, db: Session = Depends(get_db)):
     db_genrePref = db.query(Genre.genreID).join(GenrePref, Genre.genreID == GenrePref.genreID).filter(GenrePref.userID == userId).all()
     genrenames = [genre[0] for genre in db_genrePref]
-    print(genrenames)
     return genrenames
 
 async def fetch_dbgenreNameFetch(genreId: List[int], db: Session = Depends(get_db)):
-    genrelist = []
-    for id in genreId:
-        # Flatten the result to get a list of genre names
-        genres = [genre[0] for genre in db.query(Genre.genrename).filter(Genre.genreID == id).all()]
-        genrelist.extend(genres)  # Add genres to the main list
+    # Query all genres where genreID is in the provided list and sort by genreID
+    result = (
+        db.query(Genre.genreID, Genre.genrename)
+        .filter(Genre.genreID.in_(genreId))
+        .order_by(Genre.genreID)  # Sort by genreID
+        .all()
+    )
+
+    # Extract genres in the same order as returned by the query
+    genrelist = [genre.genrename for genre in result]
+
     return genrelist
+
 
 async def fetch_dbGame(ids: List[int], db: Session=Depends(get_db)):
     game_details_list = []
@@ -145,7 +162,10 @@ async def get_users(db: Session = Depends(get_db)):
 async def get_user(username: str, db: Session = Depends(get_db)):
     return await fetch_dbUser(username, db)
 
-
+@app.post("/user/{username}")
+async def create_user(username: str, db: Session = Depends(get_db)):
+    attempt = await create_dbUser(username, db)
+    return attempt
 # ----- Wishlist endpoints ----- # 
 
 @app.get("/user/{username}/wishlist")
@@ -154,7 +174,6 @@ async def get_wishlist(username: str, db:Session = Depends(get_db)):
     userId = userId.userID
     gameIDs = await fetch_dbUserWishlist(userId, db)
     gameObjectList = await fetch_dbGame(gameIDs, db)
-    print(gameObjectList)
     return gameObjectList
 
 

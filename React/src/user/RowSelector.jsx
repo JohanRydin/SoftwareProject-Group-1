@@ -20,16 +20,21 @@ export function SelectRows(gamePrefs, genrePrefs, wishList)
 
     if (gamePrefs.length > 0)
     {
+        commands = [...commands, {"similar_to_games" : "all"}]
+        titles = [...titles, "Similar To What You Play"]
+    }
+    if (gamePrefs.length > 0)
+    {
         const index = Math.floor(Math.random() * gamePrefs.length);
         const gameID = gamePrefs[index]['id']
         commands = [...commands, {"similar_to_games" : [gameID]}]
-        titles = [...titles, "Because you liked ".concat(gamePrefs[index]['gamename'])]
+        titles = [...titles, "Because You Liked '".concat(gamePrefs[index]['gamename']).concat("'")]
     }
     if (genrePrefs.length > 0)
     {
         const genre = randString(genrePrefs)
         commands = [...commands, {"similar_to_genre" : genre}]
-        titles = [...titles, "Games from the ".concat(genre).concat(" genre")]
+        titles = [...titles, "Games From The '".concat(genre).concat("' Genre")]
     }
     if (genrePrefs.length > 0)
     {
@@ -38,7 +43,7 @@ export function SelectRows(gamePrefs, genrePrefs, wishList)
         {
             const genre = randString(filtered_genres)
             commands = [...commands, {"best_reviewed" : genre}]
-            titles = [...titles, "Best reviewed ".concat(genre).concat(" games")]
+            titles = [...titles, "Best Reviewed '".concat(genre).concat("' Games")]
         }
     }
     if (genrePrefs.length > 0)
@@ -48,7 +53,7 @@ export function SelectRows(gamePrefs, genrePrefs, wishList)
         {
             const genre = randString(filtered_genres)
             commands = [...commands, {"best_sales" : genre}]
-            titles = [...titles, "Most popular ".concat(genre).concat(" games")]
+            titles = [...titles, "Most Popular '".concat(genre).concat("' Games")]
         }
     }
 
