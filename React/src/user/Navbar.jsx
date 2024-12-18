@@ -13,8 +13,6 @@ import ThumbUp from '@mui/icons-material/ThumbUp';
 
 const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, userName, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn }) => {
   const [inputValue, setInputValue] = useState('');
-  const [genres, setGenres] = useState([]);
-  const [likedGenres, setLikedGenres] = useState([]);
 
   //TODO: handleSubmit and handleAutClick is from the odin proj, should be changed.
   const handleSubmit = (e) => {
@@ -41,44 +39,6 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
     }
 
   };
-
-  useEffect(() => {
-    const fetchGenres = async () => {
-      try {
-        //setGenres(getGenres)// TODO: Fix when endpoint implemented
-        getGenres('', 40).then(data => {
-          setGenres(data);
-        })
-      }
-      catch (e) {
-        console.log(e)
-      }
-    };
-
-    fetchGenres();
-  }, []);
-  useEffect(() => {
-    const fetchGenresPrefs = async () => {
-      if (userName != null)
-      {
-        try {
-          getGenrePreferences(userName).then(data => {
-            setLikedGenres(data);
-          })
-        }
-        catch (e) {
-          console.log(e);
-          setLikedGenres([]);
-        }
-      }
-      else
-      {
-        setLikedGenres([]);
-      }
-    };
-
-    fetchGenresPrefs();
-  }, [userName]);
   
   const searchStart = () => {
     alert("Search functinality here (if user presses button instead of pressing Enter")
@@ -88,7 +48,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
     <nav className="navbar">
       <div className="nav-items">
         <h1 className="nav-item logo" >GameHive</h1>
-        <button className="nav-item"
+        {userName!=null && <button className="nav-item"
           onClick={() => {
             setDisplayMyList(!displayMyList)
             setDisplayWishlist(false)
@@ -97,8 +57,8 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
           style={{ background: displayMyList ? '#04820a63' : '#4a4a4a63' }}
         >
           <ThumbUp></ThumbUp>
-        </button>
-        <button className="nav-item"
+        </button>}
+        {userName!=null && <button className="nav-item"
           onClick={() => {
             setDisplayWishlist(!displayWishlist)
             setDisplayMyList(false)
@@ -107,8 +67,8 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
           style={{ background: displayWishlist ? '#04820a63' : '#4a4a4a63' }}
         >
           {displayWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}
-        </button>
-        {userName!=null && <GenreDropdown genres={genres} likedGenres={likedGenres} userName={userName}/>}
+        </button>}
+        {userName!=null && <GenreDropdown  userName={userName}/>}
         
         <form onSubmit={handleSubmit} className="search-form">
           <input

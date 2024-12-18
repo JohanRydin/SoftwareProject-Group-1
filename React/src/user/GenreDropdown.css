@@ -1,6 +1,7 @@
 .genredropdown-container {
   position: relative;
   display: inline-block;
+  height: 72%;
 }
 
 .genredropdown-button {
@@ -12,6 +13,8 @@
   font-weight: bold;
   cursor: pointer;
   border-radius: 6px;
+  margin-left: 10px;
+  height: 100%;
 }
 
 .genredropdown-button:hover {
@@ -56,7 +59,7 @@
   background-color: #277a3c;
   color: white;
   font-weight: bold;
-  border: 2px solid #2e2e2e;
+  border: 2px solid #000000;
 }
 
 .genredropdown-item:hover {

@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LoginModal.css';
 import { getUser, newUser } from './Connections.jsx'
+import { useGenreContext, setGenresPrefs } from './GenreProvider.jsx';
 
 export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLoginModalOpen }) => {
   const [inputValue, setInputValue] = useState('');
   const [inputValuePassword, setInputValuePassword] = useState('');
   const [inputError, setInputError] = useState(false);
   const [registerError, setRegisterError] = useState(false)
+  const { setLikedGenres } = useGenreContext();
 
   const handleLogin = (e) => {
     e.preventDefault();
 
     const name = inputValue
     getUser(name).then(data => {
-      console.log(data);
 
       setIsLoggedIn(true);  // Set user info in system
       setUserID(data['userID'])
       setUser(data['username'])
+      setGenresPrefs(name, setLikedGenres);
 
       setLoginModalOpen(false)  // Close modal
     }).catch(
@@ -54,10 +56,10 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
     setInputValuePassword(e.target.value)
   }
 
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <input
+    return (
+      <div className="login-modal-overlay" onClick={onClose}>
+        <div className="login-modal-content" onClick={e => e.stopPropagation()}>
+          <input
           type="text"
           placeholder="Username..."
           value={inputValue}
