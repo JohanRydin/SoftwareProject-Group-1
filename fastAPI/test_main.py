@@ -1,13 +1,10 @@
 import pytest
 from fastapi.testclient import TestClient
-from fastapi import FastAPI
 from pydantic import BaseModel
 from main import app, get_db, get_http_client
 from sqlmodel import Session, SQLModel, create_engine, Field, Relationship
 from typing import Optional, List
-from unittest.mock import AsyncMock 
 import httpx 
-import requests
 import os
 
 
@@ -215,7 +212,6 @@ def test_get_user(override_get_db, test_session):
     
     populate_database(test_session)
 
-    # Test the API endpoint
     response = client.get("/user/first_user")
     assert response.status_code == 200
 
@@ -227,7 +223,6 @@ def test_get_user(override_get_db, test_session):
 def test_get_wishlist(override_get_db, test_session): 
     populate_database(test_session)
     
-    # Test the API endpoint
     response = client.get("/user/first_user/wishlist")
     assert response.status_code == 200
 
@@ -289,33 +284,30 @@ def test_delete_wishlist(override_get_db, test_session):
 def test_get_genrepref(override_get_db, test_session): 
     populate_database(test_session)
    
-    # Test the API endpoint for retrieving genre preferences
     response = client.get("/user/first_user/genrepref")
     assert response.status_code == 200
 
     data = response.json()
     assert isinstance(data, list)
-    assert data == ["Action", "Adventure"]  # Adjust according to your test data
+    assert data == ["Action", "Adventure"]  
 
 def test_post_genrepref(override_get_db, test_session): 
     populate_database(test_session)
     
-    # Adding a new genre preference
     entry = {
-        "genreID": 3  # Assuming genreID 2 corresponds to "Adventure"
+        "genrename": "Puzzle" 
     }
     
     response = client.post("/user/first_user/genrepref", json=entry)
     
-    assert response.status_code == 200  # Verify the request was successful
+    assert response.status_code == 200  
     
     data = response.json()
     assert "message" in data
     assert data["message"] == "Genre added"
     assert "Entry" in data
-    assert data["Entry"] == {'genreID': 3, 'userID': 1}
+    assert data["Entry"] == {'genrename': "Puzzle", 'userID': 1}
     
-    # Verify the database entry
     new_entry = test_session.query(GenrePref).filter_by(userID=1, genreID=2).first()
     assert new_entry is not None
     assert new_entry.userID == 1
@@ -324,34 +316,30 @@ def test_post_genrepref(override_get_db, test_session):
 def test_remove_genrepref(override_get_db, test_session): 
     populate_database(test_session)
   
-    # Remove a specific genre preference (e.g., Adventure with genreID=2)
-    response = client.delete("/user/first_user/genrepref/2")
+    response = client.delete("/user/first_user/genrepref/Action")
     
-    assert response.status_code == 200  # Verify the request was successful
+    assert response.status_code == 200  
     
     data = response.json()
     assert "message" in data
-    assert data["message"] == "Game removed from GenrePref"
+    assert data["message"] == "Genre removed from GenrePref"
     assert "removed" in data
-    assert data["removed"] == {"userID": 1, "genreID": 2}
+    assert data["removed"] == {"userID": 1, "genrename": "Action"}
     
-    # Verify the database entry was removed
-    removed_entry = test_session.query(GenrePref).filter_by(userID=1, genreID=2).first()
+    removed_entry = test_session.query(GenrePref).filter_by(userID=1, genreID=1).first()
     assert removed_entry is None
 
 def test_delete_all_genrepref(override_get_db, test_session): 
     populate_database(test_session)
 
-    # Remove all genre preferences for the user
     response = client.delete("/user/first_user/genrepref")
     
-    assert response.status_code == 200  # Verify the request was successful
+    assert response.status_code == 200  
     
     data = response.json()
     assert "message" in data
     assert data["message"] == "All genrePres removed from genrePref"
     
-    # Verify the database no longer contains any genre preferences for the user
     remaining_prefs = test_session.query(GenrePref).filter_by(userID=1).all()
     assert len(remaining_prefs) == 0
 
@@ -359,23 +347,20 @@ def test_delete_all_genrepref(override_get_db, test_session):
 def test_get_gampref(override_get_db, test_session): 
     populate_database(test_session)
     
-    # Fetch the game preferences for the user
     response = client.get("/user/first_user/gamepref")
-    assert response.status_code == 200  # Check that the request is successful
+    assert response.status_code == 200  
 
     data = response.json()
-    assert isinstance(data, list)  # Ensure the response is a list
+    assert isinstance(data, list) 
     print(data)
-    # Validate the expected game preferences (adjust based on your test data)
     assert data == [{'id': 1, 'gamename': 'Action Game 1', 'description': 'An exciting action-packed adventure.', 'genres': 'Action, Adventure'}, {'id': 3, 'gamename': 'Adventure Game 1', 'description': 'Explore and uncover secrets in this adventure game.', 'genres': 'Adventure'}]
 
 def test_post_gamepref(override_get_db, test_session): 
     populate_database(test_session)
-    # Add a new game preference
-    new_game_pref = {"gameID": 2}  # Assuming gameID=3 is a valid game in your test data
+    new_game_pref = {"gameID": 2}  
     
     response = client.post("/user/first_user/gamepref", json=new_game_pref)
-    assert response.status_code == 200  # Check that the request is successful
+    assert response.status_code == 200  
 
     data = response.json()
     assert "message" in data
@@ -383,7 +368,6 @@ def test_post_gamepref(override_get_db, test_session):
     assert "Entry" in data
     assert data["Entry"] == {"userID": 1, "gameID": 2}
 
-    # Validate that the new entry exists in the database
     new_entry = test_session.query(GamePref).filter_by(userID=1, gameID=3).first()
     assert new_entry is not None
     assert new_entry.userID == 1
@@ -392,9 +376,8 @@ def test_post_gamepref(override_get_db, test_session):
 def test_remove_gamepref(override_get_db, test_session): 
     populate_database(test_session)
  
-    # Remove a specific game preference
     response = client.delete("/user/first_user/gamepref/1")
-    assert response.status_code == 200  # Check that the request is successful
+    assert response.status_code == 200  
 
     data = response.json()
     assert "message" in data
@@ -402,22 +385,19 @@ def test_remove_gamepref(override_get_db, test_session):
     assert "gamePref" in data
     assert data["gamePref"] == {"userID": 1, "gamePref": 1}
 
-    # Validate that the entry was removed from the database
     removed_entry = test_session.query(GamePref).filter_by(userID=1, gameID=1).first()
     assert removed_entry is None
 
 def test_delete_all_gamepref(override_get_db, test_session): 
     populate_database(test_session)
    
-    # Remove all game preferences for the user
     response = client.delete("/user/first_user/gamepref")
-    assert response.status_code == 200  # Check that the request is successful
+    assert response.status_code == 200  
 
     data = response.json()
     assert "message" in data
     assert data["message"] == "All genrePres removed from GamePref"
 
-    # Validate that all entries were removed from the database
     remaining_entries = test_session.query(GamePref).filter_by(userID=1).all()
     assert len(remaining_entries) == 0
 
