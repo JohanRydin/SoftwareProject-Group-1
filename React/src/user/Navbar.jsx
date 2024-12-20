@@ -11,7 +11,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ThumbUp from '@mui/icons-material/ThumbUp';
 
-const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, userName, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn }) => {
+const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, userName, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn, refresh }) => {
   const [inputValue, setInputValue] = useState('');
 
   //TODO: handleSubmit and handleAutClick is from the odin proj, should be changed.
@@ -46,7 +46,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
   return (
     <nav className="navbar">
       <div className="nav-items">
-        <h1 className="nav-item logo" >GameHive</h1>
+        <button className="nav-item logo" onClick={refresh}>GameHive</button>
         {userName!=null && <button className={`nav-item ${displayMyList ? 'nav-item-mylist-active' : 'nav-item-mylist'}`}
           onClick={() => {
             setDisplayMyList(!displayMyList)

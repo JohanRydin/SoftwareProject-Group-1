@@ -22,7 +22,7 @@ const GameProvider = ({ children }) => {
 export const useGameContext = () => useContext(GameContext);
 
 
-const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) => {
+const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, refreshState }) => {
   const { myList, setMyList, wishList, setWishlist } = useGameContext();
   const [games, setGames] = useState([]);
   const [searchedGames, setSearchedGames] = useState([]);
@@ -89,7 +89,15 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) 
     };
 
     fetchGames();
-  }, [userName]);
+  }, [userName, refreshState]);
+
+  useEffect(()=>{
+    
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // Makes the scroll smooth
+    });
+  }, [refreshState])
 
   useEffect(()=> {
     const searchFunction = async () => {
@@ -146,7 +154,7 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName }) 
 }
 
 
-function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
+function Home({ searchQuery, displayMyList, displayWishlist, userName, refreshState }) {
   return (
     <GameProvider>
       <HomeContent 
@@ -154,6 +162,7 @@ function Home({ searchQuery, displayMyList, displayWishlist, userName }) {
         displayMyList={displayMyList} 
         displayWishlist={displayWishlist} 
         userName={userName} 
+        refreshState={refreshState}
       />
     </GameProvider>
   );
