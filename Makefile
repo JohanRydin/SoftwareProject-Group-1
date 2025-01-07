@@ -1,18 +1,18 @@
 
 .PHONY: test
 
-make up:
+up:
 	docker compose up -d
 
-make down: 
+down: 
 	docker compose down
 
-make clean:
+clean:
 	docker compose down --volumes --rmi all
 
 
-make total_clean:
+total_clean:
 	docker system prune -a --volumes
 
-make test: 
+test: 
 	cd fastAPI && pytest
