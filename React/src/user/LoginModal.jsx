@@ -64,6 +64,7 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
           placeholder="Username..."
           value={inputValue}
           onChange={onChangeUsername}
+          onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
           className="login-input login-margin"
         />
         {false && <input
@@ -71,6 +72,7 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
             placeholder="Password..."
             value={'*'.repeat(inputValuePassword.length)}
             onChange={onChangePassword}
+            onKeyDown={(e) => e.key === 'Enter' && handleLogin(e)}
             className="login-input login-margin"
           />}
         {inputError && <p className="login-error login-margin">Login failed, try again.</p>}
