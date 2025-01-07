@@ -49,7 +49,7 @@ async def fetchAllGameNames(db: Session):
 async def fetch_dbUser(username: str, db: Session=Depends(get_db)):
     db_user = db.query(User).filter(User.username == username).first()
     if db_user is None:
-        raise HTTPException(stnatus_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
 async def create_dbUser(username: str, db: Session=Depends(get_db)):
