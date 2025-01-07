@@ -122,7 +122,6 @@ async def fetch_searchedGenreMatches(input: str, db:Session=Depends(get_db)):
     return lst
 
 
-
 # ------------- User ENDPOINTS ------------ #
 
 @app.get("/")
@@ -448,9 +447,20 @@ async def get_searched_games(input:str, numbers: int, db:Session=Depends(get_db)
   all_titles =await fetchAllGameNames(db)
   limit = 10 # Not sure what a reasonable limit is. 
   matches = process.extract(input, all_titles, scorer=fuzz.WRatio, limit=limit)
-  return [{"title": match[0], "score": match[1]} for match in matches]
+  print([{"title": match[0], "score": match[1]} for match in matches])
+  names = [match[0] for match in matches]
+  games = db.query(Game).filter(Game.gamename.in_(names)).all()
+  lst = [{
+      "id": game.gameID,
+      "gamename": game.gamename,
+      "description": game.shortdescription,
+      "genres": game.Genres,
+      }
+  for game in games]
+  print(lst)
+  return lst[0:numbers]
 
-    
+
 @app.get("/search/genres")
 async def get_searched_genres(input:str, numbers: int, db:Session=Depends(get_db)): 
     lst = await fetch_searchedGenreMatches(input, db)
