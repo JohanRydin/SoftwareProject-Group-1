@@ -72,6 +72,7 @@ export const Modal = ({ isOpen, onClose, gameDict, userName }) => {
         </div>
         <hr className="modal-divider" />
         <p className="modal-description">{gameDict["description"]}</p>
+        <hr className="modal-divider" />
         <div className="modal-genres">
           <div className="genres-list">
             {genres.map((genre) => (
