@@ -52,6 +52,13 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
   const onChangeUsername = (e) => {
     setInputValue(e.target.value)
   }
+
+  const onKeyDownUsername = (e) => {
+    if (e.key === 'Enter') {
+      handleLogin(e); // Trigger login when Enter is pressed
+    }
+  };
+
   const onChangePassword = (e) => {
     setInputValuePassword(e.target.value)
   }
@@ -64,6 +71,7 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
           placeholder="Username..."
           value={inputValue}
           onChange={onChangeUsername}
+          onKeyDown={onKeyDownUsername}
           className="login-input login-margin"
         />
         {false && <input

@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import GenreDropdown from './GenreDropdown.jsx'
 import { getGenres, getGenrePreferences } from './Connections.jsx'
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import QuestionProfile from '@mui/icons-material/MeetingRoom';
+import LogoutButton from '@mui/icons-material/MeetingRoom';
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -82,9 +82,9 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
 
         <button
           onClick={handleAuthClick}
-          className="nav-item"
+          className={isLoggedIn ? "nav-item" : "nav-item-login"}
         >
-          {isLoggedIn ? <AccountBoxIcon /> : <QuestionProfile />}
+          {isLoggedIn ? <LogoutButton /> : "Login"}
         </button>
 
       </div>

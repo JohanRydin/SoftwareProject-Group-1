@@ -98,3 +98,18 @@ button {
 .search-button:hover {
   background:#666059;
 }
+
+.nav-item-login {
+  display: flex; /* Centers the text vertically */
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px; /* Adjust padding for consistent spacing */
+  height: 40px; /* Matches the height of the search bar */
+  background-color: #393939; /* Matches other buttons */
+  color: white; /* Ensures the text is visible */
+  border-radius: 4px; /* Matches the search bar's rounded edges */
+  font-size: 14px; /* Matches font size of the search bar text */
+  cursor: pointer; /* Pointer cursor for button */
+  border: none; /* Removes any default borders */
+  font-weight: bold; /* Matches the button style */
+}
