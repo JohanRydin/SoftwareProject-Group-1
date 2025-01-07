@@ -3,7 +3,7 @@ import './LoginModal.css';
 import { getUser, newUser } from './Connections.jsx'
 import { useGenreContext, setGenresPrefs } from './GenreProvider.jsx';
 
-export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLoginModalOpen }) => {
+export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLoginModalOpen, cookieSet }) => {
   const [inputValue, setInputValue] = useState('');
   const [inputValuePassword, setInputValuePassword] = useState('');
   const [inputError, setInputError] = useState(false);
@@ -19,6 +19,8 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
       setIsLoggedIn(true);  // Set user info in system
       setUserID(data['userID'])
       setUser(data['username'])
+      cookieSet('user', data['username'])
+      cookieSet('userID', data['userID'])
       setGenresPrefs(name, setLikedGenres);
 
       setLoginModalOpen(false)  // Close modal
@@ -39,7 +41,8 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
       setIsLoggedIn(true)
       setUserID(data['userID'])
       setUser(data['username'])
-
+      cookieSet('user', data['username'])
+      cookieSet('userID', data['userID'])
       setLoginModalOpen(false)  // Close modal
     }).catch(
       e => {
