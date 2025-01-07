@@ -15,7 +15,16 @@ function App() {
   const [userName, setUser] = useState(null);
   const [userID, setUserID] = useState(-1);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);  
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [refreshKey, setRefreshKey] = useState(0);
+ 
+  const forceUpdate = () => {
+    setDisplayMyList(false);
+    setDisplayWishlist(false);
+    setSearchQuery('')
+    setRefreshKey(refreshKey + 1)
+
+  };
 
 
   return (
@@ -32,9 +41,9 @@ function App() {
 
         <div className="App">
           <Navbar setSearchQuery={setSearchQuery} displayMyList={displayMyList} setDisplayMyList={setDisplayMyList} displayWishlist={displayWishlist} setDisplayWishlist={setDisplayWishlist}
-          userName={userName} setUser={setUser} loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+          userName={userName} setUser={setUser} loginModalOpen={loginModalOpen} setLoginModalOpen={setLoginModalOpen} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} refresh={forceUpdate} />
           <Routes>
-            <Route path="/" element={<Home searchQuery={searchQuery} displayMyList={displayMyList} displayWishlist={displayWishlist} userName={userName} />} />
+            <Route path="/" element={<Home searchQuery={searchQuery} displayMyList={displayMyList} displayWishlist={displayWishlist} userName={userName} refreshState={refreshKey}/>} />
             <Route path="/mylist" element={<MyList />} />
             <Route path="/wishlist" element={<Wishlist />} />
           </Routes>
