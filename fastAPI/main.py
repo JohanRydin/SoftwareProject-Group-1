@@ -440,15 +440,14 @@ POST:   http://localhost:8000/user/Erik/recommendation
 
 @app.get("/search/games")
 async def get_searched_games(input:str, numbers: int, db:Session=Depends(get_db)): 
-    all_titles = await fetchAllGameNames(db)
-
-    matches = process.extract(input, all_titles, scorer=fuzz.WRatio, limit=numbers)
     
+    all_titles = await fetchAllGameNames(db)
+    matches = process.extract(input, all_titles, scorer=fuzz.WRatio, limit=numbers)
     match_scores = {match[0]: match[1] for match in matches}
-
-    names = [match[0] for match in matches]
-    games = db.query(Game).filter(Game.gamename.in_(names)).all()
-
+    
+    names = [match[0] for match in matches] 
+    games = db.query(Game).filter(Game.gamename.in_(names)).all() 
+    
     lst_with_scores = [
         {
             "id": game.gameID,
@@ -459,21 +458,11 @@ async def get_searched_games(input:str, numbers: int, db:Session=Depends(get_db)
         }
         for game in games
     ]
+    result = sorted(lst_with_scores, key=lambda x: x["score"], reverse=True)
+    for game in result:
+        del game["score"]
 
-    lst_sorted = sorted(lst_with_scores, key=lambda x: x["score"], reverse=True)
-
-
-    final_output = [
-        {
-            "id": game["id"],
-            "gamename": game["gamename"],
-            "description": game["description"],
-            "genres": game["genres"]
-        }
-        for game in lst_sorted[:numbers]  
-    ]
-
-    return final_output
+    return result
 
 
 @app.get("/search/genres")
