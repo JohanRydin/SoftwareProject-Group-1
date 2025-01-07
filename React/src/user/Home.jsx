@@ -4,6 +4,8 @@ import GameList from './GameList'
 import { getGamePreferences, getRecommendations, getWishList, getGenrePreferences, getSearch } from './Connections.jsx'
 import Modal from './Modal.jsx'
 import { SelectRows } from './RowSelector.jsx'
+import { useGenreContext, setGenresPrefs } from './GenreProvider.jsx';
+
 
 const GameContext = createContext();
 
@@ -33,6 +35,8 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
+
+  const { setLikedGenres, likedGenres } = useGenreContext();
   
 
   useEffect(() => {
@@ -59,12 +63,10 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
             return _myList;
           })
 
-          // Get genre preferences for the user
-          const genrePrefs = await getGenrePreferences(_userName).then(data => {
-            const _myList = data;
-            //setMyList(_myList);
-            return _myList;
-          })
+          
+          if (userName != '') {
+            setGenresPrefs(userName, setLikedGenres);
+          }
 
           // Get wishlist for the user
           const _wishlist = await getWishList(_userName).then(data => {
@@ -73,7 +75,7 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
           })
 
           // Select rows based on the users preferences
-          const rows = SelectRows(gamePrefs, genrePrefs, _wishlist);
+          const rows = SelectRows(gamePrefs, likedGenres, _wishlist);
           getRecommendations(_userName, rows[0]).then(data => {
             const games = data.response.games;
             setTitles(rows[1]);

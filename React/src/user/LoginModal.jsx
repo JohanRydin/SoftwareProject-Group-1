@@ -21,7 +21,7 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
       setUser(data['username'])
       cookieSet('user', data['username'])
       cookieSet('userID', data['userID'])
-      setGenresPrefs(name, setLikedGenres);
+      //setGenresPrefs(name, setLikedGenres);
 
       setLoginModalOpen(false)  // Close modal
     }).catch(
