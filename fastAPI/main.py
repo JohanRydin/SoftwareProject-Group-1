@@ -6,6 +6,7 @@ from database import SessionLocal, Base
 from models import User, Wishlist, GamePref, GenrePref, Genre, Game
 from schemas import UserCreate, UserResponse, WishlistItem, RecommendationBody, GamePrefItem, GenrePrefItem
 import httpx
+import asyncio
 from rapidfuzz import process, fuzz 
 '''
 DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:root@db:3306/storage")
@@ -34,6 +35,27 @@ async def get_db():
         yield db
     finally:
         db.close()
+
+
+@app.on_event("startup")
+async def initialize_global_games():
+    global globalGamenames
+    retries = 20 
+    delay = 1  
+
+    for attempt in range(retries):
+        try:
+            with SessionLocal() as db:
+                globalGamenames = await fetchAllGameNames(db)
+            if globalGamenames is not None:
+                break
+        except Exception as e:
+            if attempt < retries - 1:
+                await asyncio.sleep(delay)
+                print("waiting for database connection")
+                delay += 2 
+            else:
+                raise RuntimeError("Failed to connect to the database during startup.") from e
 
 @app.on_event("startup")
 async def initialize_global_games():
@@ -125,9 +147,9 @@ async def fetch_searchedGenreMatches(input: str, db:Session=Depends(get_db)):
 # ------------- User ENDPOINTS ------------ #
 
 @app.get("/")
-async def read_main(): 
+async def check_server_root(): 
     return {"message": "Root url"}
-
+'''
 @app.post("/users/", response_model=UserResponse)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(username=user.username)
@@ -135,9 +157,9 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_user)
     return db_user
-
+'''
 @app.get("/users/", response_model=list[UserResponse])
-async def get_users(db: Session = Depends(get_db)):
+async def get_all_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return users
 
@@ -149,6 +171,7 @@ async def get_user(username: str, db: Session = Depends(get_db)):
 async def create_user(username: str, db: Session = Depends(get_db)):
     attempt = await create_dbUser(username, db)
     return attempt
+
 # ----- Wishlist endpoints ----- # 
 
 @app.get("/user/{username}/wishlist")
@@ -161,7 +184,7 @@ async def get_wishlist(username: str, db:Session = Depends(get_db)):
 
 
 @app.post("/user/{username}/wishlist")
-async def post_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
+async def post_to_wishlist(username: str, wishlist_item: WishlistItem, db: Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
@@ -203,7 +226,7 @@ async def remove_game_from_wishlist(username: str, item: int, db: Session = Depe
     
 # WARNING: Deletes entire wishlist
 @app.delete("/user/{username}/wishlist")
-async def delete_wishlist(username: str, db: Session = Depends(get_db)):
+async def delete_entire_wishlist(username: str, db: Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
@@ -237,7 +260,7 @@ async def get_genrepref(username: str, db:Session = Depends(get_db)):
 
 
 @app.post("/user/{username}/genrepref")
-async def post_genrepref(username: str, genreItem: GenrePrefItem, db: Session = Depends(get_db)):
+async def post_to_genrepref(username: str, genreItem: GenrePrefItem, db: Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
 
@@ -266,7 +289,7 @@ async def post_genrepref(username: str, genreItem: GenrePrefItem, db: Session = 
 
 
 @app.delete("/user/{username}/genrepref/{genrename}")
-async def remove_genrepref(username: str, genrename: str, db: Session = Depends(get_db)):
+async def remove_specific_genrepref(username: str, genrename: str, db: Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
 
@@ -293,7 +316,7 @@ async def remove_genrepref(username: str, genrename: str, db: Session = Depends(
 
 
 @app.delete("/user/{username}/genrepref")
-async def delete_all_genrepref(username: str, db:Session = Depends(get_db)):
+async def delete_entire_genrepref(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
@@ -325,7 +348,7 @@ async def get_gamepref(username: str, db:Session = Depends(get_db)):
 
 
 @app.post("/user/{username}/gamepref")
-async def post_gamepref(username: str, gameItem: GamePrefItem, db:Session = Depends(get_db)):
+async def post_to_gamepref(username: str, gameItem: GamePrefItem, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID
 
@@ -347,7 +370,7 @@ async def post_gamepref(username: str, gameItem: GamePrefItem, db:Session = Depe
 
 
 @app.delete("/user/{username}/gamepref/{gameID}")
-async def remove_gamepref(username: str, gameID: int, db:Session = Depends(get_db)):
+async def remove_specific_gamepref(username: str, gameID: int, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
@@ -368,7 +391,7 @@ async def remove_gamepref(username: str, gameID: int, db:Session = Depends(get_d
 
 
 @app.delete("/user/{username}/gamepref")
-async def delete_all_gamepref(username: str, db:Session = Depends(get_db)):
+async def delete_entire_gamepref(username: str, db:Session = Depends(get_db)):
     userId = await fetch_dbUser(username, db)
     userId = userId.userID  
 
@@ -397,7 +420,7 @@ async def get_http_client():
         yield client
         
 @app.post("/user/{username}/recommendation")
-async def post_recommendation(
+async def get_recommended_games(
     username: str, 
     recommendationBody: RecommendationBody, 
     db: Session = Depends(get_db), 
