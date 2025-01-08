@@ -10,6 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ThumbUp from '@mui/icons-material/ThumbUp';
+import Refresh from '@mui/icons-material/Refresh';
 
 const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, userName, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn, refresh,removeCookie}) => {
   const [inputValue, setInputValue] = useState('');
@@ -66,6 +67,9 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
           {displayWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}
         </button>}
         {userName!=null && <GenreDropdown  userName={userName}/>}
+        {<button className={`nav-refresh`} onClick={refresh}>
+          <Refresh></Refresh>
+        </button>}
         
         <form onSubmit={handleSubmit} className="search-form">
           <input
