@@ -65,24 +65,35 @@ export const Modal = ({ isOpen, onClose, gameDict, userName }) => {
         <hr className="modal-divider" />
         <div className="image-container">
           <img src={gameDict.image} alt={gameDict.gamename} className="modal-image" />
-          <div className="image-buttons">
+            {userName &&
+	     <div className="image-buttons">
             <button className={`image-button ${inMyList ? 'in-my-list' : ''}`} onClick={postGamePref}> <ThumbUpIcon /> </button>
             <button className={`image-button ${inWishlist ? 'in-wishlist' : ''}`} onClick={postToWishlist}> {inWishlist ? <FavoriteIcon /> : <FavoriteBorderIcon />} </button>
-          </div>
+             </div>
+	    }
         </div>
         <hr className="modal-divider" />
         <p className="modal-description">{gameDict["description"]}</p>
         <hr className="modal-divider" />
         <div className="modal-genres">
           <div className="genres-list">
-            {genres.map((genre) => (
-              <GenreButton
-                key={genre}
-                genre={genre}
-                isToggled={toggledItems[genre]}
-                onToggle={handleToggle}
-              />
-            ))}
+	      {userName ?
+	       genres.map((genre) => (
+                <GenreButton
+                  key={genre}
+                  genre={genre}
+                  isToggled={toggledItems[genre]}
+                  onToggle={handleToggle}
+                />
+              ))
+            : genres.map((genre) => (
+                <GenreButton
+                  key={genre}
+                  genre={genre}
+                  isToggled={false}
+                  onToggle={() => {}}
+                />
+              ))}
           </div>
         </div>
       </div>
