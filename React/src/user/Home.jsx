@@ -106,6 +106,28 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
     });
   }, [refreshState])
 
+  useEffect(()=>{
+    
+    if (displayMyList) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // Makes the scroll smooth
+      });
+    }
+
+  }, [displayMyList])
+
+  useEffect(()=>{
+    
+    if (displayWishlist) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // Makes the scroll smooth
+      });
+    }
+
+  }, [displayWishlist])
+
   useEffect(()=> {
     const searchFunction = async () => {
       if (searchQuery != '') {
