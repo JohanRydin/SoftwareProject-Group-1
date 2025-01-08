@@ -63,7 +63,12 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
             return _myList;
           })
 
-          
+          const genrePrefs = await getGenrePreferences(_userName).then(data => {
+            const _myList = data;
+            //setMyList(_myList);
+            return _myList;
+          })
+
           if (userName != '') {
             setGenresPrefs(userName, setLikedGenres);
           }
@@ -75,7 +80,7 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
           })
 
           // Select rows based on the users preferences
-          const rows = SelectRows(gamePrefs, likedGenres, _wishlist);
+          const rows = SelectRows(gamePrefs, genrePrefs, _wishlist);
           getRecommendations(_userName, rows[0]).then(data => {
             const games = data.response.games;
             setTitles(rows[1]);
