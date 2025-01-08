@@ -149,6 +149,9 @@ class Recommender:
             self.remove_liked_games(similar, game_ids)
             
             if (similar):
+                for n in range(0, len(games_list)):
+                    for m in range(0, len(games_list[n])):
+                        similar[games_list[n][m]] -= 1
                 indices = find_best_indices(num, similar)
                 games_list.append(indices)
 
