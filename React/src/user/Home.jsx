@@ -139,8 +139,8 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
       :
       (games.length > 0 && <div className="games-row">
 
-        {userName != null && displayMyList && (<GameList userName={userName} games={myList} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
-        {userName != null && displayWishlist && (<GameList userName={userName} games={wishList} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
+        {userName != null && displayMyList && (<GameList userName={userName} games={myList} title ={`Liked Games`} onCardClick={handleCardClick}/>)}
+        {userName != null && displayWishlist && (<GameList userName={userName} games={wishList} title ={`Wishlist`} onCardClick={handleCardClick}/>)}
         {games.map((game, index) => (
           <GameList
             key={index}
