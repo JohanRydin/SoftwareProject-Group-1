@@ -441,7 +441,7 @@ POST:   http://localhost:8000/user/Erik/recommendation
 @app.get("/search/games")
 async def get_searched_games(input:str, numbers: int, db:Session=Depends(get_db)): 
     
-    all_titles = await fetchAllGameNames(db)
+    all_titles = globalGamenames
     matches = process.extract(input, all_titles, scorer=fuzz.WRatio, limit=numbers)
     match_scores = {match[0]: match[1] for match in matches}
     
