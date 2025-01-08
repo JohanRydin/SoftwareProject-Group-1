@@ -6,6 +6,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   min-width: 200px;
   cursor: pointer;
+  border: 2px solid #444;
 }
 
 .game-poster:hover {
