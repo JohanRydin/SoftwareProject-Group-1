@@ -66,7 +66,7 @@ export const LoginModal = ({ onClose, setIsLoggedIn, setUser, setUserID, setLogi
     return (
       <div className="login-modal-overlay" onClick={onClose}>
         <div className="login-modal-content" onClick={e => e.stopPropagation()}>
-          <input
+          <input autoFocus
           type="text"
           placeholder="Username..."
           value={inputValue}
