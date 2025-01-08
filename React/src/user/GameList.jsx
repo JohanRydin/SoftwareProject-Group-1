@@ -21,7 +21,6 @@ function GameList({ games = [], title, userName, onCardClick}) {
     return (
         <div className="gamelist-animator">
             <h2>{title}</h2>
-            <div className="gamelist-divider"></div>
             <div className="scroll-container">
                 <button
                     className="scroll-button left"
@@ -51,7 +50,8 @@ function GameList({ games = [], title, userName, onCardClick}) {
                 >
                     &gt;
                 </button>
-           </div>  
+           </div> 
+           <div className="gamelist-divider"></div> 
 
       </div>
 
