@@ -34,6 +34,17 @@ export function SelectRows(gamePrefs, genrePrefs, wishList, genres)
     {
         const index = Math.floor(Math.random() * gamePrefs.length);
         const gameID = gamePrefs[index]['id']
+        
+        if(gamePrefs.length > 1){
+            let secondID = index+1
+            if (secondID >= gamePrefs.length) {
+                secondID = index-1
+            }
+            const secondGame = gamePrefs[secondID]['id']
+            RandomInsert(commands, titles, {"similar_to_games" : [secondGame]}, "Because You Liked '".concat(gamePrefs[secondID]['gamename']).concat("'"))
+        }
+            
+        
        // commands = [...commands, {"similar_to_games" : [gameID]}]
         //titles = [...titles, "Because You Liked '".concat(gamePrefs[index]['gamename']).concat("'")]
         RandomInsert(commands, titles, {"similar_to_games" : [gameID]}, "Because You Liked '".concat(gamePrefs[index]['gamename']).concat("'"))
@@ -41,6 +52,12 @@ export function SelectRows(gamePrefs, genrePrefs, wishList, genres)
     if (genrePrefs.length > 0)
     {
         const genre = randString(genrePrefs)
+        if (genrePrefs.length > 1) {
+            const secondGenre = randString(genrePrefs)
+            if (genre != secondGenre) {
+                RandomInsert(commands, titles, {"similar_to_genre" : secondGenre}, "Games From The '".concat(secondGenre).concat("' Genre"))
+            }
+        }
         //commands = [...commands, {"similar_to_genre" : genre}]
         //titles = [...titles, "Games From The '".concat(genre).concat("' Genre")]
         RandomInsert(commands, titles, {"similar_to_genre" : genre}, "Games From The '".concat(genre).concat("' Genre"))
