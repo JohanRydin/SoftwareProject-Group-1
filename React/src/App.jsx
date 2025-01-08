@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './user/Navbar';
 import Home from './user/Home';
-import MyList from './user/MyList';
-import Wishlist from './user/Wishlist';
 import './App.css';
 import LoginModal from './user/LoginModal.jsx'
 import { GenreProvider} from "./user/GenreProvider.jsx";
@@ -64,8 +62,6 @@ function App() {
           removeCookie={removeCookie}/>
           <Routes>
             <Route path="/" element={<Home searchQuery={searchQuery} displayMyList={displayMyList} displayWishlist={displayWishlist} userName={userName} refreshState={refreshKey}/>} />
-            <Route path="/mylist" element={<MyList />} />
-            <Route path="/wishlist" element={<Wishlist />} />
           </Routes>
         </div>
       </BrowserRouter>
