@@ -8,11 +8,12 @@ class Recommender:
     matrix = None
     df = None
     rank_df = None
+    duplication_bias = -1
 
     # Constructor >:)
     # game_count - The number of games to consider. At most around 300, but it will take several minutes to initialize with all games.
     # print_time - Set to True to print the time it took to initialize the state variables
-    def __init__(self, game_count=300, print_time=False):
+    def __init__(self, game_count=300, print_time=False, duplication_bias=-1):
         start_time = time.time()
         self.df = pd.read_csv("./game_data/filtered_descriptions.csv", usecols=['name', 'filtered_descriptions', 'genres'])
         self.df['genres_list'] = self.df['genres'].apply(ast.literal_eval)
@@ -25,6 +26,8 @@ class Recommender:
         self.matrix = self.init_similarity_matrix(self.df)
         if (print_time):
             print("--- %s seconds ---" % (time.time() - start_time))
+
+        self.duplication_bias = duplication_bias
 
     # Initialize similarity matrix, n^2 time complexity :(
     # df - dataframe containing games
@@ -151,7 +154,7 @@ class Recommender:
             if (similar):
                 for n in range(0, len(games_list)):
                     for m in range(0, len(games_list[n])):
-                        similar[games_list[n][m]] -= 1
+                        similar[games_list[n][m]] += self.duplication_bias
                 indices = find_best_indices(num, similar)
                 games_list.append(indices)
 
