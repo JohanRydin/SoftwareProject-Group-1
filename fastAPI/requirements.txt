@@ -8,4 +8,5 @@ cryptography
 requests
 httpx
 pytest
-sqlmodel 
+sqlmodel
+rapidfuzz

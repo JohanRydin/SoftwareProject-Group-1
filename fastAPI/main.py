@@ -6,7 +6,7 @@ from database import SessionLocal, Base
 from models import User, Wishlist, GamePref, GenrePref, Genre, Game
 from schemas import UserCreate, UserResponse, WishlistItem, RecommendationBody, GamePrefItem, GenrePrefItem
 import httpx
-
+from rapidfuzz import process, fuzz 
 '''
 DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:root@db:3306/storage")
 
@@ -35,6 +35,17 @@ async def get_db():
     finally:
         db.close()
 
+@app.on_event("startup")
+async def initialize_global_games():
+    global globalGamenames
+    with SessionLocal() as db:
+        globalGamenames = await fetchAllGameNames(db)
+
+async def fetchAllGameNames(db: Session):
+    games = db.query(Game.gamename).all()
+    return [game[0] for game in games]
+
+        
 async def fetch_dbUser(username: str, db: Session=Depends(get_db)):
     db_user = db.query(User).filter(User.username == username).first()
     if db_user is None:
@@ -110,7 +121,8 @@ async def fetch_searchedGenreMatches(input: str, db:Session=Depends(get_db)):
     lst = await fetch_dbgenreNameFetch(lst, db)
     return lst
 
-# ------------- USER ENDPOINTS ------------ #
+
+# ------------- User ENDPOINTS ------------ #
 
 @app.get("/")
 async def read_main(): 
@@ -428,9 +440,30 @@ POST:   http://localhost:8000/user/Erik/recommendation
 
 @app.get("/search/games")
 async def get_searched_games(input:str, numbers: int, db:Session=Depends(get_db)): 
-    lst = await fetch_searchedGameMatches(input, db)
-    lst = lst[:numbers]
-    return  lst 
+    
+    all_titles = await fetchAllGameNames(db)
+    matches = process.extract(input, all_titles, scorer=fuzz.WRatio, limit=numbers)
+    match_scores = {match[0]: match[1] for match in matches}
+    
+    names = [match[0] for match in matches] 
+    games = db.query(Game).filter(Game.gamename.in_(names)).all() 
+    
+    lst_with_scores = [
+        {
+            "id": game.gameID,
+            "gamename": game.gamename,
+            "description": game.shortdescription,
+            "genres": game.Genres,
+            "score": match_scores[game.gamename] 
+        }
+        for game in games
+    ]
+    result = sorted(lst_with_scores, key=lambda x: x["score"], reverse=True)
+    for game in result:
+        del game["score"]
+
+    return result
+
 
 @app.get("/search/genres")
 async def get_searched_genres(input:str, numbers: int, db:Session=Depends(get_db)): 
