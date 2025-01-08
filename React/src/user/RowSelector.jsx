@@ -70,13 +70,12 @@ export function SelectRows(gamePrefs, genrePrefs, wishList, genres)
 
     if (true) {
         var filtered_genres = genres.filter(genre => !(genrePrefs.includes(genre)))
-        filtered_genres = filtered_genres.filter(genre => ranking_genres.includes(genre))
         if (filtered_genres.length > 0)    // Only some genres contain ranking info in AIServer
         {
             const genre = randString(filtered_genres)
             //commands = [...commands, {"best_sales" : genre}]
             //titles = [...titles, "Maybe You Like These"]
-            RandomInsert(commands, titles, {"best_sales" : genre}, "Maybe You Like These")
+            RandomInsert(commands, titles, {"similar_to_genre" : genre}, "Maybe You Like These '".concat(genre).concat("' Games"))
         }
     }
 
