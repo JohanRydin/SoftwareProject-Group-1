@@ -36,7 +36,7 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
 
-  const { setLikedGenres, likedGenres } = useGenreContext();
+  const { setLikedGenres, likedGenres, genres } = useGenreContext();
   
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
           })
 
           // Select rows based on the users preferences
-          const rows = SelectRows(gamePrefs, genrePrefs, _wishlist);
+          const rows = SelectRows(gamePrefs, genrePrefs, _wishlist, genres);
           getRecommendations(_userName, rows[0]).then(data => {
             const games = data.response.games;
             setTitles(rows[1]);
