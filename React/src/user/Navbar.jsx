@@ -41,9 +41,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
     }
 
   };
-  const searchStart = () => {
-    alert("Search functinality here (if user presses button instead of pressing Enter")
-  }
+
 
   return (
     <nav className="navbar">
@@ -78,7 +76,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
             className="search-input"
           />
           <button type="submit" className="search-button">
-            <SearchIcon className="search-icon" onClick={searchStart} />
+            <SearchIcon className="search-icon" onClick={handleSubmit} />
           </button>
         </form>
 
