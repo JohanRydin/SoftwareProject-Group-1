@@ -10,9 +10,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ThumbUp from '@mui/icons-material/ThumbUp';
+import { useGenreContext, setGenresPrefs } from './GenreProvider.jsx';
 
 const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishlist, setDisplayWishlist, userName, setUser, loginModalOpen, setLoginModalOpen, isLoggedIn, setIsLoggedIn, refresh,removeCookie}) => {
   const [inputValue, setInputValue] = useState('');
+  const { setLikedGenres } = useGenreContext();
 
   //TODO: handleSubmit and handleAutClick is from the odin proj, should be changed.
   const handleSubmit = (e) => {
@@ -29,6 +31,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
       setUser(null)
       removeCookie('user')
       removeCookie('userID')
+      setGenresPrefs(null, setLikedGenres)
     }
     else {
       setLoginModalOpen(!loginModalOpen)
