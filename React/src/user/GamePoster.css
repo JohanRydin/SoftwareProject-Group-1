@@ -4,7 +4,8 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  min-width: 200px;
+  width: 350px;
+  min-width: 350px;
   cursor: pointer;
   border: 2px solid #444;
 }
