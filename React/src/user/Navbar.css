@@ -104,7 +104,6 @@ button {
 .nav-item-mylist:hover, 
 .nav-item-wishlist:hover {
   background-color: #504d47; /* Darker gray on hover */
-  border: 1px solid #d1d1d1; /* Light gray border on hover */
 }
 
 .nav-item-mylist,

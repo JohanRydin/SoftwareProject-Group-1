@@ -20,6 +20,14 @@
     position: relative;
     display: flex;
     align-items: center;
+    
+  }
+
+  .scroll-container.special-scroll-container {
+    background-color: rgba(173, 173, 171, 0.169); 
+    /*border: 2px solid #ccc; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for emphasis */
+    border-radius: 12px;
   }
 
   .gamelist-animator {
@@ -29,6 +37,7 @@
     animation-timing-function: ease-in;
     overflow: hidden
   }
+
   @keyframes poster-animation {
     from {
       max-height: 0;
