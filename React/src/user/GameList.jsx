@@ -54,6 +54,7 @@ function GameList({ games = [], title, userName, onCardClick }) {
                     &gt;
                 </button>
             </div>
+            <div className="gamelist-divider"></div>
         </div>
     );
 }
