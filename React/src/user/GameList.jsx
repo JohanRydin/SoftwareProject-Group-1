@@ -1,10 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import './GameList.css';
 import GamePoster from "./GamePoster.jsx";
 
-
 function GameList({ games = [], title, userName, onCardClick }) {
     const scrollRef = useRef(null);
+    const [isLeftEnd, setIsLeftEnd] = useState(true);
+    const [isRightEnd, setIsRightEnd] = useState(false);
 
     const scroll = (direction) => {
         const { current } = scrollRef;
@@ -17,21 +18,31 @@ function GameList({ games = [], title, userName, onCardClick }) {
         current.scrollBy(scrollOptions);
     };
 
+    const handleScroll = () => {
+        const { current } = scrollRef;
+        setIsLeftEnd(current.scrollLeft === 0);
+        setIsRightEnd(current.scrollWidth - current.scrollLeft === current.clientWidth);
+    };
+
+    useEffect(() => {
+        const { current } = scrollRef;
+        current.addEventListener('scroll', handleScroll);
+        return () => current.removeEventListener('scroll', handleScroll);
+    }, []);
 
     return (
         <div className="gamelist-animator">
             <h2>{title}</h2>
-            <div
-                className={`scroll-container ${title === "Liked Games" || title === "Wishlist" ? "special-scroll-container" : ""
-                    }`}
-            >
-                <button
-                    className="scroll-button left"
-                    onClick={() => scroll("left")}
-                    aria-label="Scroll Left"
-                >
-                    &lt;
-                </button>
+            <div className={`scroll-container ${title === "Liked Games" || title === "Wishlist" ? "special-scroll-container" : ""}`}>
+                {!isLeftEnd && (
+                    <button
+                        className="scroll-button left"
+                        onClick={() => scroll("left")}
+                        aria-label="Scroll Left"
+                    >
+                        &lt;
+                    </button>
+                )}
                 <div className="games-posters" ref={scrollRef}>
                     {games.map((game) => (
                         <GamePoster
@@ -46,13 +57,15 @@ function GameList({ games = [], title, userName, onCardClick }) {
                         />
                     ))}
                 </div>
-                <button
-                    className="scroll-button right"
-                    onClick={() => scroll("right")}
-                    aria-label="Scroll Right"
-                >
-                    &gt;
-                </button>
+                {!isRightEnd && (
+                    <button
+                        className="scroll-button right"
+                        onClick={() => scroll("right")}
+                        aria-label="Scroll Right"
+                    >
+                        &gt;
+                    </button>
+                )}
             </div>
             <div className="gamelist-divider"></div>
         </div>
@@ -60,4 +73,3 @@ function GameList({ games = [], title, userName, onCardClick }) {
 }
 
 export default GameList;
-

@@ -51,8 +51,8 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
   return (
     <nav className="navbar">
       <div className="nav-items">
-        <button className="nav-item logo" onClick={refresh}>GameHive</button>
-        {userName!=null && <button className={`nav-item ${displayMyList ? 'nav-item-mylist-active' : 'nav-item-mylist'}`}
+      <button className="nav-item logo" onClick={refresh} title="Click to return to the homepage">GameHive</button>
+        {userName!=null && <button title="Click to open your list" className={`nav-item ${displayMyList ? 'nav-item-mylist-active' : 'nav-item-mylist'}`}
           onClick={() => {
             setDisplayMyList(!displayMyList)
             setDisplayWishlist(false)
@@ -61,7 +61,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
         >
           <ThumbUp></ThumbUp>
         </button>}
-        {userName!=null && <button className={`nav-item ${displayWishlist ? 'nav-item-wishlist-active' : 'nav-item-wishlist'}`}
+        {userName!=null && <button title="Click to open the wishlist" className={`nav-item ${displayWishlist ? 'nav-item-wishlist-active' : 'nav-item-wishlist'}`}
           onClick={() => {
             setDisplayWishlist(!displayWishlist)
             setDisplayMyList(false)
@@ -71,7 +71,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
           {displayWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}
         </button>}
         {userName!=null && <GenreDropdown  userName={userName}/>}
-        {<button className={`nav-refresh`} onClick={refresh}>
+        {<button title="Click to refresh the page"className={`nav-refresh`} onClick={refresh}>
           <Refresh></Refresh>
         </button>}
         
@@ -88,7 +88,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
           </button>
         </form>
 
-        <button
+        <button title="Click to login/logout"
           onClick={handleAuthClick}
           className={isLoggedIn ? "nav-item" : "nav-item-login"}
         >
