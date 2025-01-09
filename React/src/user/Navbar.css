@@ -90,14 +90,34 @@ button {
 
 
 
-.nav-item,
-.nav-item-mylist,
+.nav-item-mylist, 
 .nav-item-wishlist {
-  background-color:#393939;
+  background-color: #393939; /* Default background */
+  border: 1px solid transparent; /* No border by default */
+  color: white;
+  border-radius: 6px;
 }
 
+.nav-item-mylist-active, 
+.nav-item-wishlist-active {
+  background-color: #666059; /* Slightly darker for active state */
+  border: 1px solid #d1d1d1; /* Light gray border for active state */
+  color: white;
+}
+
+.nav-item-mylist:hover, 
+.nav-item-wishlist:hover {
+  background-color: #504d47; /* Darker gray on hover */
+}
+
+.nav-item-mylist,
+.nav-item-wishlist,
 .nav-item-mylist-active,
-.nav-item-wishlist-active,
+.nav-item-wishlist-active {
+  transition: background-color 0.3s ease, border 0.3s ease; /* Smooth transition for hover/active effects */
+}
+
+
 .nav-item:hover,
 .search-button:hover {
   background:#666059;

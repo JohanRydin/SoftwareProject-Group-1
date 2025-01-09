@@ -3,7 +3,7 @@ import './GameList.css';
 import GamePoster from "./GamePoster.jsx";
 
 
-function GameList({ games = [], title, userName, onCardClick}) {
+function GameList({ games = [], title, userName, onCardClick }) {
     const scrollRef = useRef(null);
 
     const scroll = (direction) => {
@@ -16,12 +16,15 @@ function GameList({ games = [], title, userName, onCardClick}) {
 
         current.scrollBy(scrollOptions);
     };
-    
+
 
     return (
         <div className="gamelist-animator">
             <h2>{title}</h2>
-            <div className="scroll-container">
+            <div
+                className={`scroll-container ${title === "Liked Games" || title === "Wishlist" ? "special-scroll-container" : ""
+                    }`}
+            >
                 <button
                     className="scroll-button left"
                     onClick={() => scroll("left")}
@@ -31,16 +34,16 @@ function GameList({ games = [], title, userName, onCardClick}) {
                 </button>
                 <div className="games-posters" ref={scrollRef}>
                     {games.map((game) => (
-                        <GamePoster 
-                            key={game["id"]} 
-                            gameID={game["id"]} 
-                            userName={userName} 
-                            name={game["gamename"]} 
-                            description={game["description"]} 
-                            genres={game["genres"]} 
-                            gameDict={game} 
-                            onCardClick={onCardClick} 
-                           />
+                        <GamePoster
+                            key={game["id"]}
+                            gameID={game["id"]}
+                            userName={userName}
+                            name={game["gamename"]}
+                            description={game["description"]}
+                            genres={game["genres"]}
+                            gameDict={game}
+                            onCardClick={onCardClick}
+                        />
                     ))}
                 </div>
                 <button
@@ -50,12 +53,10 @@ function GameList({ games = [], title, userName, onCardClick}) {
                 >
                     &gt;
                 </button>
-           </div> 
-           <div className="gamelist-divider"></div> 
-
-      </div>
-
-  );
+            </div>
+            <div className="gamelist-divider"></div>
+        </div>
+    );
 }
 
 export default GameList;

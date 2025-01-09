@@ -11,7 +11,7 @@ const GenreDropdown = ({ userName }) => {
 
   useEffect(() => {
     setSortedGenres([...genres]);
-  }, []);
+  }, [genres]);
 
   useEffect(() => {
     setColumns(
@@ -39,13 +39,13 @@ const GenreDropdown = ({ userName }) => {
   }, [toggledItems]);
 
   const handleToggle = (item) => {
-    handleToggleGenre(item, userName, toggledItems, setToggledItems)
+    handleToggleGenre(item, userName, toggledItems, setToggledItems);
   };
 
   return (
     <div className="genredropdown-container">
       <button
-        className="genredropdown-button"
+        className={`genredropdown-button ${isDropdownVisible ? 'genredropdown-button-active' : ''}`}
         onClick={() => setIsDropdownVisible(!isDropdownVisible)}
       >
         Genres
