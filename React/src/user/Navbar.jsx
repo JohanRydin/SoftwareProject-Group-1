@@ -71,7 +71,7 @@ const Navbar = ({ setSearchQuery, displayMyList, setDisplayMyList, displayWishli
           {displayWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}
         </button>}
         {userName!=null && <GenreDropdown  userName={userName}/>}
-        {<button className={`nav-refresh`} onClick={refresh}>
+        {userName!=null && <button className={`nav-refresh`} onClick={refresh}>
           <Refresh></Refresh>
         </button>}
         
