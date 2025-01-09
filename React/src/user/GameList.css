@@ -28,6 +28,7 @@
     /*border: 2px solid #ccc; */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for emphasis */
     border-radius: 12px;
+    margin-bottom: 1%;
   }
 
   .gamelist-animator {
