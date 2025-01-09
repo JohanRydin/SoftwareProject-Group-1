@@ -4,6 +4,8 @@ import GameList from './GameList'
 import { getGamePreferences, getRecommendations, getWishList, getGenrePreferences, getSearch } from './Connections.jsx'
 import Modal from './Modal.jsx'
 import { SelectRows } from './RowSelector.jsx'
+import { useGenreContext, setGenresPrefs } from './GenreProvider.jsx';
+
 
 const GameContext = createContext();
 
@@ -33,6 +35,8 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedGame, setSelectedGame] = useState(null);
+
+  const { setLikedGenres, likedGenres, genres } = useGenreContext();
   
 
   useEffect(() => {
@@ -59,12 +63,15 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
             return _myList;
           })
 
-          // Get genre preferences for the user
           const genrePrefs = await getGenrePreferences(_userName).then(data => {
             const _myList = data;
             //setMyList(_myList);
             return _myList;
           })
+
+          if (userName != '') {
+            setGenresPrefs(userName, setLikedGenres);
+          }
 
           // Get wishlist for the user
           const _wishlist = await getWishList(_userName).then(data => {
@@ -73,7 +80,7 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
           })
 
           // Select rows based on the users preferences
-          const rows = SelectRows(gamePrefs, genrePrefs, _wishlist);
+          const rows = SelectRows(gamePrefs, genrePrefs, _wishlist, genres);
           getRecommendations(_userName, rows[0]).then(data => {
             const games = data.response.games;
             setTitles(rows[1]);
@@ -98,6 +105,28 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
       behavior: "smooth", // Makes the scroll smooth
     });
   }, [refreshState])
+
+  useEffect(()=>{
+    
+    if (displayMyList) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // Makes the scroll smooth
+      });
+    }
+
+  }, [displayMyList])
+
+  useEffect(()=>{
+    
+    if (displayWishlist) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // Makes the scroll smooth
+      });
+    }
+
+  }, [displayWishlist])
 
   useEffect(()=> {
     const searchFunction = async () => {
@@ -137,8 +166,8 @@ const HomeContent = ({ searchQuery, displayMyList, displayWishlist, userName, re
       :
       (games.length > 0 && <div className="games-row">
 
-        {userName != null && displayMyList && (<GameList userName={userName} games={myList} title ={`${userName}'s List`} onCardClick={handleCardClick}/>)}
-        {userName != null && displayWishlist && (<GameList userName={userName} games={wishList} title ={`${userName}'s Wishlist`} onCardClick={handleCardClick}/>)}
+        {userName != null && displayMyList && (<GameList userName={userName} games={myList} title ={`Liked Games`} onCardClick={handleCardClick}/>)}
+        {userName != null && displayWishlist && (<GameList userName={userName} games={wishList} title ={`Wishlist`} onCardClick={handleCardClick}/>)}
         {games.map((game, index) => (
           <GameList
             key={index}
