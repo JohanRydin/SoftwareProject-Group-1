@@ -76,8 +76,8 @@ function GamePoster({ userName, gameID, image = null, name = "Cyberpunk 2077", r
 		    {userName &&
 	<div className="poster-buttons">
 
-        <button className="poster-button" data-hover-text={inMyList ? "Remove from My List" : "Add to My List"} onClick={postGamePref} style={{ backgroundColor: inMyList ? 'green' : '#ffffff8e' }}><ThumbUpIcon /></button>
-             <button className="poster-button" data-hover-text={inWishlist ? "Remove from Wishlist" : "Add to Wishlist"} onClick={postToWishlist} style={{ backgroundColor: inWishlist ? 'green' : '#ffffff8e' }}>{inWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}</button>
+        <button className="poster-button" data-hover-text={inMyList ? "Remove from \"Liked Games\"" : "Add to \"Liked Games\""} onClick={postGamePref} style={{ backgroundColor: inMyList ? 'green' : '#ffffff8e' }}><ThumbUpIcon /></button>
+             <button className="poster-button" data-hover-text={inWishlist ? "Remove from \"Wishlist\"" : "Add to \"Wishlist\""} onClick={postToWishlist} style={{ backgroundColor: inWishlist ? 'green' : '#ffffff8e' }}>{inWishlist ? <FavoriteIcon/>: <FavoriteBorderIcon/>}</button>
 	    
 	</div>
 		    }

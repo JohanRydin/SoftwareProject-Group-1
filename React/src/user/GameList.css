@@ -71,3 +71,8 @@
   .scroll-button.right {
     right: 10px;
   }
+
+  .gamelist-divider {
+    border: 1px solid #444;
+    margin-bottom: 1%;
+  }
