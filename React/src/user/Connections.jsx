@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'http://92.34.158.223:8080/api';
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 
