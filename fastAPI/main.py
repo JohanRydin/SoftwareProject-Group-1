@@ -2,6 +2,7 @@ from typing import List
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from database import SessionLocal, Base
 from models import User, Wishlist, GamePref, GenrePref, Genre, Game
 from schemas import UserCreate, UserResponse, WishlistItem, RecommendationBody, GamePrefItem, GenrePrefItem
@@ -463,24 +464,33 @@ POST:   http://localhost:8000/user/Erik/recommendation
 
 @app.get("/search/games")
 async def get_searched_games(input:str, numbers: int, db:Session=Depends(get_db)): 
-    
+
     all_titles = globalGamenames
-    matches = process.extract(input, all_titles, scorer=fuzz.WRatio, limit=numbers)
+    all_titles_lowercase = [title.lower() for title in globalGamenames]
+    input = input.lower()
+
+    matches = process.extract(input, all_titles_lowercase, scorer=fuzz.WRatio, limit=numbers)
+
     match_scores = {match[0]: match[1] for match in matches}
-    
-    names = [match[0] for match in matches] 
+
+    names = [all_titles[all_titles_lowercase.index(match[0])] for match in matches]
+
+    #games = db.query(Game).filter(
+    #    func.lower(Game.gamename).in_([name.lower() for name in names])
+    #).all()
     games = db.query(Game).filter(Game.gamename.in_(names)).all() 
-    
+
     lst_with_scores = [
         {
             "id": game.gameID,
-            "gamename": game.gamename,
+            "gamename": game.gamename, 
             "description": game.shortdescription,
             "genres": game.Genres,
-            "score": match_scores[game.gamename] 
+            "score": match_scores.get(game.gamename.lower(), None)  
         }
         for game in games
     ]
+    
     result = sorted(lst_with_scores, key=lambda x: x["score"], reverse=True)
     for game in result:
         del game["score"]
